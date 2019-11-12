@@ -80,7 +80,7 @@ bool MyModel::LoadGLTextures(void)
 {
 	/* load an image file directly as a new OpenGL texture */
 	texture[0] = SOIL_load_OGL_texture
-	("../Data/PumpkinQ.jpg",
+	("../Data/skybox.jpg",
 		SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
 
 	if (texture[0] == 0) return false;
@@ -115,7 +115,7 @@ bool MyModel::DrawGLScene(void)
 	// elapsed time in milliseconds from the last draw
 	int ms_elapsed = (int)(t - Tstamp);
 
-	if (ms_elapsed < 25) return true;
+	if (ms_elapsed < 15) return true;
 	// elapsed time in seconds from the beginning of the program
 	this->Full_elapsed = double(t - Tstart) / (double)CLOCKS_PER_SEC;
 	this->frameTime += double(t - Tstamp) / (double)CLOCKS_PER_SEC;

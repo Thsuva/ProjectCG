@@ -76,10 +76,13 @@ public:
 	MyModel() : hDC(NULL), hRC(NULL), hWnd(NULL), active(true),
 		fullscreen(true), frames(0), fps(0) {
 		Background.clear();
-		Background.push_back(Vertex(-1, -1, -5, 0, 0));
-		Background.push_back(Vertex(1, -1, -5, 1, 0));
-		Background.push_back(Vertex(1, 1, -5, 1, 1));
-		Background.push_back(Vertex(-1, 1, -5, 0, 1));
+
+		// i primi 2 valori dei vertex sono stati cambiati per fittare il 16/9
+		// (prima erano tutti -1 e 1 per generare un quadrato di lato 2 centrato in 0,0)
+		Background.push_back(Vertex(-1, -.5625, -5, 0, 0));
+		Background.push_back(Vertex(1, -.5625, -5, 1, 0));
+		Background.push_back(Vertex(1, .5625, -5, 1, 1));
+		Background.push_back(Vertex(-1, .5625, -5, 0, 1));
 		fire.clear();
 		fire.push_back(Vertex(-1, -1, -5, 0, 0));
 		fire.push_back(Vertex(1, -1, -5, 1, 0));

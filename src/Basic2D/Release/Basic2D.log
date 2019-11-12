@@ -1,14 +1,13 @@
-﻿  main.cpp
-d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\tutorial\ogl_4basic2d\basic2d_2\basic2d\main.cpp(212): warning C4838: la conversione da 'int' a 'BYTE' richiede una conversione verso un tipo di dati più piccolo
+﻿  Model.cpp
 SOIL.lib(SOIL.obj) : warning LNK4075: '/EDITANDCONTINUE' ignorato a causa della specifica di '/OPT:ICF'
 LINK : warning LNK4098: la libreria predefinita 'MSVCRTD' è in conflitto con l'utilizzo di altre librerie; usare /NODEFAULTLIB:libreria
   Generazione codice in corso...
-  3 of 113 functions ( 2.7%) were compiled, the rest were copied from previous compilation.
+  1 of 113 functions ( 0.9%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+    1 functions had inline decision re-evaluated but remain unchanged
   Generazione codice terminata
-SOIL.lib(image_DXT.obj) : warning LNK4099: impossibile trovare il PDB 'vc100.pdb' con 'SOIL.lib(image_DXT.obj)' o in 'D:\Jacopo\Università\2_Laurea Magistrale\2anno\COMPUTER_GRAPHICS\Tutorial\OGL_4basic2D\Basic2D_2\Release\vc100.pdb'; oggetto collegato senza informazioni di debug
-SOIL.lib(image_helper.obj) : warning LNK4099: impossibile trovare il PDB 'vc100.pdb' con 'SOIL.lib(image_helper.obj)' o in 'D:\Jacopo\Università\2_Laurea Magistrale\2anno\COMPUTER_GRAPHICS\Tutorial\OGL_4basic2D\Basic2D_2\Release\vc100.pdb'; oggetto collegato senza informazioni di debug
-SOIL.lib(SOIL.obj) : warning LNK4099: impossibile trovare il PDB 'vc100.pdb' con 'SOIL.lib(SOIL.obj)' o in 'D:\Jacopo\Università\2_Laurea Magistrale\2anno\COMPUTER_GRAPHICS\Tutorial\OGL_4basic2D\Basic2D_2\Release\vc100.pdb'; oggetto collegato senza informazioni di debug
-SOIL.lib(stb_image_aug.obj) : warning LNK4099: impossibile trovare il PDB 'vc100.pdb' con 'SOIL.lib(stb_image_aug.obj)' o in 'D:\Jacopo\Università\2_Laurea Magistrale\2anno\COMPUTER_GRAPHICS\Tutorial\OGL_4basic2D\Basic2D_2\Release\vc100.pdb'; oggetto collegato senza informazioni di debug
-  Basic2D.vcxproj -> D:\Jacopo\Università\2_Laurea Magistrale\2anno\COMPUTER_GRAPHICS\Tutorial\OGL_4basic2D\Basic2D_2\Release\Basic2D.exe
+SOIL.lib(image_DXT.obj) : warning LNK4099: impossibile trovare il PDB 'vc100.pdb' con 'SOIL.lib(image_DXT.obj)' o in 'D:\Jacopo\Università\2_Laurea Magistrale\2anno\COMPUTER_GRAPHICS\Repository\ProjectCG\src\Release\vc100.pdb'; oggetto collegato senza informazioni di debug
+SOIL.lib(image_helper.obj) : warning LNK4099: impossibile trovare il PDB 'vc100.pdb' con 'SOIL.lib(image_helper.obj)' o in 'D:\Jacopo\Università\2_Laurea Magistrale\2anno\COMPUTER_GRAPHICS\Repository\ProjectCG\src\Release\vc100.pdb'; oggetto collegato senza informazioni di debug
+SOIL.lib(SOIL.obj) : warning LNK4099: impossibile trovare il PDB 'vc100.pdb' con 'SOIL.lib(SOIL.obj)' o in 'D:\Jacopo\Università\2_Laurea Magistrale\2anno\COMPUTER_GRAPHICS\Repository\ProjectCG\src\Release\vc100.pdb'; oggetto collegato senza informazioni di debug
+SOIL.lib(stb_image_aug.obj) : warning LNK4099: impossibile trovare il PDB 'vc100.pdb' con 'SOIL.lib(stb_image_aug.obj)' o in 'D:\Jacopo\Università\2_Laurea Magistrale\2anno\COMPUTER_GRAPHICS\Repository\ProjectCG\src\Release\vc100.pdb'; oggetto collegato senza informazioni di debug
+  Basic2D.vcxproj -> D:\Jacopo\Università\2_Laurea Magistrale\2anno\COMPUTER_GRAPHICS\Repository\ProjectCG\src\Release\Basic2D.exe
