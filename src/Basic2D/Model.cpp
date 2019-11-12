@@ -80,7 +80,7 @@ bool MyModel::LoadGLTextures(void)
 {
 	/* load an image file directly as a new OpenGL texture */
 	texture[0] = SOIL_load_OGL_texture
-	("../Data/skybox.jpg",
+	("../Data/skybox_red.jpg",
 		SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
 
 	if (texture[0] == 0) return false;
@@ -98,6 +98,8 @@ bool MyModel::LoadGLTextures(void)
 	glBindTexture(GL_TEXTURE_2D, texture[0]);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 	return true;										// Return Success
 }
@@ -128,13 +130,20 @@ bool MyModel::DrawGLScene(void)
 	glMatrixMode(GL_MODELVIEW);				// Select The Modelview Matrix
 	glLoadIdentity();									// Reset The View
 
+	// ------------le 3 righe qui sotto servono per spostare il background in orizz di px
+	double temp_px;
+	//temp_px = -Full_elapsed*.1; // verso sx
+	temp_px = Full_elapsed * .1; // verso dx
+	glTranslatef((float)temp_px, 0.0, 0);
+	// --------------fino a qui
+	
 	glBindTexture(GL_TEXTURE_2D, texture[0]);
 
 	//  Background
 	glBegin(GL_QUADS);
 	for (int i = 0; i < 4; i++) {
-		glTexCoord2f(Background[i].u, Background[i].v);
-		glVertex3f(Background[i].x, Background[i].y, Background[i].z);
+		glTexCoord2f(Background[i].u*2, Background[i].v);
+		glVertex3f(Background[i].x*2, Background[i].y, Background[i].z);
 	}
 	glEnd();
 
