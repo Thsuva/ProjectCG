@@ -1,8 +1,12 @@
 ﻿  Model.cpp
+d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.cpp(92): warning C4474: 'sprintf': sono stati passati troppi argomenti per la stringa di formato
+  d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.cpp(92): note: con i segnaposto e i relativi parametri sono previsti argomenti variadic 0, ma sono stati specificati quelli 1
+d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.cpp(94): warning C4474: 'sprintf': sono stati passati troppi argomenti per la stringa di formato
+  d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.cpp(94): note: con i segnaposto e i relativi parametri sono previsti argomenti variadic 0, ma sono stati specificati quelli 1
 SOIL.lib(SOIL.obj) : warning LNK4075: '/EDITANDCONTINUE' ignorato a causa della specifica di '/OPT:ICF'
 LINK : warning LNK4098: la libreria predefinita 'MSVCRTD' è in conflitto con l'utilizzo di altre librerie; usare /NODEFAULTLIB:libreria
   Generazione codice in corso...
-  1 of 113 functions ( 0.9%) were compiled, the rest were copied from previous compilation.
+  3 of 113 functions ( 2.7%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     1 functions had inline decision re-evaluated but remain unchanged
   Generazione codice terminata

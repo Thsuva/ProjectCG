@@ -88,7 +88,10 @@ bool MyModel::LoadGLTextures(void)
 	//  Load 27 fire textures
 	char ll[200];
 	for (int i = 0; i < 27; i++) {
-		sprintf(ll, "../Data/FIRE%02d.TGA", i);
+		if (i < 5 || (i > 10 && i < 15) || (i > 20))
+			sprintf(ll, "../Data/fabrizio_00.png", i);
+		else
+			sprintf(ll, "../Data/fabrizio_01.png", i);
 		this->texture[i + 1] = SOIL_load_OGL_texture(
 			ll, SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
 		if (texture[i + 1] == 0) return false;
