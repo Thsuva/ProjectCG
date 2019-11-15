@@ -52,6 +52,8 @@ class MyModel Data;
 
 LRESULT	CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);	// Declaration For WndProc
 
+std::string level = "";
+
 ///////////////////////////////////////////////////////////
 //  kill the window
 GLvoid KillGLWindow(GLvoid)								// Properly Kill The Window
@@ -328,6 +330,46 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 {
 	MSG		msg;									// Windows Message Structure
 	BOOL	done = FALSE;								// Bool Variable To Exit Loop
+
+	int width = 40;
+	int height = 24;
+
+	level.append("........................................");
+	level.append("........................................");
+	level.append("........................................");
+	level.append("........................................");
+	level.append("........................................");
+	level.append("........................................");
+	level.append("........................................");
+	level.append("........................................");
+	level.append("........................................");
+	level.append("........................................");
+	level.append("........................................");
+	level.append("........................................");
+	level.append("........................................");
+	level.append("........................................");
+	level.append("........................................");
+	level.append("........................................");
+	level.append("........................................");
+	level.append("........................................");
+	level.append("........................................");
+	level.append("........................................");
+	level.append("########################################");
+	level.append("........................................");
+	level.append("........................................");
+	level.append("........................................");
+
+	auto getTile = [&](int x, int y) {
+		if (x > 0 && x < width && y > 0 && y < height)
+			return level[y*width + x];
+
+	};
+
+	auto setTile = [&](int x, int y, char c) {
+		if (x > 0 && x < width && y > 0 && y < height)
+			level[y*width + x] = c;
+
+	};
 
 	// Ask The User Which Screen Mode They Prefer
   // Init of the default button depending on Data.fullscreen
