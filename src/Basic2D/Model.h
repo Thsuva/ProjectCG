@@ -72,10 +72,13 @@ private:
 
 	GLuint	texture[28];			// Storage For 28 Textures!
 	GLuint	base;				// Base Display List For The Font Set
+
+	// per i movimenti
+	float last_mov_pers;
 public:
 	//  methods
 	MyModel() : hDC(NULL), hRC(NULL), hWnd(NULL), active(true),
-		fullscreen(true), frames(0), fps(0) {
+		fullscreen(true), frames(0), fps(0), last_mov_pers(0) {
 		Background.clear();
 
 		// i primi 2 valori dei vertex sono stati cambiati per fittare il 16/9
@@ -109,6 +112,7 @@ public:
 	bool InitGL(void);
 	void ReSizeGLScene(int width, int height);
 	void glPrint(const char *fmt, ...);			// Custom GL "Print" Routine
+	void move_personaggio(int dir);
 
 private:
 	bool LoadGLTextures(void);

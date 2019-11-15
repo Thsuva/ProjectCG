@@ -427,6 +427,19 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 				else stupid->play();
 			}
 
+			if (Data.keys[VK_LEFT])						// Is left arrow Being Pressed?
+			{
+				Data.keys[VK_LEFT] = FALSE;
+				Data.move_personaggio(-1);
+			}
+
+			if (Data.keys[VK_RIGHT])						// Is right arrow Being Pressed?
+			{
+				Data.keys[VK_RIGHT] = FALSE;
+				Data.move_personaggio(1);
+
+			}
+
 
 
 		}

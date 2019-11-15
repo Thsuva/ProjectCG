@@ -109,8 +109,6 @@ bool MyModel::LoadGLTextures(void)
 
 bool MyModel::DrawGLScene(void)
 {
-
-
 	//  TIMING - start
 	clock_t t = clock();
 	// elapsed time in seconds from the last draw
@@ -132,10 +130,7 @@ bool MyModel::DrawGLScene(void)
 	glLoadIdentity();									// Reset The View
 
 	// ------------le 3 righe qui sotto servono per spostare il background in orizz di px
-	/*double temp_px;
-	//temp_px = -Full_elapsed*.1; // verso sx
-	temp_px = Full_elapsed * .1; // verso dx
-	glTranslatef((float)temp_px, 0.0, 0);*/
+	glTranslatef((float)last_mov_pers, 0.0, 0);
 	// --------------fino a qui
 	
 	glBindTexture(GL_TEXTURE_2D, texture[0]);
@@ -163,7 +158,7 @@ bool MyModel::DrawGLScene(void)
 	double px, py;
 	px = radious * cos(omega * Full_elapsed);
 	py = radious * sin(omega * Full_elapsed);
-	// glTranslatef((float)px, (float)py, 0);
+	//glTranslatef((float)px, (float)py, 0);
 	//glScalef(0.05f, 0.05f, 1);    // 1- scale the personaggio
 
 
@@ -275,4 +270,12 @@ void MyModel::glPrint(const char *fmt, ...)					// Custom GL "Print" Routine
 	glListBase(base - 32);								// Sets The Base Character to 32
 	glCallLists(strlen(text), GL_UNSIGNED_BYTE, text);	// Draws The Display List Text
 	glPopAttrib();										// Pops The Display List Bits
+}
+
+// ------------------------------------------------------nostre funzioni
+
+// muove il personaggio
+void MyModel::move_personaggio(int dir)
+{
+	last_mov_pers += .033 * dir;
 }
