@@ -65,7 +65,8 @@ private:
 
 	//  model data
 	std::vector<Vertex> Background;   // background
-	std::vector<Vertex> fire;         // floating fire
+	std::vector<Vertex> personaggio;  // floating personaggio
+	std::vector<Vertex> tile;		  // blocco base
 	clock_t Tstamp, Tstart;
 	double Full_elapsed;  // elapsed time in seconds from the beginning of the program
 
@@ -79,15 +80,22 @@ public:
 
 		// i primi 2 valori dei vertex sono stati cambiati per fittare il 16/9
 		// (prima erano tutti -1 e 1 per generare un quadrato di lato 2 centrato in 0,0)
-		Background.push_back(Vertex(-1, -.5625, -5, 0, 0));
-		Background.push_back(Vertex(1, -.5625, -5, 1, 0));
-		Background.push_back(Vertex(1, .5625, -5, 1, 1));
-		Background.push_back(Vertex(-1, .5625, -5, 0, 1));
-		fire.clear();
-		fire.push_back(Vertex(-1, -1, -5, 0, 0));
-		fire.push_back(Vertex(1, -1, -5, 1, 0));
-		fire.push_back(Vertex(1, 1, -5, 1, 1));
-		fire.push_back(Vertex(-1, 1, -5, 0, 1));
+		Background.push_back(Vertex(-1, -.60, -5, 0, 0));
+		Background.push_back(Vertex(1, -.60, -5, 1, 0));
+		Background.push_back(Vertex(1, .60, -5, 1, 1));
+		Background.push_back(Vertex(-1, .60, -5, 0, 1));
+
+		personaggio.clear();
+		personaggio.push_back(Vertex(-.035, -.05, -5, 0, 0));
+		personaggio.push_back(Vertex(.035, -.05, -5, 1, 0));
+		personaggio.push_back(Vertex(.035, .05, -5, 1, 1));
+		personaggio.push_back(Vertex(-.035, .05, -5, 0, 1));
+
+		tile.clear();
+		tile.push_back(Vertex(-.025, -.025, -5, 0, 0));
+		tile.push_back(Vertex(.025, -.025, -5, 1, 0));
+		tile.push_back(Vertex(.025, .025, -5, 1, 1));
+		tile.push_back(Vertex(-.025, .025, -5, 0, 1));
 
 		this->Tstart = this->Tstamp = clock();
 		this->Full_elapsed = 0;

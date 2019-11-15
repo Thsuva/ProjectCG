@@ -80,18 +80,15 @@ bool MyModel::LoadGLTextures(void)
 {
 	/* load an image file directly as a new OpenGL texture */
 	texture[0] = SOIL_load_OGL_texture
-	("../Data/skybox_red.jpg",
+	("../Data/skybox.jpg",
 		SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
 
 	if (texture[0] == 0) return false;
 
-	//  Load 27 fire textures
+	//  Load 27 personaggio textures
 	char ll[200];
-	for (int i = 0; i < 27; i++) {
-		if (i < 5 || (i > 10 && i < 15) || (i > 20))
-			sprintf(ll, "../Data/fabrizio_00.png", i);
-		else
-			sprintf(ll, "../Data/fabrizio_01.png", i);
+	for (int i = 0; i < 1; i++) {
+		sprintf(ll, "../Data/fabrizio_00.png", i);
 		this->texture[i + 1] = SOIL_load_OGL_texture(
 			ll, SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
 		if (texture[i + 1] == 0) return false;
@@ -101,8 +98,9 @@ bool MyModel::LoadGLTextures(void)
 	glBindTexture(GL_TEXTURE_2D, texture[0]);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// TODO: da togliere
+	// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 	return true;										// Return Success
 }
@@ -134,10 +132,10 @@ bool MyModel::DrawGLScene(void)
 	glLoadIdentity();									// Reset The View
 
 	// ------------le 3 righe qui sotto servono per spostare il background in orizz di px
-	double temp_px;
+	/*double temp_px;
 	//temp_px = -Full_elapsed*.1; // verso sx
 	temp_px = Full_elapsed * .1; // verso dx
-	glTranslatef((float)temp_px, 0.0, 0);
+	glTranslatef((float)temp_px, 0.0, 0);*/
 	// --------------fino a qui
 	
 	glBindTexture(GL_TEXTURE_2D, texture[0]);
@@ -145,16 +143,16 @@ bool MyModel::DrawGLScene(void)
 	//  Background
 	glBegin(GL_QUADS);
 	for (int i = 0; i < 4; i++) {
-		glTexCoord2f(Background[i].u*2, Background[i].v);
-		glVertex3f(Background[i].x*2, Background[i].y, Background[i].z);
+		glTexCoord2f(Background[i].u, Background[i].v);
+		glVertex3f(Background[i].x, Background[i].y, Background[i].z);
 	}
 	glEnd();
 
-	//  Texture for the fire, change every 1/19 sec.
-	int texF = 1 + ((int((Full_elapsed * 19))) % 27);
-	glBindTexture(GL_TEXTURE_2D, texture[texF]);
+	//  Texture for the personaggio, change every 1/19 sec.
+	// int texF = 1 + ((int((Full_elapsed * 19))) % 27);
+	glBindTexture(GL_TEXTURE_2D, texture[1]);
 
-	//  fire geometrical trasformations
+	//  personaggio geometrical trasformations
 	glMatrixMode(GL_MODELVIEW);				// Select The Modelview Matrix
 	glLoadIdentity();									// Reset The View
 
@@ -165,12 +163,12 @@ bool MyModel::DrawGLScene(void)
 	double px, py;
 	px = radious * cos(omega * Full_elapsed);
 	py = radious * sin(omega * Full_elapsed);
-	glTranslatef((float)px, (float)py, 0);
-	glScalef(0.30f, 0.5f, 1);    // 1- scale the fire
+	// glTranslatef((float)px, (float)py, 0);
+	//glScalef(0.05f, 0.05f, 1);    // 1- scale the personaggio
 
 
 
-	//  fire
+	//  personaggio
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_ALPHA_TEST);
@@ -178,14 +176,21 @@ bool MyModel::DrawGLScene(void)
 
 	glBegin(GL_QUADS);
 	for (int i = 0; i < 4; i++) {
-		glTexCoord2f(fire[i].u, fire[i].v);
-		glVertex3f(fire[i].x, fire[i].y, fire[i].z);
+		glTexCoord2f(personaggio[i].u, personaggio[i].v);
+		glVertex3f(-personaggio[i].x, personaggio[i].y, personaggio[i].z);
 	}
 	glEnd();
 
 	glDisable(GL_BLEND);
 	glDisable(GL_ALPHA_TEST);
 
+	glBindTexture(GL_TEXTURE_2D, texture[3]);
+	glBegin(GL_QUADS);
+	for (int i = 0; i < 4; i++) {
+		glTexCoord2f(tile[i].u, tile[i].v);
+		glVertex3f(-.95+tile[i].x, -.45+tile[i].y, tile[i].z);
+	}
+	glEnd();
 	//  Some text
 	glMatrixMode(GL_MODELVIEW);				// Select The Modelview Matrix
 	glLoadIdentity();									// Reset The Current Modelview Matrix
