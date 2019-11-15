@@ -6,7 +6,7 @@ d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\pro
 SOIL.lib(SOIL.obj) : warning LNK4075: '/EDITANDCONTINUE' ignorato a causa della specifica di '/OPT:ICF'
 LINK : warning LNK4098: la libreria predefinita 'MSVCRTD' è in conflitto con l'utilizzo di altre librerie; usare /NODEFAULTLIB:libreria
   Generazione codice in corso...
-  3 of 113 functions ( 2.7%) were compiled, the rest were copied from previous compilation.
+  2 of 113 functions ( 1.8%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     1 functions had inline decision re-evaluated but remain unchanged
   Generazione codice terminata
