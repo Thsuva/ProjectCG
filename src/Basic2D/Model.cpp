@@ -163,7 +163,7 @@ bool MyModel::DrawGLScene(void)
 
 
 
-	//  personaggio
+	// Personaggio
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_ALPHA_TEST);
@@ -179,13 +179,28 @@ bool MyModel::DrawGLScene(void)
 	glDisable(GL_BLEND);
 	glDisable(GL_ALPHA_TEST);
 
-	glBindTexture(GL_TEXTURE_2D, texture[3]);
-	glBegin(GL_QUADS);
-	for (int i = 0; i < 4; i++) {
-		glTexCoord2f(tile[i].u, tile[i].v);
-		glVertex3f(-.95+tile[i].x, -.45+tile[i].y, tile[i].z);
+	// Tiles
+	for (int col = 0; col < Data.level_width; col++) {
+		for (int row = 0; row < Data.level_height; row++) {
+			char id = Data.Get_tile(col, row);
+			switch (id)
+			{
+			case '#':
+				glBindTexture(GL_TEXTURE_2D, texture[3]);
+				glBegin(GL_QUADS);
+				for (int i = 0; i < 4; i++) {
+					glTexCoord2f(tile[i].u, tile[i].v);
+					glVertex3f(-.975+(.05*col) + tile[i].x, -.45+(.05*row) + tile[i].y, tile[i].z);
+				}
+				glEnd();
+
+				break;
+			default:
+				break;
+			}
+		}
 	}
-	glEnd();
+	
 	//  Some text
 	glMatrixMode(GL_MODELVIEW);				// Select The Modelview Matrix
 	glLoadIdentity();									// Reset The Current Modelview Matrix
@@ -275,7 +290,48 @@ void MyModel::glPrint(const char *fmt, ...)					// Custom GL "Print" Routine
 // ------------------------------------------------------nostre funzioni
 
 // muove il personaggio
-void MyModel::move_personaggio(int dir)
+void MyModel::Move_personaggio(int dir)
 {
-	last_mov_pers += .033 * dir;
+	last_mov_pers += .025 * dir;
 }
+
+void MyModel::Set_level()
+{
+	level.append("........................................");
+	level.append("........................................");
+	level.append("..........###########...................");
+	level.append("........................................");
+	level.append("........................................");
+	level.append("......................##########........");
+	level.append("........................................");
+	level.append("........................................");
+	level.append("########################################");
+	level.append("........................................");
+	level.append("........................................");
+	level.append("........................................");
+	level.append("........................................");
+	level.append("........................................");
+	level.append("........................................");
+	level.append("........................................");
+	level.append("........................................");
+	level.append("........................................");
+	level.append("........................................");
+	level.append("........................................");
+	level.append("........................................");
+	level.append("........................................");
+	level.append("........................................");
+	level.append("........................................");
+
+}
+
+char MyModel::Get_tile(int x, int y) {
+	if (x >= 0 && x <= level_width && y >= 0 && y <= level_height)
+		return level[y*level_width + x];
+
+};
+
+void MyModel::Set_tile(int x, int y, char c) {
+	if (x >= 0 && x <= level_width && y >= 0 && y <= level_height)
+		level[y*level_width + x] = c;
+
+};

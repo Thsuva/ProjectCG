@@ -73,6 +73,10 @@ private:
 	GLuint	texture[28];			// Storage For 28 Textures!
 	GLuint	base;				// Base Display List For The Font Set
 
+	std::string level = "";
+	int level_width = 40;
+	int level_height = 24;
+
 	// per i movimenti
 	float last_mov_pers;
 public:
@@ -83,10 +87,10 @@ public:
 
 		// i primi 2 valori dei vertex sono stati cambiati per fittare il 16/9
 		// (prima erano tutti -1 e 1 per generare un quadrato di lato 2 centrato in 0,0)
-		Background.push_back(Vertex(-1, -.60, -5, 0, 0));
-		Background.push_back(Vertex(1, -.60, -5, 1, 0));
-		Background.push_back(Vertex(1, .60, -5, 1, 1));
-		Background.push_back(Vertex(-1, .60, -5, 0, 1));
+		Background.push_back(Vertex(-1, -1.8, -5, 0, 0));
+		Background.push_back(Vertex(5, -1.8, -5, 1, 0));
+		Background.push_back(Vertex(5, 1.8, -5, 1, 1));
+		Background.push_back(Vertex(-1, 1.8, -5, 0, 1));
 
 		personaggio.clear();
 		personaggio.push_back(Vertex(-.035, -.05, -5, 0, 0));
@@ -112,7 +116,12 @@ public:
 	bool InitGL(void);
 	void ReSizeGLScene(int width, int height);
 	void glPrint(const char *fmt, ...);			// Custom GL "Print" Routine
-	void move_personaggio(int dir);
+
+	// inizio nostre funzioni
+	void Move_personaggio(int dir);
+	void Set_level();
+	char Get_tile(int x, int y);
+	void Set_tile(int x, int y, char c);
 
 private:
 	bool LoadGLTextures(void);
