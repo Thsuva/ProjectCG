@@ -8,6 +8,7 @@
 #include <stdio.h>			// Header File For Standard Input/Output
 #include <gl\gl.h>			// Header File For The OpenGL32 Library
 #include <gl\glu.h>			// Header File For The GLu32 Library
+#include <iostream>
 
 #include "Model.h"
 #include "SOIL.h"
@@ -130,7 +131,9 @@ bool MyModel::DrawGLScene(void)
 	glLoadIdentity();									// Reset The View
 
 	// ------------le 3 righe qui sotto servono per spostare il background in orizz di px
-	glTranslatef((float)last_mov_pers, 0.0, 0);
+	// vedo se gestire o no il salto
+
+	glTranslatef((float)last_mov_pers_h, (float)last_mov_pers_v, 0);
 	// --------------fino a qui
 	
 	glBindTexture(GL_TEXTURE_2D, texture[0]);
@@ -150,18 +153,6 @@ bool MyModel::DrawGLScene(void)
 	//  personaggio geometrical trasformations
 	glMatrixMode(GL_MODELVIEW);				// Select The Modelview Matrix
 	glLoadIdentity();									// Reset The View
-
-  //  circular path from window center. Radious and angular velocity
-  //  in radians as follows
-	double radious = 0.5;
-	double omega = PI / 27.0;  // PI/8 each second
-	double px, py;
-	px = radious * cos(omega * Full_elapsed);
-	py = radious * sin(omega * Full_elapsed);
-	//glTranslatef((float)px, (float)py, 0);
-	//glScalef(0.05f, 0.05f, 1);    // 1- scale the personaggio
-
-
 
 	// Personaggio
 	glEnable(GL_BLEND);
@@ -190,7 +181,7 @@ bool MyModel::DrawGLScene(void)
 				glBegin(GL_QUADS);
 				for (int i = 0; i < 4; i++) {
 					glTexCoord2f(tile[i].u, tile[i].v);
-					glVertex3f(-.975+(.05*col) + tile[i].x, -.45+(.05*row) + tile[i].y, tile[i].z);
+					glVertex3f(-.975+(.05*col) + tile[i].x, .55-(.05*row) + tile[i].y, tile[i].z);
 				}
 				glEnd();
 
@@ -292,24 +283,29 @@ void MyModel::glPrint(const char *fmt, ...)					// Custom GL "Print" Routine
 // muove il personaggio
 void MyModel::Move_personaggio(int dir)
 {
-	last_mov_pers += .025 * dir;
+	last_mov_pers_h += .025 * dir;
+}
+
+void MyModel::Jump_personaggio(int dir)
+{
+	last_mov_pers_v += .025 * dir;
 }
 
 void MyModel::Set_level()
 {
 	level.append("........................................");
 	level.append("........................................");
-	level.append("..........###########...................");
 	level.append("........................................");
 	level.append("........................................");
-	level.append("......................##########........");
 	level.append("........................................");
 	level.append("........................................");
+	level.append("........................................");
+	level.append("........................................");
+	level.append("........................................");
+	level.append("........................................");
+	level.append("........................................");
+	level.append("....................########............");
 	level.append("########################################");
-	level.append("........................................");
-	level.append("........................................");
-	level.append("........................................");
-	level.append("........................................");
 	level.append("........................................");
 	level.append("........................................");
 	level.append("........................................");

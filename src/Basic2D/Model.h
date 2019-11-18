@@ -78,11 +78,13 @@ private:
 	int level_height = 24;
 
 	// per i movimenti
-	float last_mov_pers;
+	float last_mov_pers_h;
+	float last_mov_pers_v;
+
 public:
 	//  methods
 	MyModel() : hDC(NULL), hRC(NULL), hWnd(NULL), active(true),
-		fullscreen(true), frames(0), fps(0), last_mov_pers(0) {
+		fullscreen(true), frames(0), fps(0), last_mov_pers_h(0), last_mov_pers_v(-.025) {
 		Background.clear();
 
 		// i primi 2 valori dei vertex sono stati cambiati per fittare il 16/9
@@ -93,16 +95,16 @@ public:
 		Background.push_back(Vertex(-1, 1.8, -5, 0, 1));
 
 		personaggio.clear();
-		personaggio.push_back(Vertex(-.035, -.05, -5, 0, 0));
-		personaggio.push_back(Vertex(.035, -.05, -5, 1, 0));
-		personaggio.push_back(Vertex(.035, .05, -5, 1, 1));
-		personaggio.push_back(Vertex(-.035, .05, -5, 0, 1));
+		personaggio.push_back(Vertex(-.035, -.025, -1, 0, 0));
+		personaggio.push_back(Vertex(.035, -.025, -1, 1, 0));
+		personaggio.push_back(Vertex(.035, .075, -1, 1, 1));
+		personaggio.push_back(Vertex(-.035, .075, -1, 0, 1));
 
 		tile.clear();
-		tile.push_back(Vertex(-.025, -.025, -5, 0, 0));
-		tile.push_back(Vertex(.025, -.025, -5, 1, 0));
-		tile.push_back(Vertex(.025, .025, -5, 1, 1));
-		tile.push_back(Vertex(-.025, .025, -5, 0, 1));
+		tile.push_back(Vertex(-.025, -.025, -4, 0, 0));
+		tile.push_back(Vertex(.025, -.025, -4, 1, 0));
+		tile.push_back(Vertex(.025, .025, -4, 1, 1));
+		tile.push_back(Vertex(-.025, .025, -4, 0, 1));
 
 		this->Tstart = this->Tstamp = clock();
 		this->Full_elapsed = 0;
@@ -119,6 +121,7 @@ public:
 
 	// inizio nostre funzioni
 	void Move_personaggio(int dir);
+	void Jump_personaggio(int dir);
 	void Set_level();
 	char Get_tile(int x, int y);
 	void Set_tile(int x, int y, char c);

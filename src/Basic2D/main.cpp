@@ -447,6 +447,19 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 
 			}
 
+			if (Data.keys[VK_UP])						// Is right arrow Being Pressed?
+			{
+				Data.keys[VK_UP] = FALSE;
+
+				Data.Jump_personaggio(-1);
+			}
+
+			if (Data.keys[VK_DOWN])						// Is right arrow Being Pressed?
+			{
+				Data.keys[VK_DOWN] = FALSE;
+
+				Data.Jump_personaggio(1);
+			}
 
 
 		}
