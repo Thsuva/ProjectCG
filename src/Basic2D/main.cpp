@@ -448,10 +448,17 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 				Data.keys[VK_RIGHT] = FALSE;
 				if (Data.Player.last_mov_pers_h > (-Data.Get_level_width() * .05)) {
 					int next_pos_x = -1;
+					float test = ((Data.Player.last_mov_pers_v) + 11);
+					int current_pos_y_bottom = (int)test;
+					int current_pos_y_top = current_pos_y_bottom - 1;
 
 					// simulo lo spostamento e calcolo la nuova tile
-					next_pos_x = (int)((Data.Player.last_mov_pers_h - .075) / .05);
-					if (Data.Get_tile(next_pos_x, Data.Player.last_mov_pers_v) == '.')
+					next_pos_x = (int)((Data.Player.last_mov_pers_h + .075) / .05);
+					//next_pos_x = next_pos_x + 20;
+
+					if (1==1)
+						Data.Player.Move_personaggio(-1);
+					if (Data.Get_tile(next_pos_x, current_pos_y_bottom) == '.' && Data.Get_tile(next_pos_x, current_pos_y_top) == '.')
 						Data.Player.Move_personaggio(-1);
 					// else rumore e ciclo animazione
 				}

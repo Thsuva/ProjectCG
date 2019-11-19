@@ -90,8 +90,12 @@ bool MyModel::LoadGLTextures(void)
 
 	//  Load 27 personaggio textures
 	char ll[200];
-	for (int i = 0; i < 1; i++) {
-		sprintf(ll, "../Data/fabrizio_00.png", i);
+	for (int i = 0; i < 2; i++) {
+		if (i==0)
+			sprintf(ll, "../Data/fabrizio_00.png", i);
+		else if (i==1)
+			sprintf(ll, "../Data/blank_tile.png", i);
+
 		this->texture[i + 1] = SOIL_load_OGL_texture(
 			ll, SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
 		if (texture[i + 1] == 0) return false;
@@ -179,7 +183,7 @@ bool MyModel::DrawGLScene(void)
 			switch (id)
 			{
 			case '#':
-				glBindTexture(GL_TEXTURE_2D, texture[3]);
+				glBindTexture(GL_TEXTURE_2D, texture[2]);
 				glBegin(GL_QUADS);
 				for (int i = 0; i < 4; i++) {
 					glTexCoord2f(tile[i].u, tile[i].v);
@@ -193,7 +197,7 @@ bool MyModel::DrawGLScene(void)
 			}
 		}
 	}
-	
+
 	//  Some text
 	glMatrixMode(GL_MODELVIEW);				// Select The Modelview Matrix
 	glLoadIdentity();									// Reset The Current Modelview Matrix
