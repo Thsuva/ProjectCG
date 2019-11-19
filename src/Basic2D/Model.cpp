@@ -9,6 +9,8 @@
 #include <gl\gl.h>			// Header File For The OpenGL32 Library
 #include <gl\glu.h>			// Header File For The GLu32 Library
 #include <iostream>
+#include <fstream>
+#include <string>
 
 #include "Model.h"
 #include "SOIL.h"
@@ -81,7 +83,7 @@ bool MyModel::LoadGLTextures(void)
 {
 	/* load an image file directly as a new OpenGL texture */
 	texture[0] = SOIL_load_OGL_texture
-	("../Data/skybox.jpg",
+	("../Data/skybox_hd.jpg",
 		SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
 
 	if (texture[0] == 0) return false;
@@ -133,7 +135,7 @@ bool MyModel::DrawGLScene(void)
 	// ------------le 3 righe qui sotto servono per spostare il background in orizz di px
 	// vedo se gestire o no il salto
 
-	glTranslatef((float)last_mov_pers_h, (float)last_mov_pers_v, 0);
+	glTranslatef((float)Player.last_mov_pers_h, (float)Player.last_mov_pers_v, 0);
 	// --------------fino a qui
 	
 	glBindTexture(GL_TEXTURE_2D, texture[0]);
@@ -162,8 +164,8 @@ bool MyModel::DrawGLScene(void)
 
 	glBegin(GL_QUADS);
 	for (int i = 0; i < 4; i++) {
-		glTexCoord2f(personaggio[i].u, personaggio[i].v);
-		glVertex3f(-personaggio[i].x, personaggio[i].y, personaggio[i].z);
+		glTexCoord2f(Player.personaggio[i].u, Player.personaggio[i].v);
+		glVertex3f(-Player.personaggio[i].x, Player.personaggio[i].y, Player.personaggio[i].z);
 	}
 	glEnd();
 
@@ -171,7 +173,7 @@ bool MyModel::DrawGLScene(void)
 	glDisable(GL_ALPHA_TEST);
 
 	// Tiles
-	for (int col = 0; col < Data.level_width; col++) {
+	for (int col = 0; col < Data.screen_width * Data.num_of_screens; col++) {
 		for (int row = 0; row < Data.level_height; row++) {
 			char id = Data.Get_tile(col, row);
 			switch (id)
@@ -181,7 +183,7 @@ bool MyModel::DrawGLScene(void)
 				glBegin(GL_QUADS);
 				for (int i = 0; i < 4; i++) {
 					glTexCoord2f(tile[i].u, tile[i].v);
-					glVertex3f(-.975+(.05*col) + tile[i].x, .55-(.05*row) + tile[i].y, tile[i].z);
+					glVertex3f(-.975+(.05*col) + tile[i].x + Player.last_mov_pers_h, .55-(.05*row) + tile[i].y + Player.last_mov_pers_v + .025, tile[i].z);
 				}
 				glEnd();
 
@@ -281,53 +283,44 @@ void MyModel::glPrint(const char *fmt, ...)					// Custom GL "Print" Routine
 // ------------------------------------------------------nostre funzioni
 
 // muove il personaggio
-void MyModel::Move_personaggio(int dir)
+void Personaggio::Move_personaggio(int dir)
 {
 	last_mov_pers_h += .025 * dir;
 }
 
-void MyModel::Jump_personaggio(int dir)
+void Personaggio::Jump_personaggio(int dir)
 {
 	last_mov_pers_v += .025 * dir;
 }
 
 void MyModel::Set_level()
 {
-	level.append("........................................");
-	level.append("........................................");
-	level.append("........................................");
-	level.append("........................................");
-	level.append("........................................");
-	level.append("........................................");
-	level.append("........................................");
-	level.append("........................................");
-	level.append("........................................");
-	level.append("........................................");
-	level.append("........................................");
-	level.append("....................########............");
-	level.append("########################################");
-	level.append("........................................");
-	level.append("........................................");
-	level.append("........................................");
-	level.append("........................................");
-	level.append("........................................");
-	level.append("........................................");
-	level.append("........................................");
-	level.append("........................................");
-	level.append("........................................");
-	level.append("........................................");
-	level.append("........................................");
+	std::ifstream file("../Data/level_input.txt");
+	std::string str;
+	while (std::getline(file, str)) {
+		level.append(str);
+	}
 
 }
 
+int MyModel::Get_level_width()
+{
+	return screen_width * (num_of_screens - 1);
+}
+
+bool Can_personaggio_move(char dir)
+{
+	// cose
+}
+
 char MyModel::Get_tile(int x, int y) {
-	if (x >= 0 && x <= level_width && y >= 0 && y <= level_height)
-		return level[y*level_width + x];
+	if (x >= 0 && x <= screen_width*num_of_screens && y >= 0 && y <= level_height)
+		return level[y*screen_width*num_of_screens + x];
 
 };
 
 void MyModel::Set_tile(int x, int y, char c) {
-	if (x >= 0 && x <= level_width && y >= 0 && y <= level_height)
-		level[y*level_width + x] = c;
+	if (x >= 0 && x <= screen_width*num_of_screens && y >= 0 && y <= level_height)
+		level[y*screen_width*num_of_screens + x] = c;
 
 };

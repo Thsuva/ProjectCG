@@ -437,13 +437,17 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 			if (Data.keys[VK_LEFT])						// Is left arrow Being Pressed?
 			{
 				Data.keys[VK_LEFT] = FALSE;
-				Data.Move_personaggio(1);
+
+				// se non rischio di uscire dal livello ed entrare nel nero
+				if (Data.Player.last_mov_pers_h < -.025)
+					Data.Player.Move_personaggio(1);
 			}
 
 			if (Data.keys[VK_RIGHT])						// Is right arrow Being Pressed?
 			{
 				Data.keys[VK_RIGHT] = FALSE;
-				Data.Move_personaggio(-1);
+				if (Data.Player.last_mov_pers_h > (-Data.Get_level_width() * .05))
+					Data.Player.Move_personaggio(-1);
 
 			}
 
@@ -451,14 +455,14 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 			{
 				Data.keys[VK_UP] = FALSE;
 
-				Data.Jump_personaggio(-1);
+				Data.Player.Jump_personaggio(-1);
 			}
 
 			if (Data.keys[VK_DOWN])						// Is right arrow Being Pressed?
 			{
 				Data.keys[VK_DOWN] = FALSE;
 
-				Data.Jump_personaggio(1);
+				Data.Player.Jump_personaggio(1);
 			}
 
 

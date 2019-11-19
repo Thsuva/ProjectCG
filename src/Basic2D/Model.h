@@ -42,6 +42,37 @@ public:
 };
 
 
+class Personaggio {
+
+public:
+	std::vector<Vertex> personaggio;  // floating personaggio
+
+	// per i movimenti
+	float last_mov_pers_h;
+	float last_mov_pers_v;
+
+public:
+	//  methods
+	Personaggio() : last_mov_pers_h(0), last_mov_pers_v(-.025) {
+
+		personaggio.clear();
+		personaggio.push_back(Vertex(-.05, -.025, -1, 0, 0));
+		personaggio.push_back(Vertex(.05, -.025, -1, 1, 0));
+		personaggio.push_back(Vertex(.05, .075, -1, 1, 1));
+		personaggio.push_back(Vertex(-.05, .075, -1, 0, 1));
+
+
+	}
+	~Personaggio() {
+	}
+
+	// inizio nostre funzioni
+	void Move_personaggio(int dir);
+	void Jump_personaggio(int dir);
+	bool Can_personaggio_move(char dir);
+
+};
+
 class MyModel {
 public:
 	//  general data for window and input controls
@@ -53,6 +84,7 @@ public:
 	bool	keys[256];			// Array Used For The Keyboard Routine
 	bool	active;		      // Window Active Flag Set To TRUE By Default
 	bool	fullscreen;	    // Fullscreen Flag 
+	Personaggio Player;
 
 private:
 	//  projection limits in X and Y: x in [-plx, plx], y in [-ply, ply]
@@ -65,7 +97,7 @@ private:
 
 	//  model data
 	std::vector<Vertex> Background;   // background
-	std::vector<Vertex> personaggio;  // floating personaggio
+	
 	std::vector<Vertex> tile;		  // blocco base
 	clock_t Tstamp, Tstart;
 	double Full_elapsed;  // elapsed time in seconds from the beginning of the program
@@ -74,17 +106,14 @@ private:
 	GLuint	base;				// Base Display List For The Font Set
 
 	std::string level = "";
-	int level_width = 40;
+	int num_of_screens = 3;
+	int screen_width = 40;
 	int level_height = 24;
-
-	// per i movimenti
-	float last_mov_pers_h;
-	float last_mov_pers_v;
 
 public:
 	//  methods
 	MyModel() : hDC(NULL), hRC(NULL), hWnd(NULL), active(true),
-		fullscreen(true), frames(0), fps(0), last_mov_pers_h(0), last_mov_pers_v(-.025) {
+		fullscreen(true), frames(0), fps(0){
 		Background.clear();
 
 		// i primi 2 valori dei vertex sono stati cambiati per fittare il 16/9
@@ -93,12 +122,6 @@ public:
 		Background.push_back(Vertex(5, -1.8, -5, 1, 0));
 		Background.push_back(Vertex(5, 1.8, -5, 1, 1));
 		Background.push_back(Vertex(-1, 1.8, -5, 0, 1));
-
-		personaggio.clear();
-		personaggio.push_back(Vertex(-.035, -.025, -1, 0, 0));
-		personaggio.push_back(Vertex(.035, -.025, -1, 1, 0));
-		personaggio.push_back(Vertex(.035, .075, -1, 1, 1));
-		personaggio.push_back(Vertex(-.035, .075, -1, 0, 1));
 
 		tile.clear();
 		tile.push_back(Vertex(-.025, -.025, -4, 0, 0));
@@ -120,11 +143,10 @@ public:
 	void glPrint(const char *fmt, ...);			// Custom GL "Print" Routine
 
 	// inizio nostre funzioni
-	void Move_personaggio(int dir);
-	void Jump_personaggio(int dir);
 	void Set_level();
 	char Get_tile(int x, int y);
 	void Set_tile(int x, int y, char c);
+	int Get_level_width();
 
 private:
 	bool LoadGLTextures(void);
