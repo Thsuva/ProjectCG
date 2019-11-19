@@ -69,7 +69,6 @@ public:
 	// inizio nostre funzioni
 	void Move_personaggio(int dir);
 	void Jump_personaggio(int dir);
-	bool Can_personaggio_move(char dir);
 
 };
 

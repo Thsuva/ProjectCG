@@ -308,11 +308,6 @@ int MyModel::Get_level_width()
 	return screen_width * (num_of_screens - 1);
 }
 
-bool Can_personaggio_move(char dir)
-{
-	// cose
-}
-
 char MyModel::Get_tile(int x, int y) {
 	if (x >= 0 && x <= screen_width*num_of_screens && y >= 0 && y <= level_height)
 		return level[y*screen_width*num_of_screens + x];

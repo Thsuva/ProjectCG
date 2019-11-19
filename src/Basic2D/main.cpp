@@ -446,9 +446,16 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 			if (Data.keys[VK_RIGHT])						// Is right arrow Being Pressed?
 			{
 				Data.keys[VK_RIGHT] = FALSE;
-				if (Data.Player.last_mov_pers_h > (-Data.Get_level_width() * .05))
-					Data.Player.Move_personaggio(-1);
+				if (Data.Player.last_mov_pers_h > (-Data.Get_level_width() * .05)) {
+					int next_pos_x = -1;
 
+					// simulo lo spostamento e calcolo la nuova tile
+					next_pos_x = (int)((Data.Player.last_mov_pers_h - .075) / .05);
+					if (Data.Get_tile(next_pos_x, Data.Player.last_mov_pers_v) == '.')
+						Data.Player.Move_personaggio(-1);
+					// else rumore e ciclo animazione
+				}
+					
 			}
 
 			if (Data.keys[VK_UP])						// Is right arrow Being Pressed?
