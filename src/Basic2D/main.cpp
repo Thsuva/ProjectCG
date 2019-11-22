@@ -436,30 +436,58 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 
 			if (Data.keys[VK_LEFT])						// Is left arrow Being Pressed?
 			{
-				Data.keys[VK_LEFT] = FALSE;
+				//Data.keys[VK_LEFT] = FALSE;
 
 				// se non rischio di uscire dal livello ed entrare nel nero
-				if (Data.Player.last_mov_pers_h < -.025)
-					Data.Player.Move_personaggio(1);
+				if (Data.Player.last_mov_pers_h < -.025) {
+					int current_pos_row_bottom = -1;
+					int next_pos_col = (int)((Data.Player.last_mov_pers_h + .075) / .05);
+
+					if (next_pos_col < 0)
+						next_pos_col *= -1;
+
+					next_pos_col += 20;
+
+					// simulo lo spostamento e calcolo la nuova tile
+					current_pos_row_bottom = (int)((Data.Player.last_mov_pers_v + .025) / .05);
+					if (current_pos_row_bottom < 0)
+						current_pos_row_bottom *= -1;
+
+					current_pos_row_bottom = 11 - current_pos_row_bottom;
+					int current_pos_row_top = current_pos_row_bottom - 1;
+
+					if (Data.Get_tile(next_pos_col, current_pos_row_bottom) == '.' && Data.Get_tile(next_pos_col, current_pos_row_top) == '.') {
+						Data.Player.Move_personaggio(1);
+					}
+						
+					// else rumore e ciclo animazione
+				}
 			}
 
 			if (Data.keys[VK_RIGHT])						// Is right arrow Being Pressed?
 			{
-				Data.keys[VK_RIGHT] = FALSE;
+				//Data.keys[VK_RIGHT] = FALSE;
 				if (Data.Player.last_mov_pers_h > (-Data.Get_level_width() * .05)) {
-					int next_pos_x = -1;
-					float test = ((Data.Player.last_mov_pers_v) + 11);
-					int current_pos_y_bottom = (int)test;
-					int current_pos_y_top = current_pos_y_bottom - 1;
+					int current_pos_row_bottom = -1;
+					int next_pos_col = (int)((Data.Player.last_mov_pers_h - .05) / .05); 
 
+					if (next_pos_col < 0)
+						next_pos_col *= -1;
+
+					next_pos_col += 20;
+					
 					// simulo lo spostamento e calcolo la nuova tile
-					next_pos_x = (int)((Data.Player.last_mov_pers_h + .075) / .05);
-					//next_pos_x = next_pos_x + 20;
+					current_pos_row_bottom = (int)((Data.Player.last_mov_pers_v + .025)/ .05);
+					if (current_pos_row_bottom < 0)
+						current_pos_row_bottom *= -1;
 
-					if (1==1)
+					current_pos_row_bottom = 11 - current_pos_row_bottom;
+					int current_pos_row_top = current_pos_row_bottom - 1;
+
+					if (Data.Get_tile(next_pos_col, current_pos_row_bottom) == '.' && Data.Get_tile(next_pos_col, current_pos_row_top) == '.') {
 						Data.Player.Move_personaggio(-1);
-					if (Data.Get_tile(next_pos_x, current_pos_y_bottom) == '.' && Data.Get_tile(next_pos_x, current_pos_y_top) == '.')
-						Data.Player.Move_personaggio(-1);
+					}
+						
 					// else rumore e ciclo animazione
 				}
 					
@@ -467,16 +495,25 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 
 			if (Data.keys[VK_UP])						// Is right arrow Being Pressed?
 			{
-				Data.keys[VK_UP] = FALSE;
+				//Data.keys[VK_UP] = FALSE;
 
-				Data.Player.Jump_personaggio(-1);
+				Data.Player.Move_up_down_personaggio(-1);
 			}
 
 			if (Data.keys[VK_DOWN])						// Is right arrow Being Pressed?
 			{
-				Data.keys[VK_DOWN] = FALSE;
+				//Data.keys[VK_DOWN] = FALSE;
 
-				Data.Player.Jump_personaggio(1);
+				Data.Player.Move_up_down_personaggio(1);
+			}
+
+			if (Data.keys[VK_SPACE])						// Is right arrow Being Pressed?
+			{
+				//Data.keys[VK_SPACE] = FALSE;
+
+				if (Data.Player.jump_quantum == 0 && Data.Player.on_ground)
+					Data.Player.on_ground = false;
+					Data.Player.jump_quantum = 20;
 			}
 
 

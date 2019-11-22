@@ -50,10 +50,12 @@ public:
 	// per i movimenti
 	float last_mov_pers_h;
 	float last_mov_pers_v;
+	int jump_quantum;
+	bool on_ground;
 
 public:
 	//  methods
-	Personaggio() : last_mov_pers_h(0), last_mov_pers_v(-.025) {
+	Personaggio() : last_mov_pers_h(0), last_mov_pers_v(-.025), jump_quantum(0), on_ground(true) {
 
 		personaggio.clear();
 		personaggio.push_back(Vertex(-.05, -.025, -1, 0, 0));
@@ -68,8 +70,9 @@ public:
 
 	// inizio nostre funzioni
 	void Move_personaggio(int dir);
-	void Jump_personaggio(int dir);
-
+	void Move_up_down_personaggio(int dir);
+	void Jump_personaggio();
+	void Gravity_personaggio();
 };
 
 class MyModel {
@@ -146,6 +149,7 @@ public:
 	char Get_tile(int x, int y);
 	void Set_tile(int x, int y, char c);
 	int Get_level_width();
+	int Get_level_height();
 
 private:
 	bool LoadGLTextures(void);

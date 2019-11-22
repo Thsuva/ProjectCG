@@ -139,6 +139,9 @@ bool MyModel::DrawGLScene(void)
 	// ------------le 3 righe qui sotto servono per spostare il background in orizz di px
 	// vedo se gestire o no il salto
 
+	// gravità mi sembra funzionante
+	Player.Gravity_personaggio();
+	Player.Jump_personaggio();
 	glTranslatef((float)Player.last_mov_pers_h, (float)Player.last_mov_pers_v, 0);
 	// --------------fino a qui
 	
@@ -289,12 +292,64 @@ void MyModel::glPrint(const char *fmt, ...)					// Custom GL "Print" Routine
 // muove il personaggio
 void Personaggio::Move_personaggio(int dir)
 {
-	last_mov_pers_h += .025 * dir;
+	last_mov_pers_h += .00025 * dir;
 }
 
-void Personaggio::Jump_personaggio(int dir)
+void Personaggio::Move_up_down_personaggio(int dir)
 {
-	last_mov_pers_v += .025 * dir;
+	last_mov_pers_v += .00025 * dir;
+}
+
+void Personaggio::Gravity_personaggio()
+{
+	if (last_mov_pers_v < (Data.Get_level_height() * .05) && jump_quantum == 0) {
+		int next_pos_row_bottom = -1;
+		int current_pos_col_right = (int)((last_mov_pers_h) / .05);
+
+		if (current_pos_col_right < 0)
+			current_pos_col_right *= -1;
+
+		current_pos_col_right += 20;
+		int current_pos_col_left = current_pos_col_right - 1;
+
+		// simulo lo spostamento e calcolo la nuova tile
+		next_pos_row_bottom = (int)((last_mov_pers_v) / .05);
+
+		next_pos_row_bottom = 12 - next_pos_row_bottom;
+
+		if (Data.Get_tile(current_pos_col_left, next_pos_row_bottom) == '.' && Data.Get_tile(current_pos_col_right, next_pos_row_bottom) == '.')
+			last_mov_pers_v += .025;
+		else
+			on_ground = true;
+		// else rumore e ciclo animazione
+	}
+}
+
+void Personaggio::Jump_personaggio()
+{
+	if (jump_quantum > 0) {
+		int next_pos_row_top = -1;
+		int current_pos_col_right = (int)((last_mov_pers_h) / .05);
+
+		if (current_pos_col_right < 0)
+			current_pos_col_right *= -1;
+
+		current_pos_col_right += 20;
+		int current_pos_col_left = current_pos_col_right - 1;
+
+		// simulo lo spostamento e calcolo la nuova tile
+		next_pos_row_top = (int)((last_mov_pers_v - .125) / .05);
+
+		next_pos_row_top = 10 - next_pos_row_top;
+
+		if (Data.Get_tile(current_pos_col_left, next_pos_row_top) == '.' && Data.Get_tile(current_pos_col_right, next_pos_row_top) == '.') {
+			last_mov_pers_v -= .025;
+			jump_quantum -= 1;
+		}
+		else
+			jump_quantum = 0;
+			
+	}
 }
 
 void MyModel::Set_level()
@@ -310,6 +365,11 @@ void MyModel::Set_level()
 int MyModel::Get_level_width()
 {
 	return screen_width * (num_of_screens - 1);
+}
+
+int MyModel::Get_level_height()
+{
+	return level_height;
 }
 
 char MyModel::Get_tile(int x, int y) {
