@@ -11,6 +11,8 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <cstdlib>
+#include <cmath>
 
 #include "Model.h"
 #include "SOIL.h"
@@ -123,7 +125,7 @@ bool MyModel::DrawGLScene(void)
 	// elapsed time in milliseconds from the last draw
 	int ms_elapsed = (int)(t - Tstamp);
 
-	if (ms_elapsed < 15) return true;
+	if (ms_elapsed < 30) return true;
 	// elapsed time in seconds from the beginning of the program
 	this->Full_elapsed = double(t - Tstart) / (double)CLOCKS_PER_SEC;
 	this->frameTime += double(t - Tstamp) / (double)CLOCKS_PER_SEC;
@@ -140,7 +142,7 @@ bool MyModel::DrawGLScene(void)
 	// vedo se gestire o no il salto
 
 	// gravità mi sembra funzionante
-	Player.Gravity_personaggio();
+	//Player.Gravity_personaggio();
 	Player.Jump_personaggio();
 	glTranslatef((float)Player.last_mov_pers_h, (float)Player.last_mov_pers_v, 0);
 	// --------------fino a qui
@@ -190,7 +192,7 @@ bool MyModel::DrawGLScene(void)
 				glBegin(GL_QUADS);
 				for (int i = 0; i < 4; i++) {
 					glTexCoord2f(tile[i].u, tile[i].v);
-					glVertex3f(-.975+(.05*col) + tile[i].x + Player.last_mov_pers_h, .55-(.05*row) + tile[i].y + Player.last_mov_pers_v + .025, tile[i].z);
+					glVertex3f(-.975+(.05*col) + tile[i].x + Player.last_mov_pers_h, .55-(.05*row) + tile[i].y + Player.last_mov_pers_v, tile[i].z);
 				}
 				glEnd();
 
@@ -290,9 +292,48 @@ void MyModel::glPrint(const char *fmt, ...)					// Custom GL "Print" Routine
 // ------------------------------------------------------nostre funzioni
 
 // muove il personaggio
-void Personaggio::Move_personaggio(int dir)
+void Personaggio::MoveOrCollide(double nvel_h)
 {
-	last_mov_pers_h += .00025 * dir;
+	nvel_h = (abs(nvel_h) > MAX_VEL_H) ? (MAX_VEL_H * (nvel_h/abs(nvel_h))) : nvel_h;
+
+	double npx = last_mov_pers_h + nvel_h;
+
+	if (nvel_h < 0) {
+		int next_pos_col_right = 21 - (int)((npx) / .05);
+		int next_pos_row_bottom = 11 + (int)(last_mov_pers_v / .05);
+
+		int next_pos_row_top = 0;
+		int next_pos_row_middle = next_pos_row_bottom - 1;
+		if (fmod(last_mov_pers_v,.05)==0) {
+			next_pos_row_top = next_pos_row_middle;
+		}
+		else {
+			next_pos_row_top = next_pos_row_middle - 1;
+		}
+
+		if (Data.Get_tile(next_pos_col_right, next_pos_row_bottom) == '.' && Data.Get_tile(next_pos_col_right, next_pos_row_top) == '.' && Data.Get_tile(next_pos_col_right, next_pos_row_middle) == '.') {
+			last_mov_pers_h = npx;
+			vel_h = nvel_h;
+		}
+		else {
+			vel_h = 0;
+		}
+	}
+	else if (nvel_h > 0) {
+		int next_pos_col_left = 19 - (int)((npx) / .05);
+		int next_pos_row_bottom = 11 + (int)(last_mov_pers_v / .05);
+
+		int next_pos_row_top = next_pos_row_bottom - 1;
+
+		if (Data.Get_tile(next_pos_col_left, next_pos_row_bottom) == '.' && Data.Get_tile(next_pos_col_left, next_pos_row_top) == '.') {
+			last_mov_pers_h = npx;
+			vel_h = nvel_h;
+		}
+		else {
+			vel_h = 0;
+		}
+	}	
+		
 }
 
 void Personaggio::Move_up_down_personaggio(int dir)
@@ -302,7 +343,7 @@ void Personaggio::Move_up_down_personaggio(int dir)
 
 void Personaggio::Gravity_personaggio()
 {
-	if (last_mov_pers_v < (Data.Get_level_height() * .05) && jump_quantum == 0) {
+	if (last_mov_pers_v < (Data.Get_level_height() * .05) && 0 == 0) {
 		int next_pos_row_bottom = -1;
 		int current_pos_col_right = (int)((last_mov_pers_h) / .05);
 
@@ -327,7 +368,7 @@ void Personaggio::Gravity_personaggio()
 
 void Personaggio::Jump_personaggio()
 {
-	if (jump_quantum > 0) {
+	if (0 > 0) {
 		int next_pos_row_top = -1;
 		int current_pos_col_right = (int)((last_mov_pers_h) / .05);
 
@@ -344,10 +385,10 @@ void Personaggio::Jump_personaggio()
 
 		if (Data.Get_tile(current_pos_col_left, next_pos_row_top) == '.' && Data.Get_tile(current_pos_col_right, next_pos_row_top) == '.') {
 			last_mov_pers_v -= .025;
-			jump_quantum -= 1;
+			int jump_quantum = 1;
 		}
 		else
-			jump_quantum = 0;
+			int jump_quantum = 0;
 			
 	}
 }

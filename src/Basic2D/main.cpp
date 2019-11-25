@@ -439,7 +439,7 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 				//Data.keys[VK_LEFT] = FALSE;
 
 				// se non rischio di uscire dal livello ed entrare nel nero
-				if (Data.Player.last_mov_pers_h < -.025) {
+				/*if (Data.Player.last_mov_pers_h < -.025) {
 					int current_pos_row_bottom = -1;
 					int next_pos_col = (int)((Data.Player.last_mov_pers_h + .075) / .05);
 
@@ -461,13 +461,19 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 					}
 						
 					// else rumore e ciclo animazione
+				}*/
+				if (Data.Player.last_mov_pers_h < -.025) {
+					double vel = .00025;
+					double nvel_h = Data.Player.vel_h + vel;
+
+					Data.Player.MoveOrCollide(nvel_h);
 				}
 			}
 
 			if (Data.keys[VK_RIGHT])						// Is right arrow Being Pressed?
 			{
 				//Data.keys[VK_RIGHT] = FALSE;
-				if (Data.Player.last_mov_pers_h > (-Data.Get_level_width() * .05)) {
+				/*if (Data.Player.last_mov_pers_h > (-Data.Get_level_width() * .05)) {
 					int current_pos_row_bottom = -1;
 					int next_pos_col = (int)((Data.Player.last_mov_pers_h - .05) / .05); 
 
@@ -489,6 +495,12 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 					}
 						
 					// else rumore e ciclo animazione
+				}*/
+				if (Data.Player.last_mov_pers_h > (-Data.Get_level_width() * .05)) {
+					double vel = .00025;
+					double nvel_h = Data.Player.vel_h - vel;
+
+					Data.Player.MoveOrCollide(nvel_h);
 				}
 					
 			}
@@ -511,9 +523,6 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 			{
 				//Data.keys[VK_SPACE] = FALSE;
 
-				if (Data.Player.jump_quantum == 0 && Data.Player.on_ground)
-					Data.Player.on_ground = false;
-					Data.Player.jump_quantum = 20;
 			}
 
 

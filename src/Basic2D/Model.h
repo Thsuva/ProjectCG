@@ -50,18 +50,21 @@ public:
 	// per i movimenti
 	float last_mov_pers_h;
 	float last_mov_pers_v;
-	int jump_quantum;
+	float vel_h;
+	float vel_v;
+	float MAX_VEL_H = 0.00025 * 3;
+	float MAX_VEL_V = 0.00025 * 3;
 	bool on_ground;
 
 public:
 	//  methods
-	Personaggio() : last_mov_pers_h(0), last_mov_pers_v(-.025), jump_quantum(0), on_ground(true) {
+	Personaggio() : last_mov_pers_h(0), last_mov_pers_v(0), vel_h(0), vel_v(0), on_ground(true) {
 
 		personaggio.clear();
-		personaggio.push_back(Vertex(-.05, -.025, -1, 0, 0));
-		personaggio.push_back(Vertex(.05, -.025, -1, 1, 0));
-		personaggio.push_back(Vertex(.05, .075, -1, 1, 1));
-		personaggio.push_back(Vertex(-.05, .075, -1, 0, 1));
+		personaggio.push_back(Vertex(-.05, 0, -1, 0, 0));
+		personaggio.push_back(Vertex(.05, 0, -1, 1, 0));
+		personaggio.push_back(Vertex(.05, .1, -1, 1, 1));
+		personaggio.push_back(Vertex(-.05, .1, -1, 0, 1));
 
 
 	}
@@ -69,7 +72,7 @@ public:
 	}
 
 	// inizio nostre funzioni
-	void Move_personaggio(int dir);
+	void MoveOrCollide(double nvel_h);
 	void Move_up_down_personaggio(int dir);
 	void Jump_personaggio();
 	void Gravity_personaggio();
@@ -126,10 +129,10 @@ public:
 		Background.push_back(Vertex(-1, 1.8, -5, 0, 1));
 
 		tile.clear();
-		tile.push_back(Vertex(-.025, -.025, -4, 0, 0));
-		tile.push_back(Vertex(.025, -.025, -4, 1, 0));
-		tile.push_back(Vertex(.025, .025, -4, 1, 1));
-		tile.push_back(Vertex(-.025, .025, -4, 0, 1));
+		tile.push_back(Vertex(-.025, 0, -4, 0, 0));
+		tile.push_back(Vertex(.025, 0, -4, 1, 0));
+		tile.push_back(Vertex(.025, .05, -4, 1, 1));
+		tile.push_back(Vertex(-.025, .05, -4, 0, 1));
 
 		this->Tstart = this->Tstamp = clock();
 		this->Full_elapsed = 0;
