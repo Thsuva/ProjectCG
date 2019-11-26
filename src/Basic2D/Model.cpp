@@ -142,8 +142,7 @@ bool MyModel::DrawGLScene(void)
 	// vedo se gestire o no il salto
 
 	// gravità mi sembra funzionante
-	//Player.Gravity_personaggio();
-	Player.Jump_personaggio();
+	Player.Gravity();
 	glTranslatef((float)Player.last_mov_pers_h, (float)Player.last_mov_pers_v, 0);
 	// --------------fino a qui
 	
@@ -224,10 +223,10 @@ bool MyModel::DrawGLScene(void)
 	this->glPrint("Elapsed time: %6.2f sec.  -  Fps %6.2f",
 		Full_elapsed, fps);
 
-	if (this->Full_elapsed < 6) {
+	if (true) {
 		glRasterPos3f(-(float)plx + PixToCoord_X(10), (float)-ply + PixToCoord_Y(21),
 			-4);
-		this->glPrint("F2/F3/F4 for sounds");
+		this->glPrint("vel_v: %f, vel_h: %f",Data.Player.vel_v,Data.Player.vel_h);
 	}
 
 	glEnable(GL_TEXTURE_2D);							// Enable Texture Mapping
@@ -294,46 +293,37 @@ void MyModel::glPrint(const char *fmt, ...)					// Custom GL "Print" Routine
 // muove il personaggio
 void Personaggio::MoveOrCollide(double nvel_h)
 {
-	nvel_h = (abs(nvel_h) > MAX_VEL_H) ? (MAX_VEL_H * (nvel_h/abs(nvel_h))) : nvel_h;
+	nvel_h = (abs(nvel_h) > MAX_VEL_H) ? (MAX_VEL_H * (nvel_h / abs(nvel_h))) : nvel_h;
 
 	double npx = last_mov_pers_h + nvel_h;
+	int next_pos_col = -1;
 
-	if (nvel_h < 0) {
-		int next_pos_col_right = 21 - (int)((npx) / .05);
-		int next_pos_row_bottom = 11 + (int)(last_mov_pers_v / .05);
+	if (nvel_h < 0)
+		next_pos_col = 21 - (int)((npx) / .05);
+	else if (nvel_h > 0)
+		next_pos_col = 19 - (int)((npx) / .05);
 
-		int next_pos_row_top = 0;
-		int next_pos_row_middle = next_pos_row_bottom - 1;
-		if (fmod(last_mov_pers_v,.05)==0) {
-			next_pos_row_top = next_pos_row_middle;
-		}
-		else {
-			next_pos_row_top = next_pos_row_middle - 1;
-		}
 
-		if (Data.Get_tile(next_pos_col_right, next_pos_row_bottom) == '.' && Data.Get_tile(next_pos_col_right, next_pos_row_top) == '.' && Data.Get_tile(next_pos_col_right, next_pos_row_middle) == '.') {
-			last_mov_pers_h = npx;
-			vel_h = nvel_h;
-		}
-		else {
-			vel_h = 0;
-		}
+	int next_pos_row_bottom = (int)(last_mov_pers_v / .05);
+
+	if (last_mov_pers_v > 0)
+		next_pos_row_bottom += 12;
+	else
+		next_pos_row_bottom += 11;
+
+	int next_pos_row_middle = next_pos_row_bottom - 1;
+	int next_pos_row_top = next_pos_row_middle;
+
+	if (fmod(last_mov_pers_v, .05) != 0)
+		next_pos_row_top -= 1;
+
+	if (Data.Get_tile(next_pos_col, next_pos_row_bottom) == '.' && Data.Get_tile(next_pos_col, next_pos_row_middle) == '.' && Data.Get_tile(next_pos_col, next_pos_row_top) == '.') {
+		last_mov_pers_h = npx;
+		vel_h = nvel_h;
 	}
-	else if (nvel_h > 0) {
-		int next_pos_col_left = 19 - (int)((npx) / .05);
-		int next_pos_row_bottom = 11 + (int)(last_mov_pers_v / .05);
-
-		int next_pos_row_top = next_pos_row_bottom - 1;
-
-		if (Data.Get_tile(next_pos_col_left, next_pos_row_bottom) == '.' && Data.Get_tile(next_pos_col_left, next_pos_row_top) == '.') {
-			last_mov_pers_h = npx;
-			vel_h = nvel_h;
-		}
-		else {
-			vel_h = 0;
-		}
-	}	
-		
+	else {
+		vel_h = 0;
+	}
 }
 
 void Personaggio::Move_up_down_personaggio(int dir)
@@ -341,57 +331,71 @@ void Personaggio::Move_up_down_personaggio(int dir)
 	last_mov_pers_v += .00025 * dir;
 }
 
-void Personaggio::Gravity_personaggio()
+void Personaggio::Gravity()
 {
-	if (last_mov_pers_v < (Data.Get_level_height() * .05) && 0 == 0) {
-		int next_pos_row_bottom = -1;
-		int current_pos_col_right = (int)((last_mov_pers_h) / .05);
-
-		if (current_pos_col_right < 0)
-			current_pos_col_right *= -1;
-
-		current_pos_col_right += 20;
-		int current_pos_col_left = current_pos_col_right - 1;
-
-		// simulo lo spostamento e calcolo la nuova tile
-		next_pos_row_bottom = (int)((last_mov_pers_v) / .05);
-
-		next_pos_row_bottom = 12 - next_pos_row_bottom;
-
-		if (Data.Get_tile(current_pos_col_left, next_pos_row_bottom) == '.' && Data.Get_tile(current_pos_col_right, next_pos_row_bottom) == '.')
-			last_mov_pers_v += .025;
-		else
-			on_ground = true;
-		// else rumore e ciclo animazione
+	if (Is_on_tile()) {
+		vel_v = 0;
 	}
+	else {
+		vel_v += 00025;
+		vel_v = (vel_v > MAX_VEL_V) ? MAX_VEL_V : vel_v;
+		double npy = last_mov_pers_v + vel_h;
+
+		int next_pos_row_bottom = (int)(npy / .05);
+
+		if (npy > 0)
+			next_pos_row_bottom += 12;
+		else
+			next_pos_row_bottom += 11;
+
+		int current_pos_col_right = 20 - (int)((last_mov_pers_h) / .05);
+		int current_pos_col_middle = current_pos_col_right - 1;
+		int current_pos_col_left = current_pos_col_middle;
+		if (fmod(last_mov_pers_h, .05) != 0) {
+			current_pos_col_left -= 1;
+		}
+
+		if (Data.Get_tile(current_pos_col_right, next_pos_row_bottom) == '#'
+			|| Data.Get_tile(current_pos_col_middle, next_pos_row_bottom) == '#'
+			|| Data.Get_tile(current_pos_col_left, next_pos_row_bottom) == '#') {
+			last_mov_pers_v = ((next_pos_row_bottom - 12) * .05);
+			vel_v = 0;
+		}
+	}
+	last_mov_pers_v += vel_v;
 }
 
 void Personaggio::Jump_personaggio()
 {
-	if (0 > 0) {
-		int next_pos_row_top = -1;
-		int current_pos_col_right = (int)((last_mov_pers_h) / .05);
-
-		if (current_pos_col_right < 0)
-			current_pos_col_right *= -1;
-
-		current_pos_col_right += 20;
-		int current_pos_col_left = current_pos_col_right - 1;
-
-		// simulo lo spostamento e calcolo la nuova tile
-		next_pos_row_top = (int)((last_mov_pers_v - .125) / .05);
-
-		next_pos_row_top = 10 - next_pos_row_top;
-
-		if (Data.Get_tile(current_pos_col_left, next_pos_row_top) == '.' && Data.Get_tile(current_pos_col_right, next_pos_row_top) == '.') {
-			last_mov_pers_v -= .025;
-			int jump_quantum = 1;
-		}
-		else
-			int jump_quantum = 0;
-			
+	if (Is_on_tile()) {
+		vel_v -= .00025*2000;
+		last_mov_pers_v += vel_v;
 	}
+	
 }
+
+bool Personaggio::Is_on_tile(){
+	int current_pos_col_right = 20 - (int)((last_mov_pers_h) / .05);
+	int current_pos_col_middle = current_pos_col_right - 1;
+	int current_pos_col_left = current_pos_col_middle;
+	if (fmod(last_mov_pers_h, .05) != 0) {
+		current_pos_col_left -= 1;
+	}
+
+	int next_pos_row_bottom = (int)(last_mov_pers_v / .05);
+
+	if (last_mov_pers_v > 0)
+		next_pos_row_bottom += 13;
+	else
+		next_pos_row_bottom += 12;
+
+	if (fmod(last_mov_pers_v, .05) == 0 && (Data.Get_tile(current_pos_col_right, next_pos_row_bottom) == '#' 
+		|| Data.Get_tile(current_pos_col_middle, next_pos_row_bottom) == '#' || Data.Get_tile(current_pos_col_left, next_pos_row_bottom) == '#')) {
+		return true;
+	}
+	return false;
+}
+
 
 void MyModel::Set_level()
 {
@@ -414,13 +418,12 @@ int MyModel::Get_level_height()
 }
 
 char MyModel::Get_tile(int x, int y) {
-	if (x >= 0 && x <= screen_width*num_of_screens && y >= 0 && y <= level_height)
+	if (x >= 0 && x < screen_width*num_of_screens && y >= 0 && y < level_height)
 		return level[y*screen_width*num_of_screens + x];
 
 };
 
 void MyModel::Set_tile(int x, int y, char c) {
-	if (x >= 0 && x <= screen_width*num_of_screens && y >= 0 && y <= level_height)
+	if (x >= 0 && x < screen_width*num_of_screens && y >= 0 && y < level_height)
 		level[y*screen_width*num_of_screens + x] = c;
-
 };

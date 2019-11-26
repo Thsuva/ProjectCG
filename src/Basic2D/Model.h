@@ -53,7 +53,7 @@ public:
 	float vel_h;
 	float vel_v;
 	float MAX_VEL_H = 0.00025 * 3;
-	float MAX_VEL_V = 0.00025 * 3;
+	float MAX_VEL_V = 0.00025 * 100;
 	bool on_ground;
 
 public:
@@ -75,8 +75,10 @@ public:
 	void MoveOrCollide(double nvel_h);
 	void Move_up_down_personaggio(int dir);
 	void Jump_personaggio();
-	void Gravity_personaggio();
+	void Gravity();
+	bool Is_on_tile();
 };
+
 
 class MyModel {
 public:

@@ -35,7 +35,8 @@
 #include <stdio.h>			// Header File For Standard Input/Output
 #include <gl\gl.h>			// Header File For The OpenGL32 Library
 #include <gl\glu.h>			// Header File For The GLu32 Library
-
+#include <cstdlib>
+#include <cmath>
 
 #include "Model.h"
 
@@ -434,34 +435,8 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 				else stupid->play();
 			}
 
-			if (Data.keys[VK_LEFT])						// Is left arrow Being Pressed?
+			if (Data.keys[VK_LEFT])      // Is left arrow Being Pressed?
 			{
-				//Data.keys[VK_LEFT] = FALSE;
-
-				// se non rischio di uscire dal livello ed entrare nel nero
-				/*if (Data.Player.last_mov_pers_h < -.025) {
-					int current_pos_row_bottom = -1;
-					int next_pos_col = (int)((Data.Player.last_mov_pers_h + .075) / .05);
-
-					if (next_pos_col < 0)
-						next_pos_col *= -1;
-
-					next_pos_col += 20;
-
-					// simulo lo spostamento e calcolo la nuova tile
-					current_pos_row_bottom = (int)((Data.Player.last_mov_pers_v + .025) / .05);
-					if (current_pos_row_bottom < 0)
-						current_pos_row_bottom *= -1;
-
-					current_pos_row_bottom = 11 - current_pos_row_bottom;
-					int current_pos_row_top = current_pos_row_bottom - 1;
-
-					if (Data.Get_tile(next_pos_col, current_pos_row_bottom) == '.' && Data.Get_tile(next_pos_col, current_pos_row_top) == '.') {
-						Data.Player.Move_personaggio(1);
-					}
-						
-					// else rumore e ciclo animazione
-				}*/
 				if (Data.Player.last_mov_pers_h < -.025) {
 					double vel = .00025;
 					double nvel_h = Data.Player.vel_h + vel;
@@ -470,39 +445,15 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 				}
 			}
 
-			if (Data.keys[VK_RIGHT])						// Is right arrow Being Pressed?
+			if (Data.keys[VK_RIGHT])      // Is right arrow Being Pressed?
 			{
-				//Data.keys[VK_RIGHT] = FALSE;
-				/*if (Data.Player.last_mov_pers_h > (-Data.Get_level_width() * .05)) {
-					int current_pos_row_bottom = -1;
-					int next_pos_col = (int)((Data.Player.last_mov_pers_h - .05) / .05); 
-
-					if (next_pos_col < 0)
-						next_pos_col *= -1;
-
-					next_pos_col += 20;
-					
-					// simulo lo spostamento e calcolo la nuova tile
-					current_pos_row_bottom = (int)((Data.Player.last_mov_pers_v + .025)/ .05);
-					if (current_pos_row_bottom < 0)
-						current_pos_row_bottom *= -1;
-
-					current_pos_row_bottom = 11 - current_pos_row_bottom;
-					int current_pos_row_top = current_pos_row_bottom - 1;
-
-					if (Data.Get_tile(next_pos_col, current_pos_row_bottom) == '.' && Data.Get_tile(next_pos_col, current_pos_row_top) == '.') {
-						Data.Player.Move_personaggio(-1);
-					}
-						
-					// else rumore e ciclo animazione
-				}*/
 				if (Data.Player.last_mov_pers_h > (-Data.Get_level_width() * .05)) {
 					double vel = .00025;
 					double nvel_h = Data.Player.vel_h - vel;
 
 					Data.Player.MoveOrCollide(nvel_h);
 				}
-					
+
 			}
 
 			if (Data.keys[VK_UP])						// Is right arrow Being Pressed?
@@ -522,7 +473,19 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 			if (Data.keys[VK_SPACE])						// Is right arrow Being Pressed?
 			{
 				//Data.keys[VK_SPACE] = FALSE;
+				Data.Player.Jump_personaggio();
 
+			}
+
+			if (!Data.keys[VK_LEFT] && !Data.keys[VK_RIGHT]) {
+
+				if (Data.Player.vel_h < 0)
+					Data.Player.vel_h += .00025;
+				else if (Data.Player.vel_h > 0)
+					Data.Player.vel_h -= .00025;
+				
+				if (Data.Player.vel_h  < .00025 && Data.Player.vel_h > -.00025)
+					Data.Player.vel_h = 0;
 			}
 
 
