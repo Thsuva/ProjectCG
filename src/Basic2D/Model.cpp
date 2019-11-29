@@ -125,7 +125,7 @@ bool MyModel::DrawGLScene(void)
 	// elapsed time in milliseconds from the last draw
 	int ms_elapsed = (int)(t - Tstamp);
 
-	if (ms_elapsed < 30) return true;
+	if (ms_elapsed < 10) return true;
 	// elapsed time in seconds from the beginning of the program
 	this->Full_elapsed = double(t - Tstart) / (double)CLOCKS_PER_SEC;
 	this->frameTime += double(t - Tstamp) / (double)CLOCKS_PER_SEC;
@@ -226,7 +226,7 @@ bool MyModel::DrawGLScene(void)
 	if (true) {
 		glRasterPos3f(-(float)plx + PixToCoord_X(10), (float)-ply + PixToCoord_Y(21),
 			-4);
-		this->glPrint("vel_v: %f, vel_h: %f",Data.Player.vel_v,Data.Player.vel_h);
+		this->glPrint("vel_v: %d, vel_h: %f",Data.Player.Is_on_tile(),Data.Player.last_mov_pers_v);
 	}
 
 	glEnable(GL_TEXTURE_2D);							// Enable Texture Mapping
@@ -313,11 +313,11 @@ void Personaggio::MoveOrCollide(double nvel_h)
 
 	int next_pos_row_middle = next_pos_row_bottom - 1;
 	int next_pos_row_top = next_pos_row_middle;
-
-	if (fmod(last_mov_pers_v, .05) != 0)
+	int temp_last_pers_v = (int)(last_mov_pers_v * 100000);
+	if (temp_last_pers_v % 5000 != 0)
 		next_pos_row_top -= 1;
 
-	if (Data.Get_tile(next_pos_col, next_pos_row_bottom) == '.' && Data.Get_tile(next_pos_col, next_pos_row_middle) == '.' && Data.Get_tile(next_pos_col, next_pos_row_top) == '.') {
+	if (Data.Get_tile(next_pos_col, next_pos_row_bottom) != '#' && Data.Get_tile(next_pos_col, next_pos_row_middle) != '#' && Data.Get_tile(next_pos_col, next_pos_row_top) != '#') {
 		last_mov_pers_h = npx;
 		vel_h = nvel_h;
 	}
@@ -337,7 +337,7 @@ void Personaggio::Gravity()
 		vel_v = 0;
 	}
 	else {
-		vel_v += 00025;
+		vel_v += .00025;
 		vel_v = (vel_v > MAX_VEL_V) ? MAX_VEL_V : vel_v;
 		double npy = last_mov_pers_v + vel_h;
 
@@ -347,12 +347,19 @@ void Personaggio::Gravity()
 			next_pos_row_bottom += 12;
 		else
 			next_pos_row_bottom += 11;
-
-		int current_pos_col_right = 20 - (int)((last_mov_pers_h) / .05);
+		
+		int current_pos_col_right = 21 - (int)((last_mov_pers_h) / .05);
 		int current_pos_col_middle = current_pos_col_right - 1;
 		int current_pos_col_left = current_pos_col_middle;
-		if (fmod(last_mov_pers_h, .05) != 0) {
+		int temp_last_pers_h = (int)(last_mov_pers_h * 100000);
+		if (temp_last_pers_h% 5000 != 0) {
 			current_pos_col_left -= 1;
+		}
+
+		
+		if (next_pos_row_bottom == 23) {
+			vel_v = 0;
+			//Player.Die();
 		}
 
 		if (Data.Get_tile(current_pos_col_right, next_pos_row_bottom) == '#'
@@ -361,6 +368,15 @@ void Personaggio::Gravity()
 			last_mov_pers_v = ((next_pos_row_bottom - 12) * .05);
 			vel_v = 0;
 		}
+		
+		int newt_pos_row_top = next_pos_row_bottom - 2;
+		if (Data.Get_tile(current_pos_col_right, newt_pos_row_top) == '#'
+			|| Data.Get_tile(current_pos_col_middle, newt_pos_row_top) == '#'
+			|| Data.Get_tile(current_pos_col_left, newt_pos_row_top) == '#') {
+			last_mov_pers_v = ((next_pos_row_bottom - 10.99) * .05);;
+			vel_v = 0;
+		}
+		
 	}
 	last_mov_pers_v += vel_v;
 }
@@ -368,17 +384,18 @@ void Personaggio::Gravity()
 void Personaggio::Jump_personaggio()
 {
 	if (Is_on_tile()) {
-		vel_v -= .00025*2000;
+		vel_v -= MAX_VEL_V;
 		last_mov_pers_v += vel_v;
 	}
 	
 }
 
 bool Personaggio::Is_on_tile(){
-	int current_pos_col_right = 20 - (int)((last_mov_pers_h) / .05);
+	int current_pos_col_right = 21 - (int)((last_mov_pers_h) / .05);
 	int current_pos_col_middle = current_pos_col_right - 1;
 	int current_pos_col_left = current_pos_col_middle;
-	if (fmod(last_mov_pers_h, .05) != 0) {
+	int temp_last_pers_h = (int)(last_mov_pers_h * 100000);
+	if (temp_last_pers_h % 5000 != 0) {
 		current_pos_col_left -= 1;
 	}
 
@@ -388,8 +405,8 @@ bool Personaggio::Is_on_tile(){
 		next_pos_row_bottom += 13;
 	else
 		next_pos_row_bottom += 12;
-
-	if (fmod(last_mov_pers_v, .05) == 0 && (Data.Get_tile(current_pos_col_right, next_pos_row_bottom) == '#' 
+	int temp_last_pers_v = (int)(last_mov_pers_v * 100000);
+	if (temp_last_pers_v % 5000 == 0 && (Data.Get_tile(current_pos_col_right, next_pos_row_bottom) == '#'
 		|| Data.Get_tile(current_pos_col_middle, next_pos_row_bottom) == '#' || Data.Get_tile(current_pos_col_left, next_pos_row_bottom) == '#')) {
 		return true;
 	}

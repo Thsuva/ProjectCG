@@ -52,8 +52,8 @@ public:
 	float last_mov_pers_v;
 	float vel_h;
 	float vel_v;
-	float MAX_VEL_H = 0.00025 * 3;
-	float MAX_VEL_V = 0.00025 * 100;
+	float MAX_VEL_H = 0.00025 * .7;
+	float MAX_VEL_V = 0.00025 * 50;
 	bool on_ground;
 
 public:

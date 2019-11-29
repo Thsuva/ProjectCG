@@ -21,6 +21,8 @@ c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\
 c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(321): warning C4244: '=': conversione da 'double' a 'float'. Possibile perdita di dati.
 c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(322): warning C4244: '=': conversione da 'double' a 'float'. Possibile perdita di dati.
 c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(331): warning C4244: '+=': conversione da 'double' a 'float'. Possibile perdita di dati.
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(361): warning C4244: '=': conversione da 'double' a 'float'. Possibile perdita di dati.
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(424): warning C4715: 'MyModel::Get_tile': non tutti i percorsi di controllo restituiscono un valore
+c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(340): warning C4305: '+=': troncamento da 'double' a 'float'
+c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(364): warning C4244: '=': conversione da 'double' a 'float'. Possibile perdita di dati.
+c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(372): warning C4244: '=': conversione da 'double' a 'float'. Possibile perdita di dati.
+c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(437): warning C4715: 'MyModel::Get_tile': non tutti i percorsi di controllo restituiscono un valore
   Basic2D.vcxproj -> C:\Users\fabrizio\Desktop\Universitazione\Magistrale\ComputerGraphics\ProjectCG\src\Debug\Basic2D.exe
