@@ -13,6 +13,9 @@
 #include <string>
 #include <cstdlib>
 #include <cmath>
+#include <list>
+#include <stdlib.h>
+
 
 #include "Model.h"
 #include "SOIL.h"
@@ -202,6 +205,37 @@ bool MyModel::DrawGLScene(void)
 		}
 	}
 
+	// bullets 
+	std::list<Bullet>::iterator it = bullet_list.begin();
+
+	// printo tutta la coda ad ogni iterazione
+	for (it = bullet_list.begin(); it != bullet_list.end(); ++it) {
+		it->update_position();
+		glBindTexture(GL_TEXTURE_2D, texture[2]);
+		glBegin(GL_QUADS);
+		for (int i = 0; i < 4; i++) {
+			glTexCoord2f(it->bullet[i].u, it->bullet[i].v);
+			glVertex3f(it->bullet[i].x + Player.last_mov_pers_h + it->pos_x, it->bullet[i].y - Player.last_mov_pers_v + it->pos_y, it->bullet[i].z);
+		}
+		glEnd();
+
+	}
+	// Tiles
+	for (int col = 0; col < Data.screen_width * Data.num_of_screens; col++) {
+		for (int row = 0; row < Data.level_height; row++) {
+			char id = Data.Get_tile(col, row);
+			switch (id)
+			{
+			case '#':
+				
+
+				break;
+			default:
+				break;
+			}
+		}
+	}
+
 	//  Some text
 	glMatrixMode(GL_MODELVIEW);				// Select The Modelview Matrix
 	glLoadIdentity();									// Reset The Current Modelview Matrix
@@ -226,7 +260,7 @@ bool MyModel::DrawGLScene(void)
 	if (true) {
 		glRasterPos3f(-(float)plx + PixToCoord_X(10), (float)-ply + PixToCoord_Y(21),
 			-4);
-		this->glPrint("vel_v: %d, vel_h: %f",Data.Player.Is_on_tile(),Data.Player.last_mov_pers_v);
+		this->glPrint("vel_v: %f, vel_h: %f",Data.Player.vel_v,Data.Player.vel_h);
 	}
 
 	glEnable(GL_TEXTURE_2D);							// Enable Texture Mapping
@@ -411,6 +445,16 @@ bool Personaggio::Is_on_tile(){
 		return true;
 	}
 	return false;
+}
+
+Bullet Personaggio::shoot() {
+	float start_x = last_mov_pers_h + 0.5;
+	float start_y = last_mov_pers_v - 0.5;
+
+	Bullet bullet = Bullet(start_x, start_y, last_mov_pers_h, last_mov_pers_v);
+
+	return bullet;
+
 }
 
 

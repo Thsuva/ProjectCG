@@ -17,6 +17,7 @@
 #include <vector>
 #include <time.h>
 #include <math.h>
+#include <list>
 
 #define PI 3.141592654
 
@@ -41,6 +42,45 @@ public:
 	inline void SetN(float x, float y, float z) { Nx = x; Ny = y; Nz = z; }
 };
 
+class Bullet {
+
+public:
+	std::vector<Vertex> bullet;  // floating personaggio
+
+	// per i movimenti
+	float pos_x;
+	float pos_y;
+	float vel_h;
+	float vel_v;
+
+
+public:
+	//  methods
+	Bullet(float start_x, float start_y, float target_x, float target_y) : pos_x(start_x
+	), pos_y(start_y), vel_h(0), vel_v(0.005) {
+
+		bullet.clear();
+		bullet.push_back(Vertex(start_x - .005, start_y - .005, -1, 0, 0));
+		bullet.push_back(Vertex(start_x + .005, start_y - .005, -1, 1, 0));
+		bullet.push_back(Vertex(start_x + .005, start_y + .005, -1, 1, 1));
+		bullet.push_back(Vertex(start_x - .005, start_y + .005, -1, 0, 1));
+
+		float dx = pos_x - target_x;
+		float dy = pos_x - target_y;
+
+	}
+	~Bullet() {
+	}
+
+	void update_position() {
+		pos_x = pos_x + vel_h;
+		pos_y = pos_y + vel_v;
+
+		//if outofscreen: self.distruttore 
+	}
+};
+
+
 
 class Personaggio {
 
@@ -54,11 +94,11 @@ public:
 	float vel_v;
 	float MAX_VEL_H = 0.00025 * .7;
 	float MAX_VEL_V = 0.00025 * 50;
-	bool on_ground;
+	int weapon = 0;
 
 public:
 	//  methods
-	Personaggio() : last_mov_pers_h(0), last_mov_pers_v(0), vel_h(0), vel_v(0), on_ground(true) {
+	Personaggio() : last_mov_pers_h(0), last_mov_pers_v(0), vel_h(0), vel_v(0){
 
 		personaggio.clear();
 		personaggio.push_back(Vertex(-.05, 0, -1, 0, 0));
@@ -77,8 +117,8 @@ public:
 	void Jump_personaggio();
 	void Gravity();
 	bool Is_on_tile();
+	Bullet shoot();
 };
-
 
 class MyModel {
 public:
@@ -92,6 +132,7 @@ public:
 	bool	active;		      // Window Active Flag Set To TRUE By Default
 	bool	fullscreen;	    // Fullscreen Flag 
 	Personaggio Player;
+	std::list<Bullet> bullet_list;
 
 private:
 	//  projection limits in X and Y: x in [-plx, plx], y in [-ply, ply]

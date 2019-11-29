@@ -421,11 +421,11 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 				if (explosion->isPlaying()) explosion->reset();
 				else explosion->play();
 			}
+			//test shooting
 			if (Data.keys[VK_F3])						// Is F3 Being Pressed?
 			{
-				Data.keys[VK_F3] = FALSE;					// If So Make Key FALSE
-				if (bell->isPlaying()) bell->reset();
-				else bell->play();
+				Bullet bullet = Data.Player.shoot();
+				Data.bullet_list.push_back(bullet);
 			}
 
 			if (Data.keys[VK_F4])						// Is F4 Being Pressed?
