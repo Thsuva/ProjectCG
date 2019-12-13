@@ -424,6 +424,7 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 			//test shooting
 			if (Data.keys[VK_F3])						// Is F3 Being Pressed?
 			{
+				Data.keys[VK_F3] = FALSE;
 				Bullet bullet = Data.Player.shoot();
 				Data.bullet_list.push_back(bullet);
 			}

@@ -210,12 +210,12 @@ bool MyModel::DrawGLScene(void)
 
 	// printo tutta la coda ad ogni iterazione
 	for (it = bullet_list.begin(); it != bullet_list.end(); ++it) {
-		it->update_position();
+		// it->update_position();
 		glBindTexture(GL_TEXTURE_2D, texture[2]);
 		glBegin(GL_QUADS);
 		for (int i = 0; i < 4; i++) {
 			glTexCoord2f(it->bullet[i].u, it->bullet[i].v);
-			glVertex3f(it->bullet[i].x + Player.last_mov_pers_h + it->pos_x, it->bullet[i].y - Player.last_mov_pers_v + it->pos_y, it->bullet[i].z);
+			glVertex3f(it->bullet[i].x + Player.last_mov_pers_h + it->pos_x, it->bullet[i].y - Player.last_mov_pers_v - it->pos_y, it->bullet[i].z);
 		}
 		glEnd();
 
@@ -382,7 +382,7 @@ void Personaggio::Gravity()
 		else
 			next_pos_row_bottom += 11;
 		
-		int current_pos_col_right = 21 - (int)((last_mov_pers_h) / .05);
+		int current_pos_col_right = 20 - (int)((last_mov_pers_h) / .05);
 		int current_pos_col_middle = current_pos_col_right - 1;
 		int current_pos_col_left = current_pos_col_middle;
 		int temp_last_pers_h = (int)(last_mov_pers_h * 100000);
@@ -425,7 +425,7 @@ void Personaggio::Jump_personaggio()
 }
 
 bool Personaggio::Is_on_tile(){
-	int current_pos_col_right = 21 - (int)((last_mov_pers_h) / .05);
+	int current_pos_col_right = 20 - (int)((last_mov_pers_h) / .05);
 	int current_pos_col_middle = current_pos_col_right - 1;
 	int current_pos_col_left = current_pos_col_middle;
 	int temp_last_pers_h = (int)(last_mov_pers_h * 100000);
@@ -448,8 +448,8 @@ bool Personaggio::Is_on_tile(){
 }
 
 Bullet Personaggio::shoot() {
-	float start_x = last_mov_pers_h + 0.5;
-	float start_y = last_mov_pers_v - 0.5;
+	float start_x = last_mov_pers_h + 0.05;
+	float start_y = last_mov_pers_v - 0.05;
 
 	Bullet bullet = Bullet(start_x, start_y, last_mov_pers_h, last_mov_pers_v);
 
