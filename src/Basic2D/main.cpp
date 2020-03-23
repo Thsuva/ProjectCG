@@ -110,22 +110,22 @@ BOOL CreateGLWindow(char* title, int width, int height, int bits, bool fullscree
 	RECT		WindowRect;				// Grabs Rectangle Upper Left / Lower Right Values
 	WindowRect.left = (long)0;			// Set Left Value To 0
 	WindowRect.right = (long)width;		// Set Right Value To Requested Width
-	WindowRect.top = (long)0;				// Set Top Value To 0
-	WindowRect.bottom = (long)height;		// Set Bottom Value To Requested Height
+	WindowRect.top = (long)0;			// Set Top Value To 0
+	WindowRect.bottom = (long)height;	// Set Bottom Value To Requested Height
 
 	Data.fullscreen = fullscreenflag;			// Set The Global Fullscreen Flag
 
 	Data.hInstance = GetModuleHandle(NULL);				// Grab An Instance For Our Window
-	wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;	// Redraw On Size, And Own DC For Window.
+	wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;	    // Redraw On Size, And Own DC For Window.
 	wc.lpfnWndProc = (WNDPROC)WndProc;					// WndProc Handles Messages
 	wc.cbClsExtra = 0;									// No Extra Window Data
 	wc.cbWndExtra = 0;									// No Extra Window Data
-	wc.hInstance = Data.hInstance;							// Set The Instance
-	wc.hIcon = LoadIcon(NULL, IDI_WINLOGO);			// Load The Default Icon
+	wc.hInstance = Data.hInstance;						// Set The Instance
+	wc.hIcon = LoadIcon(NULL, IDI_WINLOGO);			    // Load The Default Icon
 	wc.hCursor = LoadCursor(NULL, IDC_ARROW);			// Load The Arrow Pointer
-	wc.hbrBackground = NULL;									// No Background Required For GL
-	wc.lpszMenuName = NULL;									// We Don't Want A Menu
-	wc.lpszClassName = "Basic2D";								// Set The Class Name
+	wc.hbrBackground = NULL;							// No Background Required For GL
+	wc.lpszMenuName = NULL;								// We Don't Want A Menu
+	wc.lpszClassName = "Basic2D";						// Set The Class Name
 
 	if (!RegisterClass(&wc))									// Attempt To Register The Window Class
 	{
@@ -186,7 +186,7 @@ BOOL CreateGLWindow(char* title, int width, int height, int bits, bool fullscree
 		WindowRect.bottom - WindowRect.top,	// Calculate Window Height
 		NULL,								// No Parent Window
 		NULL,								// No Menu
-		Data.hInstance,							// Instance
+		Data.hInstance,						// Instance
 		NULL)))								// Dont Pass Anything To WM_CREATE
 	{
 		KillGLWindow();								// Reset The Display
@@ -367,7 +367,7 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 	}
 	stream->setRepeat(true);
 	stream->setVolume(0.5f); // 50% volume
-	stream->play();
+	//stream->play();
 
 	OutputStreamPtr explosion(OpenSound(device, "../Data/explosion.wav", false));
 	OutputStreamPtr bell(OpenSound(device, "../Data/bell.wav", false));
@@ -438,9 +438,9 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 
 			if (Data.keys[VK_LEFT])      // Is left arrow Being Pressed?
 			{
-				if (Data.Player.last_mov_pers_h < -.025) {
+				if (Data.Player.player_x > 1) {
 					double vel = .00025;
-					double nvel_h = Data.Player.vel_h + vel;
+					double nvel_h = Data.Player.vel_h - vel;
 
 					Data.Player.MoveOrCollide(nvel_h);
 				}
@@ -448,9 +448,9 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 
 			if (Data.keys[VK_RIGHT])      // Is right arrow Being Pressed?
 			{
-				if (Data.Player.last_mov_pers_h > (-Data.Get_level_width() * .05)) {
+				if (Data.Player.player_horizontal_transl < (Data.Get_level_width() * .05)) {
 					double vel = .00025;
-					double nvel_h = Data.Player.vel_h - vel;
+					double nvel_h = Data.Player.vel_h + vel;
 
 					Data.Player.MoveOrCollide(nvel_h);
 				}

@@ -136,7 +136,6 @@ bool MyModel::DrawGLScene(void)
 	this->Tstamp = t;
 	//  TIMING - end
 
-	// spostate queste 3 righe
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear The Screen And The Depth Buffer
 	glMatrixMode(GL_MODELVIEW);				// Select The Modelview Matrix
 	glLoadIdentity();									// Reset The View
@@ -145,8 +144,11 @@ bool MyModel::DrawGLScene(void)
 	// vedo se gestire o no il salto
 
 	// gravità mi sembra funzionante
+	Player.Setup_position();
 	Player.Gravity();
-	glTranslatef((float)Player.last_mov_pers_h, (float)Player.last_mov_pers_v, 0);
+	Player.Convert_coordinate_for_translation();
+	
+	glTranslatef(Player.player_horizontal_transl, Player.player_vertical_transl, 0);
 	// --------------fino a qui
 	
 	glBindTexture(GL_TEXTURE_2D, texture[0]);
@@ -194,7 +196,7 @@ bool MyModel::DrawGLScene(void)
 				glBegin(GL_QUADS);
 				for (int i = 0; i < 4; i++) {
 					glTexCoord2f(tile[i].u, tile[i].v);
-					glVertex3f(-.975+(.05*col) + tile[i].x + Player.last_mov_pers_h, .55-(.05*row) + tile[i].y + Player.last_mov_pers_v, tile[i].z);
+					glVertex3f(-.975+(.05*col) + tile[i].x + Player.player_horizontal_transl, .55-(.05*row) + tile[i].y + Player.player_vertical_transl, tile[i].z);
 				}
 				glEnd();
 
@@ -205,6 +207,7 @@ bool MyModel::DrawGLScene(void)
 		}
 	}
 
+	/*
 	// bullets 
 	std::list<Bullet>::iterator it = bullet_list.begin();
 
@@ -215,30 +218,16 @@ bool MyModel::DrawGLScene(void)
 		glBegin(GL_QUADS);
 		for (int i = 0; i < 4; i++) {
 			glTexCoord2f(it->bullet[i].u, it->bullet[i].v);
-			glVertex3f(it->bullet[i].x + Player.last_mov_pers_h + it->pos_x, it->bullet[i].y - Player.last_mov_pers_v - it->pos_y, it->bullet[i].z);
+			glVertex3f(it->bullet[i].x + Player.player_x + it->pos_x, it->bullet[i].y - Player.player_y - it->pos_y, it->bullet[i].z);
 		}
 		glEnd();
 
 	}
-	// Tiles
-	for (int col = 0; col < Data.screen_width * Data.num_of_screens; col++) {
-		for (int row = 0; row < Data.level_height; row++) {
-			char id = Data.Get_tile(col, row);
-			switch (id)
-			{
-			case '#':
-				
-
-				break;
-			default:
-				break;
-			}
-		}
-	}
+	*/
 
 	//  Some text
 	glMatrixMode(GL_MODELVIEW);				// Select The Modelview Matrix
-	glLoadIdentity();									// Reset The Current Modelview Matrix
+	glLoadIdentity();						// Reset The Current Modelview Matrix
 	glDisable(GL_TEXTURE_2D);
 
 	// Color
@@ -257,10 +246,12 @@ bool MyModel::DrawGLScene(void)
 	this->glPrint("Elapsed time: %6.2f sec.  -  Fps %6.2f",
 		Full_elapsed, fps);
 
+	 //////// QUI ///////////////
 	if (true) {
 		glRasterPos3f(-(float)plx + PixToCoord_X(10), (float)-ply + PixToCoord_Y(21),
 			-4);
-		this->glPrint("vel_v: %f, vel_h: %f",Data.Player.vel_v,Data.Player.vel_h);
+		this->glPrint("bt: %d, mbt: %d, tt: %d, lt: %d, mft: %d, rt: %d plx: %f, ply: %f, trx: %f try: %f",
+			Player.bottom_tile, Player.middle_body_tile, Player.top_tile, Player.left_tile, Player.middle_feet_tile, Player.right_tile, Player.player_x, Player.player_y, Player.player_horizontal_transl, Player.player_vertical_transl);
 	}
 
 	glEnable(GL_TEXTURE_2D);							// Enable Texture Mapping
@@ -329,30 +320,27 @@ void Personaggio::MoveOrCollide(double nvel_h)
 {
 	nvel_h = (abs(nvel_h) > MAX_VEL_H) ? (MAX_VEL_H * (nvel_h / abs(nvel_h))) : nvel_h;
 
-	double npx = last_mov_pers_h + nvel_h;
-	int next_pos_col = -1;
+	double npx = player_x + nvel_h;
 
-	if (nvel_h < 0)
+	int next_pos_col = (int)(npx / .05);
+
+	if (nvel_h > 0)
+		next_pos_col += 1;
+	else
+		next_pos_col -= 1;
+
+	/*if (nvel_h < 0)
 		next_pos_col = 21 - (int)((npx) / .05);
 	else if (nvel_h > 0)
-		next_pos_col = 19 - (int)((npx) / .05);
+		next_pos_col = 19 - (int)((npx) / .05);*/
 
-
-	int next_pos_row_bottom = (int)(last_mov_pers_v / .05);
-
-	if (last_mov_pers_v > 0)
-		next_pos_row_bottom += 12;
+	/*if (player_y > 0)
+		bottom_tile += 12;
 	else
-		next_pos_row_bottom += 11;
+		bottom_tile += 11;*/
 
-	int next_pos_row_middle = next_pos_row_bottom - 1;
-	int next_pos_row_top = next_pos_row_middle;
-	int temp_last_pers_v = (int)(last_mov_pers_v * 100000);
-	if (temp_last_pers_v % 5000 != 0)
-		next_pos_row_top -= 1;
-
-	if (Data.Get_tile(next_pos_col, next_pos_row_bottom) != '#' && Data.Get_tile(next_pos_col, next_pos_row_middle) != '#' && Data.Get_tile(next_pos_col, next_pos_row_top) != '#') {
-		last_mov_pers_h = npx;
+	if (Data.Get_tile(next_pos_col, bottom_tile) != '#' && Data.Get_tile(next_pos_col, middle_body_tile) != '#' && Data.Get_tile(next_pos_col, top_tile) != '#') {
+		player_x = npx;
 		vel_h = nvel_h;
 	}
 	else {
@@ -362,96 +350,126 @@ void Personaggio::MoveOrCollide(double nvel_h)
 
 void Personaggio::Move_up_down_personaggio(int dir)
 {
-	last_mov_pers_v += .00025 * dir;
+	player_y += .00025 * dir;
+}
+
+void Personaggio::Setup_position()
+{
+	// setto posizione orizzontale
+
+	middle_feet_tile = (int)((player_x) / .05);
+	left_tile = middle_feet_tile - 1;
+	right_tile = middle_feet_tile;
+	int temp_last_pers_h = (int)(player_x * 100);
+	if (temp_last_pers_h % 5 != 0) {
+		right_tile += 1;
+	}
+
+	// setto posizione verticale
+	middle_body_tile = (int)((player_y) / .05);
+
+	top_tile = middle_body_tile - 1;
+	bottom_tile = middle_body_tile;
+	// erano rispettivamente: 100000 ; % 5000
+	int temp_last_pers_v = (int)(player_y * 100);
+	if (temp_last_pers_v % 5 != 0)
+		bottom_tile += 1;
 }
 
 void Personaggio::Gravity()
 {
+	vel_v += .00025;
+
 	if (Is_on_tile()) {
 		vel_v = 0;
 	}
 	else {
-		vel_v += .00025;
 		vel_v = (vel_v > MAX_VEL_V) ? MAX_VEL_V : vel_v;
-		double npy = last_mov_pers_v + vel_h;
+		// posizione a metà corpo di mario + metà altezza di mario + spostamento
+		double npy = player_y + (p_height / 2) + vel_h;
 
 		int next_pos_row_bottom = (int)(npy / .05);
 
+		/*
 		if (npy > 0)
 			next_pos_row_bottom += 12;
 		else
 			next_pos_row_bottom += 11;
-		
-		int current_pos_col_right = 20 - (int)((last_mov_pers_h) / .05);
-		int current_pos_col_middle = current_pos_col_right - 1;
-		int current_pos_col_left = current_pos_col_middle;
-		int temp_last_pers_h = (int)(last_mov_pers_h * 100000);
-		if (temp_last_pers_h% 5000 != 0) {
-			current_pos_col_left -= 1;
-		}
+        */
+		/*
+		middle_feet_tile = (int)((player_x) / .05) - 1;
+		right_tile = middle_feet_tile + 1;
+		left_tile = middle_feet_tile;
+		int temp_last_pers_h = (int)(player_x * 100000);
+		if (temp_last_pers_h % 5000 != 0) {
+			left_tile -= 1;
+		}*/
 
-		
 		if (next_pos_row_bottom == 23) {
 			vel_v = 0;
 			//Player.Die();
 		}
 
-		if (Data.Get_tile(current_pos_col_right, next_pos_row_bottom) == '#'
-			|| Data.Get_tile(current_pos_col_middle, next_pos_row_bottom) == '#'
-			|| Data.Get_tile(current_pos_col_left, next_pos_row_bottom) == '#') {
-			last_mov_pers_v = ((next_pos_row_bottom - 12) * .05);
+		if (Data.Get_tile(right_tile, next_pos_row_bottom) == '#'
+			|| Data.Get_tile(middle_feet_tile, next_pos_row_bottom) == '#'
+			|| Data.Get_tile(left_tile, next_pos_row_bottom) == '#') {
+			player_y = (next_pos_row_bottom - 1) * .05;
 			vel_v = 0;
 		}
-		
-		int newt_pos_row_top = next_pos_row_bottom - 2;
-		if (Data.Get_tile(current_pos_col_right, newt_pos_row_top) == '#'
-			|| Data.Get_tile(current_pos_col_middle, newt_pos_row_top) == '#'
-			|| Data.Get_tile(current_pos_col_left, newt_pos_row_top) == '#') {
-			last_mov_pers_v = ((next_pos_row_bottom - 10.99) * .05);;
+
+		int next_pos_row_top = next_pos_row_bottom - 2;
+		if (Data.Get_tile(right_tile, next_pos_row_top) == '#'
+			|| Data.Get_tile(middle_feet_tile, next_pos_row_top) == '#'
+			|| Data.Get_tile(left_tile, next_pos_row_top) == '#') {
+			player_y = ((next_pos_row_bottom + 0.01) * .05);
 			vel_v = 0;
 		}
-		
+
 	}
-	last_mov_pers_v += vel_v;
+	 		
+
+	player_y += vel_v;
 }
 
 void Personaggio::Jump_personaggio()
 {
 	if (Is_on_tile()) {
 		vel_v -= MAX_VEL_V;
-		last_mov_pers_v += vel_v;
+		player_y += vel_v;
 	}
 	
 }
 
 bool Personaggio::Is_on_tile(){
-	int current_pos_col_right = 20 - (int)((last_mov_pers_h) / .05);
-	int current_pos_col_middle = current_pos_col_right - 1;
-	int current_pos_col_left = current_pos_col_middle;
-	int temp_last_pers_h = (int)(last_mov_pers_h * 100000);
-	if (temp_last_pers_h % 5000 != 0) {
-		current_pos_col_left -= 1;
-	}
-
-	int next_pos_row_bottom = (int)(last_mov_pers_v / .05);
-
-	if (last_mov_pers_v > 0)
+	
+	int next_pos_row_bottom = (int)((player_y+(p_height/2)) / .05);
+	/*
+	if (player_y > 0)
 		next_pos_row_bottom += 13;
 	else
 		next_pos_row_bottom += 12;
-	int temp_last_pers_v = (int)(last_mov_pers_v * 100000);
-	if (temp_last_pers_v % 5000 == 0 && (Data.Get_tile(current_pos_col_right, next_pos_row_bottom) == '#'
-		|| Data.Get_tile(current_pos_col_middle, next_pos_row_bottom) == '#' || Data.Get_tile(current_pos_col_left, next_pos_row_bottom) == '#')) {
+	*/
+	int temp_last_pers_v = (int)(player_y * 100000);
+	if (temp_last_pers_v % 5000 == 0 && (Data.Get_tile(right_tile, next_pos_row_bottom) == '#'
+		|| Data.Get_tile(middle_feet_tile, next_pos_row_bottom) == '#' || Data.Get_tile(left_tile, next_pos_row_bottom) == '#')) {
 		return true;
 	}
 	return false;
 }
 
-Bullet Personaggio::shoot() {
-	float start_x = last_mov_pers_h + 0.05;
-	float start_y = last_mov_pers_v - 0.05;
+void Personaggio::Convert_coordinate_for_translation() {
 
-	Bullet bullet = Bullet(start_x, start_y, last_mov_pers_h, last_mov_pers_v);
+
+	player_horizontal_transl = ((p_width / 2 )* 20) - player_x;
+	player_vertical_transl = player_y - ((p_height / 2) * 11);
+
+}
+
+Bullet Personaggio::shoot() {
+	float start_x = player_x + 0.05;
+	float start_y = player_y - 0.05;
+
+	Bullet bullet = Bullet(start_x, start_y, player_x, player_y);
 
 	return bullet;
 

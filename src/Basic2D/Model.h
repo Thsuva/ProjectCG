@@ -88,24 +88,40 @@ public:
 	std::vector<Vertex> personaggio;  // floating personaggio
 
 	// per i movimenti
-	float last_mov_pers_h;
-	float last_mov_pers_v;
+	float player_x;
+	float player_y;
+	float player_horizontal_transl;
+	float player_vertical_transl;
+	float p_height = 0.1;
+	float p_width = 0.1;
 	float vel_h;
 	float vel_v;
 	float MAX_VEL_H = 0.00025 * .7;
 	float MAX_VEL_V = 0.00025 * 50;
+	
+	//collision tile of feet
+	int left_tile = 19;
+	int middle_feet_tile=19;
+	int right_tile=20;
+	
+
+	//collision tile of body
+	int bottom_tile = 11;
+	int middle_body_tile = 11;
+	int top_tile = 10;
+
+
 	int weapon = 0;
 
 public:
 	//  methods
-	Personaggio() : last_mov_pers_h(0), last_mov_pers_v(0), vel_h(0), vel_v(0){
+	Personaggio() : player_x(1), player_y(0.55), vel_h(0), vel_v(0){
 
 		personaggio.clear();
-		personaggio.push_back(Vertex(-.05, 0, -1, 0, 0));
-		personaggio.push_back(Vertex(.05, 0, -1, 1, 0));
-		personaggio.push_back(Vertex(.05, .1, -1, 1, 1));
-		personaggio.push_back(Vertex(-.05, .1, -1, 0, 1));
-
+		personaggio.push_back(Vertex(-0.05, 0, -1, 0, 0));
+		personaggio.push_back(Vertex(0.05, 0, -1, 1, 0));
+		personaggio.push_back(Vertex(0.05, 0.1, -1, 1, 1));
+		personaggio.push_back(Vertex(-0.05, 0.1, -1, 0, 1));
 
 	}
 	~Personaggio() {
@@ -115,8 +131,10 @@ public:
 	void MoveOrCollide(double nvel_h);
 	void Move_up_down_personaggio(int dir);
 	void Jump_personaggio();
+	void Setup_position();
 	void Gravity();
 	bool Is_on_tile();
+	void Convert_coordinate_for_translation();
 	Bullet shoot();
 };
 
