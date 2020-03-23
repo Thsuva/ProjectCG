@@ -95,11 +95,13 @@ bool MyModel::LoadGLTextures(void)
 
 	//  Load 27 personaggio textures
 	char ll[200];
-	for (int i = 0; i < 2; i++) {
+	for (int i = 0; i < 3; i++) {
 		if (i==0)
 			sprintf(ll, "../Data/fabrizio_00.png", i);
 		else if (i==1)
 			sprintf(ll, "../Data/blank_tile.png", i);
+		else if (i == 2)
+			sprintf(ll, "../Data/enemy.png", i);
 
 		this->texture[i + 1] = SOIL_load_OGL_texture(
 			ll, SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
@@ -185,7 +187,8 @@ bool MyModel::DrawGLScene(void)
 	glDisable(GL_BLEND);
 	glDisable(GL_ALPHA_TEST);
 
-	// Tiles
+	// Tiles + nemici
+	char giuseppi = 'c';
 	for (int col = 0; col < Data.screen_width * Data.num_of_screens; col++) {
 		for (int row = 0; row < Data.level_height; row++) {
 			char id = Data.Get_tile(col, row);
@@ -200,6 +203,10 @@ bool MyModel::DrawGLScene(void)
 				}
 				glEnd();
 
+				break;
+			case '*':
+				enemy_list.push_back(Enemy(col, row));
+				Set_tile(col, row, '.');
 				break;
 			default:
 				break;
@@ -316,7 +323,7 @@ void MyModel::glPrint(const char *fmt, ...)					// Custom GL "Print" Routine
 // ------------------------------------------------------nostre funzioni
 
 // muove il personaggio
-void Personaggio::MoveOrCollide(double nvel_h)
+void Character::MoveOrCollide(double nvel_h)
 {
 	nvel_h = (abs(nvel_h) > MAX_VEL_H) ? (MAX_VEL_H * (nvel_h / abs(nvel_h))) : nvel_h;
 
@@ -348,12 +355,12 @@ void Personaggio::MoveOrCollide(double nvel_h)
 	}
 }
 
-void Personaggio::Move_up_down_personaggio(int dir)
+void Character::Move_up_down_personaggio(int dir)
 {
 	player_y += .00025 * dir;
 }
 
-void Personaggio::Setup_position()
+void Character::Setup_position()
 {
 	// setto posizione orizzontale
 
@@ -376,7 +383,7 @@ void Personaggio::Setup_position()
 		bottom_tile += 1;
 }
 
-void Personaggio::Gravity()
+void Character::Gravity()
 {
 	vel_v += .00025;
 
@@ -431,7 +438,7 @@ void Personaggio::Gravity()
 	player_y += vel_v;
 }
 
-void Personaggio::Jump_personaggio()
+void Character::Jump_personaggio()
 {
 	if (Is_on_tile()) {
 		vel_v -= MAX_VEL_V;
@@ -440,7 +447,7 @@ void Personaggio::Jump_personaggio()
 	
 }
 
-bool Personaggio::Is_on_tile(){
+bool Character::Is_on_tile(){
 	
 	int next_pos_row_bottom = (int)((player_y+(p_height/2)) / .05);
 	/*
@@ -457,7 +464,7 @@ bool Personaggio::Is_on_tile(){
 	return false;
 }
 
-void Personaggio::Convert_coordinate_for_translation() {
+void Character::Convert_coordinate_for_translation() {
 
 
 	player_horizontal_transl = ((p_width / 2 )* 20) - player_x;
@@ -465,7 +472,7 @@ void Personaggio::Convert_coordinate_for_translation() {
 
 }
 
-Bullet Personaggio::shoot() {
+Bullet Character::shoot() {
 	float start_x = player_x + 0.05;
 	float start_y = player_y - 0.05;
 

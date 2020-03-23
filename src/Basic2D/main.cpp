@@ -448,7 +448,7 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 
 			if (Data.keys[VK_RIGHT])      // Is right arrow Being Pressed?
 			{
-				if (Data.Player.player_horizontal_transl < (Data.Get_level_width() * .05)) {
+				if (Data.Player.player_x < (Data.Get_level_width() * .05)) {
 					double vel = .00025;
 					double nvel_h = Data.Player.vel_h + vel;
 

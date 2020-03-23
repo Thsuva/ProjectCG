@@ -82,7 +82,7 @@ public:
 
 
 
-class Personaggio {
+class Character {
 
 public:
 	std::vector<Vertex> personaggio;  // floating personaggio
@@ -96,7 +96,7 @@ public:
 	float p_width = 0.1;
 	float vel_h;
 	float vel_v;
-	float MAX_VEL_H = 0.00025 * .7;
+	float MAX_VEL_H = 0.00025 * 2;
 	float MAX_VEL_V = 0.00025 * 50;
 	
 	//collision tile of feet
@@ -115,16 +115,10 @@ public:
 
 public:
 	//  methods
-	Personaggio() : player_x(1), player_y(0.55), vel_h(0), vel_v(0){
-
-		personaggio.clear();
-		personaggio.push_back(Vertex(-0.05, 0, -1, 0, 0));
-		personaggio.push_back(Vertex(0.05, 0, -1, 1, 0));
-		personaggio.push_back(Vertex(0.05, 0.1, -1, 1, 1));
-		personaggio.push_back(Vertex(-0.05, 0.1, -1, 0, 1));
+	Character() {
 
 	}
-	~Personaggio() {
+	~Character() {
 	}
 
 	// inizio nostre funzioni
@@ -136,6 +130,46 @@ public:
 	bool Is_on_tile();
 	void Convert_coordinate_for_translation();
 	Bullet shoot();
+};
+
+class Personaggio : public Character
+{
+	public:
+		Personaggio() : Character(){
+
+			player_x = 1;
+			player_y = 0.55;
+			vel_h = 0;
+			vel_v = 0;
+			personaggio.clear();
+			personaggio.push_back(Vertex(-0.05, 0, -1, 0, 0));
+			personaggio.push_back(Vertex(0.05, 0, -1, 1, 0));
+			personaggio.push_back(Vertex(0.05, 0.1, -1, 1, 1));
+			personaggio.push_back(Vertex(-0.05, 0.1, -1, 0, 1));
+
+		}
+		~Personaggio(){
+		}
+
+};
+
+class Enemy : public Character
+{
+	public:
+		Enemy(int x, int y) : Character()
+		{
+			player_x = 1;
+			player_y = 0.55;
+			vel_h = 0;
+			vel_v = 0;
+			personaggio.clear();
+			personaggio.push_back(Vertex(-0.05, 0, -1, 0, 0));
+			personaggio.push_back(Vertex(0.05, 0, -1, 1, 0));
+			personaggio.push_back(Vertex(0.05, 0.1, -1, 1, 1));
+			personaggio.push_back(Vertex(-0.05, 0.1, -1, 0, 1));
+		}
+		~Enemy() {
+		}
 };
 
 class MyModel {
@@ -150,6 +184,7 @@ public:
 	bool	active;		      // Window Active Flag Set To TRUE By Default
 	bool	fullscreen;	    // Fullscreen Flag 
 	Personaggio Player;
+	std::list<Enemy> enemy_list;
 	std::list<Bullet> bullet_list;
 
 private:
