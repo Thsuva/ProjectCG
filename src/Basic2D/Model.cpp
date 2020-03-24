@@ -95,13 +95,15 @@ bool MyModel::LoadGLTextures(void)
 
 	//  Load 27 personaggio textures
 	char ll[200];
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < 4; i++) {
 		if (i==0)
 			sprintf(ll, "../Data/fabrizio_00.png", i);
 		else if (i==1)
 			sprintf(ll, "../Data/blank_tile.png", i);
 		else if (i == 2)
 			sprintf(ll, "../Data/enemy.png", i);
+		else if (i == 3)
+			sprintf(ll, "../Data/died.png", i);
 
 		this->texture[i + 1] = SOIL_load_OGL_texture(
 			ll, SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
@@ -138,158 +140,192 @@ bool MyModel::DrawGLScene(void)
 	this->Tstamp = t;
 	//  TIMING - end
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear The Screen And The Depth Buffer
-	glMatrixMode(GL_MODELVIEW);				// Select The Modelview Matrix
-	glLoadIdentity();									// Reset The View
+	if (Player.alive) 
+	{
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear The Screen And The Depth Buffer
+		glMatrixMode(GL_MODELVIEW);				// Select The Modelview Matrix
+		glLoadIdentity();									// Reset The View
 
-	// ------------le 3 righe qui sotto servono per spostare il background in orizz di px
-	// vedo se gestire o no il salto
+		// ------------le 3 righe qui sotto servono per spostare il background in orizz di px
+		// vedo se gestire o no il salto
 
-	// gravità mi sembra funzionante
-	Player.Setup_position();
-	glTranslatef(Player.player_horizontal_transl, Player.player_vertical_transl, 0);
-	// --------------fino a qui
-	
-	glBindTexture(GL_TEXTURE_2D, texture[0]);
+		// gravità mi sembra funzionante
+		Player.Setup_position();
+		glTranslatef(Player.player_horizontal_transl, Player.player_vertical_transl, 0);
+		// --------------fino a qui
 
-	//  Background
-	glBegin(GL_QUADS);
-	for (int i = 0; i < 4; i++) {
-		glTexCoord2f(Background[i].u, Background[i].v);
-		glVertex3f(Background[i].x, Background[i].y, Background[i].z);
-	}
-	glEnd();
+		glBindTexture(GL_TEXTURE_2D, texture[0]);
 
-	//  Texture for the personaggio, change every 1/19 sec.
-	// int texF = 1 + ((int((Full_elapsed * 19))) % 27);
-	glBindTexture(GL_TEXTURE_2D, texture[1]);
+		//  Background
+		glBegin(GL_QUADS);
+		for (int i = 0; i < 4; i++) {
+			glTexCoord2f(Background[i].u, Background[i].v);
+			glVertex3f(Background[i].x, Background[i].y, Background[i].z);
+		}
+		glEnd();
 
-	//  personaggio geometrical trasformations
-	glMatrixMode(GL_MODELVIEW);				// Select The Modelview Matrix
-	glLoadIdentity();									// Reset The View
+		//  Texture for the personaggio, change every 1/19 sec.
+		// int texF = 1 + ((int((Full_elapsed * 19))) % 27);
+		glBindTexture(GL_TEXTURE_2D, texture[1]);
 
-	// Personaggio
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_ALPHA_TEST);
-	glAlphaFunc(GL_GREATER, 0);
+		//  personaggio geometrical trasformations
+		glMatrixMode(GL_MODELVIEW);				// Select The Modelview Matrix
+		glLoadIdentity();									// Reset The View
 
-	glBegin(GL_QUADS);
-	for (int i = 0; i < 4; i++) {
-		glTexCoord2f(Player.personaggio[i].u, Player.personaggio[i].v);
-		glVertex3f(-Player.personaggio[i].x, Player.personaggio[i].y, Player.personaggio[i].z);
-	}
-	glEnd();
+		// Personaggio
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glEnable(GL_ALPHA_TEST);
+		glAlphaFunc(GL_GREATER, 0);
 
-	glDisable(GL_BLEND);
-	glDisable(GL_ALPHA_TEST);
+		glBegin(GL_QUADS);
+		for (int i = 0; i < 4; i++) {
+			glTexCoord2f(Player.personaggio[i].u, Player.personaggio[i].v);
+			glVertex3f(-Player.personaggio[i].x, Player.personaggio[i].y, Player.personaggio[i].z);
+		}
+		glEnd();
 
-	// Tiles + nemici
-	int enemy_ids = 0;
-	for (int col = 0; col < Data.screen_width * Data.num_of_screens; col++) {
-		for (int row = 0; row < Data.level_height; row++) {
-			char id = Data.Get_tile(col, row);
-			switch (id)
-			{
-			case '#':
-				glBindTexture(GL_TEXTURE_2D, texture[2]);
+		glDisable(GL_BLEND);
+		glDisable(GL_ALPHA_TEST);
+
+		// Tiles + nemici
+		int enemy_ids = 0;
+		for (int col = 0; col < Data.screen_width * Data.num_of_screens; col++) {
+			for (int row = 0; row < Data.level_height; row++) {
+				char id = Data.Get_tile(col, row);
+				switch (id)
+				{
+				case '#':
+					glBindTexture(GL_TEXTURE_2D, texture[2]);
+					glBegin(GL_QUADS);
+					for (int i = 0; i < 4; i++) {
+						glTexCoord2f(tile[i].u, tile[i].v);
+						glVertex3f(-.975 + (.05*col) + tile[i].x + Player.player_horizontal_transl, .55 - (.05*row) + tile[i].y + Player.player_vertical_transl, tile[i].z);
+					}
+					glEnd();
+
+					break;
+				case '*':
+					enemy_list.push_back(Enemy(col, row, enemy_ids));
+					Set_tile(col, row, '.');
+					enemy_ids += 1;
+					break;
+				default:
+					break;
+				}
+			}
+		}
+
+		// Nemici
+		std::list<Enemy>::iterator it;
+
+		// definisco lista temp
+		std::list<Enemy> temp_list(enemy_list);
+		// cancello la lista dei nemici
+		enemy_list.clear();
+
+		int my_level_width = Get_level_width();
+		// printo tutta la coda ad ogni iterazione
+		for (it = temp_list.begin(); it != temp_list.end(); ++it) {
+
+			if (it->alive) {
+				glBindTexture(GL_TEXTURE_2D, texture[3]);
 				glBegin(GL_QUADS);
+				// ad ogni tic mi muovo o verso il personaggio, o dalla parte opposta oppure salto
+				//it->random_move(Player.player_x, my_level_width);
+				it->Setup_position();
 				for (int i = 0; i < 4; i++) {
-					glTexCoord2f(tile[i].u, tile[i].v);
-					glVertex3f(-.975+(.05*col) + tile[i].x + Player.player_horizontal_transl, .55-(.05*row) + tile[i].y + Player.player_vertical_transl, tile[i].z);
+					glTexCoord2f(it->personaggio[i].u, it->personaggio[i].v);
+					glVertex3f(it->personaggio[i].x - it->player_horizontal_transl + Player.player_horizontal_transl,
+						it->personaggio[i].y - it->player_vertical_transl + Player.player_vertical_transl, it->personaggio[i].z);
 				}
 				glEnd();
 
-				break;
-			case '*':
-				enemy_list.push_back(Enemy(col, row, enemy_ids));
-				Set_tile(col, row, '.');
-				enemy_ids += 1;
-				break;
-			default:
-				break;
+				// se il nemico è ancora vivo lo appendo alla lista dei nemici, altrimenti muore
+				enemy_list.push_back(*it);
 			}
+
+
 		}
-	}
+		/*
+		// bullets
+		std::list<Bullet>::iterator it = bullet_list.begin();
 
-	// nemici
-	std::list<Enemy>::iterator it;
-	int my_level_width = Get_level_width();
-	// printo tutta la coda ad ogni iterazione
-	for (it = enemy_list.begin(); it != enemy_list.end(); ++it) {
-
-		if (it->alive) {
+		// printo tutta la coda ad ogni iterazione
+		for (it = bullet_list.begin(); it != bullet_list.end(); ++it) {
 			// it->update_position();
-			glBindTexture(GL_TEXTURE_2D, texture[3]);
+			glBindTexture(GL_TEXTURE_2D, texture[2]);
 			glBegin(GL_QUADS);
-			// ad ogni tic mi muovo o verso il personaggio, o dalla parte opposta oppure salto
-			it->random_move(Player.player_x, my_level_width);
-			it->Setup_position();
 			for (int i = 0; i < 4; i++) {
-				glTexCoord2f(it->personaggio[i].u, it->personaggio[i].v);
-				glVertex3f(it->personaggio[i].x - it->player_horizontal_transl + Player.player_horizontal_transl,
-					it->personaggio[i].y - it->player_vertical_transl + Player.player_vertical_transl, it->personaggio[i].z);
+				glTexCoord2f(it->bullet[i].u, it->bullet[i].v);
+				glVertex3f(it->bullet[i].x + Player.player_x + it->pos_x, it->bullet[i].y - Player.player_y - it->pos_y, it->bullet[i].z);
 			}
 			glEnd();
-		}
-		else {
-			int size = enemy_list.size();
-			enemy_list.remove(*it);
-			size = enemy_list.size();
-			size = enemy_list.size();
-		}
-			
-		
 
+		}
+		*/
+
+		// check delle collisioni
+		Check_collisions();
+
+		//  Some text
+		glMatrixMode(GL_MODELVIEW);				// Select The Modelview Matrix
+		glLoadIdentity();						// Reset The Current Modelview Matrix
+		glDisable(GL_TEXTURE_2D);
+
+		// Color
+		glColor3f(1.0f, 1.0f, 1.0f);
+
+		// Position The Text On The Screen
+		glRasterPos3f(-(float)plx + PixToCoord_X(10), (float)ply - PixToCoord_Y(21),
+			-4);
+
+		// compute fps and write text
+		this->frames++;
+		if (this->frames > 18) {
+			this->fps = frames / frameTime;
+			this->frames = 0; this->frameTime = 0;
+		}
+		this->glPrint("Elapsed time: %6.2f sec.  -  Fps %6.2f",
+			Full_elapsed, fps);
+
+		//////// QUI ///////////////
+		if (true) {
+			glRasterPos3f(-(float)plx + PixToCoord_X(10), (float)-ply + PixToCoord_Y(21),
+				-4);
+			this->glPrint("bt: %d, mbt: %d, tt: %d, lt: %d, mft: %d, rt: %d plx: %f, ply: %f, trx: %f try: %f",
+				Player.bottom_tile, Player.middle_body_tile, Player.top_tile, Player.left_tile, Player.middle_feet_tile, Player.right_tile, Player.player_x, Player.player_y, Player.player_horizontal_transl, Player.player_vertical_transl);
+		}
+
+		glEnable(GL_TEXTURE_2D);							// Enable Texture Mapping
 	}
-	/*
-	// bullets 
-	std::list<Bullet>::iterator it = bullet_list.begin();
 
-	// printo tutta la coda ad ogni iterazione
-	for (it = bullet_list.begin(); it != bullet_list.end(); ++it) {
-		// it->update_position();
-		glBindTexture(GL_TEXTURE_2D, texture[2]);
+	// quando muoio printo il relativo messaggio
+	else 
+	{
+		std::vector<Vertex> Background_dead;
+		Background_dead.push_back(Vertex(-1, -0.6, -5, 0, 0));
+		Background_dead.push_back(Vertex(1, -0.6, -5, 1, 0));
+		Background_dead.push_back(Vertex(1, 0.6, -5, 1, 1));
+		Background_dead.push_back(Vertex(-1, 0.6, -5, 0, 1));
+
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear The Screen And The Depth Buffer
+		glMatrixMode(GL_MODELVIEW);				// Select The Modelview Matrix
+		glLoadIdentity();									// Reset The View
+
+
+		glBindTexture(GL_TEXTURE_2D, texture[4]);
+
+		//  Background
 		glBegin(GL_QUADS);
 		for (int i = 0; i < 4; i++) {
-			glTexCoord2f(it->bullet[i].u, it->bullet[i].v);
-			glVertex3f(it->bullet[i].x + Player.player_x + it->pos_x, it->bullet[i].y - Player.player_y - it->pos_y, it->bullet[i].z);
+			glTexCoord2f(Background_dead[i].u, Background_dead[i].v);
+			glVertex3f(Background_dead[i].x, Background_dead[i].y, Background_dead[i].z);
 		}
 		glEnd();
 
 	}
-	*/
-
-	//  Some text
-	glMatrixMode(GL_MODELVIEW);				// Select The Modelview Matrix
-	glLoadIdentity();						// Reset The Current Modelview Matrix
-	glDisable(GL_TEXTURE_2D);
-
-	// Color
-	glColor3f(1.0f, 1.0f, 1.0f);
-
-	// Position The Text On The Screen
-	glRasterPos3f(-(float)plx + PixToCoord_X(10), (float)ply - PixToCoord_Y(21),
-		-4);
-
-	// compute fps and write text
-	this->frames++;
-	if (this->frames > 18) {
-		this->fps = frames / frameTime;
-		this->frames = 0; this->frameTime = 0;
-	}
-	this->glPrint("Elapsed time: %6.2f sec.  -  Fps %6.2f",
-		Full_elapsed, fps);
-
-	 //////// QUI ///////////////
-	if (true) {
-		glRasterPos3f(-(float)plx + PixToCoord_X(10), (float)-ply + PixToCoord_Y(21),
-			-4);
-		this->glPrint("bt: %d, mbt: %d, tt: %d, lt: %d, mft: %d, rt: %d plx: %f, ply: %f, trx: %f try: %f",
-			Player.bottom_tile, Player.middle_body_tile, Player.top_tile, Player.left_tile, Player.middle_feet_tile, Player.right_tile, Player.player_x, Player.player_y, Player.player_horizontal_transl, Player.player_vertical_transl);
-	}
-
-	glEnable(GL_TEXTURE_2D);							// Enable Texture Mapping
+	
 	return true;
 }
 
@@ -357,7 +393,7 @@ void Character::MoveOrCollide(double nvel_h)
 
 	double npx = player_x + nvel_h;
 
-	int next_pos_col = (int)(npx / .05);
+	int next_pos_col = round((npx / .05)) / 100;
 
 	if (nvel_h > 0)
 		next_pos_col += 1;
@@ -391,8 +427,7 @@ void Character::Move_up_down_personaggio(int dir)
 void Character::Setup_position()
 {
 	// setto posizione orizzontale
-
-	middle_feet_tile = (int)((player_x) / .05);
+	middle_feet_tile = round(((player_x) / .05)) / 100;
 	left_tile = middle_feet_tile - 1;
 	right_tile = middle_feet_tile;
 	int temp_last_pers_h = (int)(player_x * 100);
@@ -401,7 +436,7 @@ void Character::Setup_position()
 	}
 
 	// setto posizione verticale
-	middle_body_tile = (int)((player_y) / .05);
+	middle_body_tile = round(((player_y) / .05)) / 100;
 
 	top_tile = middle_body_tile - 1;
 	bottom_tile = middle_body_tile;
@@ -409,6 +444,8 @@ void Character::Setup_position()
 	int temp_last_pers_v = (int)(player_y * 100);
 	if (temp_last_pers_v % 5 != 0)
 		bottom_tile += 1;
+		
+		
 
 	// forza di gravità
 	Gravity();
@@ -429,7 +466,7 @@ void Character::Gravity()
 		// posizione a metà corpo di mario + metà altezza di mario + spostamento
 		double npy = player_y + (p_height / 2) + vel_h;
 
-		int next_pos_row_bottom = (int)(npy / .05);
+		int next_pos_row_bottom = round((npy / .05)) / 100;
 
 		/*
 		if (npy > 0)
@@ -483,7 +520,7 @@ void Character::Jump_personaggio()
 
 bool Character::Is_on_tile(){
 	
-	int next_pos_row_bottom = (int)((player_y+(p_height/2)) / .05);
+	int next_pos_row_bottom = round(((player_y+(p_height/2)) / .05)) / 100;
 	/*
 	if (player_y > 0)
 		next_pos_row_bottom += 13;
@@ -508,12 +545,7 @@ void Character::Convert_coordinate_for_translation() {
 
 void Character::Die()
 {
-
-}
-
-void Personaggio::Die()
-{
-
+	alive = false;
 }
 
 
@@ -559,6 +591,39 @@ void MyModel::Set_tile(int x, int y, char c) {
 		level[y*screen_width*num_of_screens + x] = c;
 }
 
+int Character::round(double value) {
+
+	value *= 100;
+	value += .5;
+	int int_value = (int)value;
+
+	return int_value;
+}
+
+// verifico se il personaggio tocca un nemico, oppure se il nemico è toccato da un bullet, oppure se un bullet scontra una tile
+void MyModel::Check_collisions()
+{
+	// Nemici
+	std::list<Enemy>::iterator enemy_it;
+	float player_right = Player.player_x + (Player.p_width / 2);
+	float player_left = Player.player_x - (Player.p_width / 2);
+	float player_top = Player.player_y - (Player.p_height / 2);
+	float player_bottom = Player.player_y + (Player.p_height / 2);
+
+	// printo tutta la coda ad ogni iterazione
+	for (enemy_it = enemy_list.begin(); enemy_it != enemy_list.end(); ++enemy_it) {
+
+		float enemy_right = enemy_it->player_x + (enemy_it->p_width / 2);
+		float enemy_left = enemy_it->player_x - (enemy_it->p_width / 2);
+		float enemy_top = enemy_it->player_y - (enemy_it->p_height / 2);
+		float enemy_bottom = enemy_it->player_y + (enemy_it->p_height / 2);
+
+		// QUI CONTROLLARE CHE FUNZIONI METTENDO BREAKPOINT A RIGA 623 + FARE APPROSSIMAZIONI COME QUELLA FATTA A RIGA 430 PER CONSIDERARE SOLO I PRIMI 2-3 DECIMALI (DA VEDERE)
+		if (enemy_left > player_left && enemy_left <= player_right && ((enemy_bottom >= player_top && enemy_bottom < player_bottom) || (enemy_top <= player_bottom && enemy_top > player_top)))
+			Player.Die();
+	}
+}
+
 void Enemy::random_move(float hero_player_x, int level_width)
 {
 	int rand_var = (rand() % 10) + 1;
@@ -596,9 +661,4 @@ void Enemy::random_move(float hero_player_x, int level_width)
 	{
 		Jump_personaggio();
 	}
-}
-
-void Enemy::Die()
-{
-	alive = false;
 }

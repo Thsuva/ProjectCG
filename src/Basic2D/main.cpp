@@ -332,10 +332,10 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 	MSG		msg;									// Windows Message Structure
 	BOOL	done = FALSE;								// Bool Variable To Exit Loop
 
-	
+
 
 	Data.Set_level();
-	
+
 
 	// Ask The User Which Screen Mode They Prefer
   // Init of the default button depending on Data.fullscreen
@@ -394,103 +394,107 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 		}
 		else										// If There Are No Messages
 		{
-			// Draw The Scene.  Watch For ESC Key And Quit Messages From DrawGLScene()
-			if ((Data.active && !Data.DrawGLScene()) || Data.keys[VK_ESCAPE])	// Active?  Was There A Quit Received?
-			{
-				done = TRUE;							// ESC or DrawGLScene Signalled A Quit
-			}
-			else									// Not Time To Quit, Update Screen
-			{
-				SwapBuffers(Data.hDC);					// Swap Buffers (Double Buffering)
-			}
-
-			//  Removed the F1 key: no fullscreen!
-
-			if (Data.keys[VK_F1])						// Is F1 Being Pressed?
-			{
-				Data.keys[VK_F1] = FALSE;					// If So Make Key FALSE
-				KillGLWindow();						// Kill Our Current Window
-				Data.fullscreen = !Data.fullscreen;				// Toggle Fullscreen / Windowed Mode
-				// Recreate Our OpenGL Window
-				if (!CreateGLWindow("Basic 2D game skeleton", 1280, 720, 32, Data.fullscreen))
+			
+				// Draw The Scene.  Watch For ESC Key And Quit Messages From DrawGLScene()
+				if ((Data.active && !Data.DrawGLScene()) || Data.keys[VK_ESCAPE])	// Active?  Was There A Quit Received?
 				{
-					return 0;						// Quit If Window Was Not Created
+					done = TRUE;							// ESC or DrawGLScene Signalled A Quit
 				}
-			}
-			if (Data.keys[VK_F2])						// Is F2 Being Pressed?
-			{
-				Data.keys[VK_F2] = FALSE;					// If So Make Key FALSE
-				if (explosion->isPlaying()) explosion->reset();
-				else explosion->play();
-			}
-			//test shooting
-			if (Data.keys[VK_F3])						// Is F3 Being Pressed?
-			{
-				Data.keys[VK_F3] = FALSE;
-				Bullet bullet = Data.Player.shoot();
-				Data.bullet_list.push_back(bullet);
-			}
-
-			if (Data.keys[VK_F4])						// Is F4 Being Pressed?
-			{
-				Data.keys[VK_F4] = FALSE;					// If So Make Key FALSE
-				if (stupid->isPlaying()) stupid->reset();
-				else stupid->play();
-			}
-
-			if (Data.keys[VK_LEFT])      // Is left arrow Being Pressed?
-			{
-				if (Data.Player.player_x > 1) {
-					double vel = .00025;
-					double nvel_h = Data.Player.vel_h - vel;
-
-					Data.Player.MoveOrCollide(nvel_h);
-				}
-			}
-
-			if (Data.keys[VK_RIGHT])      // Is right arrow Being Pressed?
-			{
-				if (Data.Player.player_x < (Data.Get_level_width() * .05)) {
-					double vel = .00025;
-					double nvel_h = Data.Player.vel_h + vel;
-
-					Data.Player.MoveOrCollide(nvel_h);
+				else									// Not Time To Quit, Update Screen
+				{
+					SwapBuffers(Data.hDC);					// Swap Buffers (Double Buffering)
 				}
 
-			}
-
-			if (Data.keys[VK_UP])						// Is right arrow Being Pressed?
+			if (Data.Player.alive)
 			{
-				//Data.keys[VK_UP] = FALSE;
+				//  Removed the F1 key: no fullscreen!
 
-				Data.Player.Move_up_down_personaggio(-1);
+				if (Data.keys[VK_F1])						// Is F1 Being Pressed?
+				{
+					Data.keys[VK_F1] = FALSE;					// If So Make Key FALSE
+					KillGLWindow();						// Kill Our Current Window
+					Data.fullscreen = !Data.fullscreen;				// Toggle Fullscreen / Windowed Mode
+					// Recreate Our OpenGL Window
+					if (!CreateGLWindow("Basic 2D game skeleton", 1280, 720, 32, Data.fullscreen))
+					{
+						return 0;						// Quit If Window Was Not Created
+					}
+				}
+				if (Data.keys[VK_F2])						// Is F2 Being Pressed?
+				{
+					Data.keys[VK_F2] = FALSE;					// If So Make Key FALSE
+					if (explosion->isPlaying()) explosion->reset();
+					else explosion->play();
+				}
+				//test shooting
+				if (Data.keys[VK_F3])						// Is F3 Being Pressed?
+				{
+					Data.keys[VK_F3] = FALSE;
+					Bullet bullet = Data.Player.shoot();
+					Data.bullet_list.push_back(bullet);
+				}
+
+				if (Data.keys[VK_F4])						// Is F4 Being Pressed?
+				{
+					Data.keys[VK_F4] = FALSE;					// If So Make Key FALSE
+					if (stupid->isPlaying()) stupid->reset();
+					else stupid->play();
+				}
+
+				if (Data.keys[VK_LEFT])      // Is left arrow Being Pressed?
+				{
+					if (Data.Player.player_x > 1) {
+						double vel = .00025;
+						double nvel_h = Data.Player.vel_h - vel;
+
+						Data.Player.MoveOrCollide(nvel_h);
+					}
+				}
+
+				if (Data.keys[VK_RIGHT])      // Is right arrow Being Pressed?
+				{
+					if (Data.Player.player_x < (Data.Get_level_width() * .05)) {
+						double vel = .00025;
+						double nvel_h = Data.Player.vel_h + vel;
+
+						Data.Player.MoveOrCollide(nvel_h);
+					}
+
+				}
+
+				if (Data.keys[VK_UP])						// Is right arrow Being Pressed?
+				{
+					//Data.keys[VK_UP] = FALSE;
+
+					Data.Player.Move_up_down_personaggio(-1);
+				}
+
+				if (Data.keys[VK_DOWN])						// Is right arrow Being Pressed?
+				{
+					//Data.keys[VK_DOWN] = FALSE;
+
+					Data.Player.Move_up_down_personaggio(1);
+				}
+
+				if (Data.keys[VK_SPACE])						// Is right arrow Being Pressed?
+				{
+					//Data.keys[VK_SPACE] = FALSE;
+					Data.Player.Jump_personaggio();
+
+				}
+
+				if (!Data.keys[VK_LEFT] && !Data.keys[VK_RIGHT]) {
+
+					if (Data.Player.vel_h < 0)
+						Data.Player.vel_h += .00025;
+					else if (Data.Player.vel_h > 0)
+						Data.Player.vel_h -= .00025;
+
+					if (Data.Player.vel_h  < .00025 && Data.Player.vel_h > -.00025)
+						Data.Player.vel_h = 0;
+				}
+
 			}
-
-			if (Data.keys[VK_DOWN])						// Is right arrow Being Pressed?
-			{
-				//Data.keys[VK_DOWN] = FALSE;
-
-				Data.Player.Move_up_down_personaggio(1);
-			}
-
-			if (Data.keys[VK_SPACE])						// Is right arrow Being Pressed?
-			{
-				//Data.keys[VK_SPACE] = FALSE;
-				Data.Player.Jump_personaggio();
-
-			}
-
-			if (!Data.keys[VK_LEFT] && !Data.keys[VK_RIGHT]) {
-
-				if (Data.Player.vel_h < 0)
-					Data.Player.vel_h += .00025;
-				else if (Data.Player.vel_h > 0)
-					Data.Player.vel_h -= .00025;
-				
-				if (Data.Player.vel_h  < .00025 && Data.Player.vel_h > -.00025)
-					Data.Player.vel_h = 0;
-			}
-
 
 		}
 	}

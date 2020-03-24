@@ -87,6 +87,8 @@ class Character {
 public:
 	std::vector<Vertex> personaggio;  // floating personaggio
 
+	bool alive;
+
 	// per i movimenti
 	float player_x;
 	float player_y;
@@ -116,7 +118,7 @@ public:
 public:
 	//  methods
 	Character() {
-
+		alive = true;
 	}
 	~Character() {
 	}
@@ -128,9 +130,10 @@ public:
 	void Setup_position();
 	void Gravity();
 	bool Is_on_tile();
-	virtual void Die();
+	void Die();
 	void Convert_coordinate_for_translation();
 	Bullet shoot();
+	int round(double value);
 };
 
 class Personaggio : public Character
@@ -149,7 +152,6 @@ class Personaggio : public Character
 			personaggio.push_back(Vertex(-0.05, 0.1, -1, 0, 1));
 
 		}
-		void Die();
 		~Personaggio(){
 		}
 
@@ -159,11 +161,10 @@ class Enemy : public Character
 {
 	public:
 		int id;
-		bool alive;
+		
 		Enemy(int x, int y, int my_id) : Character()
 		{
 			id = my_id;
-			alive = true;
 			player_x = .05 * (x+1);
 			player_y = .05 * (y+1);
 			vel_h = 0;
@@ -175,8 +176,6 @@ class Enemy : public Character
 			personaggio.push_back(Vertex(-0.05, 0.1, -1, 0, 1));
 		}
 		void random_move(float hero_player_x, int level_width);
-		bool operator == (const Enemy& e) const { return id == e.id; }
-		void Die();
 		~Enemy() {
 		}
 };
@@ -258,6 +257,7 @@ public:
 	void Set_tile(int x, int y, char c);
 	int Get_level_width();
 	int Get_level_height();
+	void Check_collisions();
 
 private:
 	bool LoadGLTextures(void);

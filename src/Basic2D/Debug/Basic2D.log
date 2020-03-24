@@ -4,45 +4,51 @@ d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\pro
 d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.h(64): warning C4244: 'argomento': conversione da 'double' a 'float'. Possibile perdita di dati.
 d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.h(65): warning C4244: 'argomento': conversione da 'double' a 'float'. Possibile perdita di dati.
 d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.h(66): warning C4244: 'argomento': conversione da 'double' a 'float'. Possibile perdita di dati.
-d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.h(95): warning C4305: 'inizializzazione': troncamento da 'double' a 'float'
-d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.h(96): warning C4305: 'inizializzazione': troncamento da 'double' a 'float'
-d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.h(99): warning C4305: 'inizializzazione': troncamento da 'double' a 'float'
-d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.h(100): warning C4305: 'inizializzazione': troncamento da 'double' a 'float'
-d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.h(142): warning C4305: '=': troncamento da 'double' a 'float'
-d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.h(146): warning C4305: 'argomento': troncamento da 'double' a 'float'
-d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.h(147): warning C4305: 'argomento': troncamento da 'double' a 'float'
-d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.h(148): warning C4305: 'argomento': troncamento da 'double' a 'float'
+d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.h(97): warning C4305: 'inizializzazione': troncamento da 'double' a 'float'
+d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.h(98): warning C4305: 'inizializzazione': troncamento da 'double' a 'float'
+d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.h(101): warning C4305: 'inizializzazione': troncamento da 'double' a 'float'
+d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.h(102): warning C4305: 'inizializzazione': troncamento da 'double' a 'float'
+d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.h(145): warning C4305: '=': troncamento da 'double' a 'float'
 d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.h(149): warning C4305: 'argomento': troncamento da 'double' a 'float'
-d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.h(167): warning C4244: '=': conversione da 'double' a 'float'. Possibile perdita di dati.
+d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.h(150): warning C4305: 'argomento': troncamento da 'double' a 'float'
+d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.h(151): warning C4305: 'argomento': troncamento da 'double' a 'float'
+d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.h(152): warning C4305: 'argomento': troncamento da 'double' a 'float'
 d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.h(168): warning C4244: '=': conversione da 'double' a 'float'. Possibile perdita di dati.
-d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.h(172): warning C4305: 'argomento': troncamento da 'double' a 'float'
+d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.h(169): warning C4244: '=': conversione da 'double' a 'float'. Possibile perdita di dati.
 d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.h(173): warning C4305: 'argomento': troncamento da 'double' a 'float'
 d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.h(174): warning C4305: 'argomento': troncamento da 'double' a 'float'
 d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.h(175): warning C4305: 'argomento': troncamento da 'double' a 'float'
+d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.h(176): warning C4305: 'argomento': troncamento da 'double' a 'float'
+d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.h(230): warning C4305: 'argomento': troncamento da 'double' a 'float'
 d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.h(231): warning C4305: 'argomento': troncamento da 'double' a 'float'
 d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.h(232): warning C4305: 'argomento': troncamento da 'double' a 'float'
 d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.h(233): warning C4305: 'argomento': troncamento da 'double' a 'float'
-d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.h(234): warning C4305: 'argomento': troncamento da 'double' a 'float'
+d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.h(236): warning C4305: 'argomento': troncamento da 'double' a 'float'
 d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.h(237): warning C4305: 'argomento': troncamento da 'double' a 'float'
 d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.h(238): warning C4305: 'argomento': troncamento da 'double' a 'float'
 d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.h(239): warning C4305: 'argomento': troncamento da 'double' a 'float'
-d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.h(240): warning C4305: 'argomento': troncamento da 'double' a 'float'
 d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.cpp(100): warning C4474: 'sprintf': sono stati passati troppi argomenti per la stringa di formato
   d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.cpp(100): note: con i segnaposto e i relativi parametri sono previsti argomenti variadic 0, ma sono stati specificati quelli 1
 d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.cpp(102): warning C4474: 'sprintf': sono stati passati troppi argomenti per la stringa di formato
   d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.cpp(102): note: con i segnaposto e i relativi parametri sono previsti argomenti variadic 0, ma sono stati specificati quelli 1
 d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.cpp(104): warning C4474: 'sprintf': sono stati passati troppi argomenti per la stringa di formato
   d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.cpp(104): note: con i segnaposto e i relativi parametri sono previsti argomenti variadic 0, ma sono stati specificati quelli 1
-d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.cpp(199): warning C4244: 'argomento': conversione da 'double' a 'GLfloat'. Possibile perdita di dati.
-d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.cpp(378): warning C4244: '=': conversione da 'double' a 'float'. Possibile perdita di dati.
-d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.cpp(379): warning C4244: '=': conversione da 'double' a 'float'. Possibile perdita di dati.
-d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.cpp(388): warning C4244: '+=': conversione da 'double' a 'float'. Possibile perdita di dati.
-d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.cpp(422): warning C4305: '+=': troncamento da 'double' a 'float'
-d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.cpp(457): warning C4244: '=': conversione da 'double' a 'float'. Possibile perdita di dati.
-d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.cpp(465): warning C4244: '=': conversione da 'double' a 'float'. Possibile perdita di dati.
-d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.cpp(521): warning C4244: 'inizializzazione': conversione da 'double' a 'float'. Possibile perdita di dati.
-d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.cpp(522): warning C4244: 'inizializzazione': conversione da 'double' a 'float'. Possibile perdita di dati.
-d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.cpp(570): warning C4305: '+=': troncamento da 'double' a 'float'
-d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.cpp(572): warning C4305: '-=': troncamento da 'double' a 'float'
-d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.cpp(555): warning C4715: 'MyModel::Get_tile': non tutti i percorsi di controllo restituiscono un valore
+d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.cpp(106): warning C4474: 'sprintf': sono stati passati troppi argomenti per la stringa di formato
+  d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.cpp(106): note: con i segnaposto e i relativi parametri sono previsti argomenti variadic 0, ma sono stati specificati quelli 1
+d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.cpp(203): warning C4244: 'argomento': conversione da 'double' a 'GLfloat'. Possibile perdita di dati.
+d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.cpp(307): warning C4305: 'argomento': troncamento da 'double' a 'float'
+d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.cpp(308): warning C4305: 'argomento': troncamento da 'double' a 'float'
+d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.cpp(309): warning C4305: 'argomento': troncamento da 'double' a 'float'
+d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.cpp(310): warning C4305: 'argomento': troncamento da 'double' a 'float'
+d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.cpp(414): warning C4244: '=': conversione da 'double' a 'float'. Possibile perdita di dati.
+d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.cpp(415): warning C4244: '=': conversione da 'double' a 'float'. Possibile perdita di dati.
+d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.cpp(424): warning C4244: '+=': conversione da 'double' a 'float'. Possibile perdita di dati.
+d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.cpp(459): warning C4305: '+=': troncamento da 'double' a 'float'
+d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.cpp(494): warning C4244: '=': conversione da 'double' a 'float'. Possibile perdita di dati.
+d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.cpp(502): warning C4244: '=': conversione da 'double' a 'float'. Possibile perdita di dati.
+d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.cpp(553): warning C4244: 'inizializzazione': conversione da 'double' a 'float'. Possibile perdita di dati.
+d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.cpp(554): warning C4244: 'inizializzazione': conversione da 'double' a 'float'. Possibile perdita di dati.
+d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.cpp(634): warning C4305: '+=': troncamento da 'double' a 'float'
+d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.cpp(636): warning C4305: '-=': troncamento da 'double' a 'float'
+d:\jacopo\università\2_laurea magistrale\2anno\computer_graphics\repository\projectcg\src\basic2d\model.cpp(587): warning C4715: 'MyModel::Get_tile': non tutti i percorsi di controllo restituiscono un valore
   Basic2D.vcxproj -> D:\Jacopo\Università\2_Laurea Magistrale\2anno\COMPUTER_GRAPHICS\Repository\ProjectCG\src\Debug\Basic2D.exe
