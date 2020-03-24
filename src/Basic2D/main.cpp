@@ -367,6 +367,8 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 	}
 	stream->setRepeat(true);
 	stream->setVolume(0.5f); // 50% volume
+
+	// TODO: da rimettere per sentire la musica
 	//stream->play();
 
 	OutputStreamPtr explosion(OpenSound(device, "../Data/explosion.wav", false));

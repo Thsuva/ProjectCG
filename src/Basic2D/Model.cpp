@@ -147,9 +147,6 @@ bool MyModel::DrawGLScene(void)
 
 	// gravità mi sembra funzionante
 	Player.Setup_position();
-	Player.Gravity();
-	Player.Convert_coordinate_for_translation();
-	
 	glTranslatef(Player.player_horizontal_transl, Player.player_vertical_transl, 0);
 	// --------------fino a qui
 	
@@ -188,7 +185,7 @@ bool MyModel::DrawGLScene(void)
 	glDisable(GL_ALPHA_TEST);
 
 	// Tiles + nemici
-	char giuseppi = 'c';
+	int enemy_ids = 0;
 	for (int col = 0; col < Data.screen_width * Data.num_of_screens; col++) {
 		for (int row = 0; row < Data.level_height; row++) {
 			char id = Data.Get_tile(col, row);
@@ -205,8 +202,9 @@ bool MyModel::DrawGLScene(void)
 
 				break;
 			case '*':
-				enemy_list.push_back(Enemy(col, row));
+				enemy_list.push_back(Enemy(col, row, enemy_ids));
 				Set_tile(col, row, '.');
+				enemy_ids += 1;
 				break;
 			default:
 				break;
@@ -214,6 +212,36 @@ bool MyModel::DrawGLScene(void)
 		}
 	}
 
+	// nemici
+	std::list<Enemy>::iterator it;
+	int my_level_width = Get_level_width();
+	// printo tutta la coda ad ogni iterazione
+	for (it = enemy_list.begin(); it != enemy_list.end(); ++it) {
+
+		if (it->alive) {
+			// it->update_position();
+			glBindTexture(GL_TEXTURE_2D, texture[3]);
+			glBegin(GL_QUADS);
+			// ad ogni tic mi muovo o verso il personaggio, o dalla parte opposta oppure salto
+			it->random_move(Player.player_x, my_level_width);
+			it->Setup_position();
+			for (int i = 0; i < 4; i++) {
+				glTexCoord2f(it->personaggio[i].u, it->personaggio[i].v);
+				glVertex3f(it->personaggio[i].x - it->player_horizontal_transl + Player.player_horizontal_transl,
+					it->personaggio[i].y - it->player_vertical_transl + Player.player_vertical_transl, it->personaggio[i].z);
+			}
+			glEnd();
+		}
+		else {
+			int size = enemy_list.size();
+			enemy_list.remove(*it);
+			size = enemy_list.size();
+			size = enemy_list.size();
+		}
+			
+		
+
+	}
 	/*
 	// bullets 
 	std::list<Bullet>::iterator it = bullet_list.begin();
@@ -381,6 +409,12 @@ void Character::Setup_position()
 	int temp_last_pers_v = (int)(player_y * 100);
 	if (temp_last_pers_v % 5 != 0)
 		bottom_tile += 1;
+
+	// forza di gravità
+	Gravity();
+
+	// setto i valori di traslazione
+	Convert_coordinate_for_translation();
 }
 
 void Character::Gravity()
@@ -414,7 +448,7 @@ void Character::Gravity()
 
 		if (next_pos_row_bottom == 23) {
 			vel_v = 0;
-			//Player.Die();
+			Die();
 		}
 
 		if (Data.Get_tile(right_tile, next_pos_row_bottom) == '#'
@@ -472,6 +506,17 @@ void Character::Convert_coordinate_for_translation() {
 
 }
 
+void Character::Die()
+{
+
+}
+
+void Personaggio::Die()
+{
+
+}
+
+
 Bullet Character::shoot() {
 	float start_x = player_x + 0.05;
 	float start_y = player_y - 0.05;
@@ -507,9 +552,53 @@ char MyModel::Get_tile(int x, int y) {
 	if (x >= 0 && x < screen_width*num_of_screens && y >= 0 && y < level_height)
 		return level[y*screen_width*num_of_screens + x];
 
-};
+}
 
 void MyModel::Set_tile(int x, int y, char c) {
 	if (x >= 0 && x < screen_width*num_of_screens && y >= 0 && y < level_height)
 		level[y*screen_width*num_of_screens + x] = c;
-};
+}
+
+void Enemy::random_move(float hero_player_x, int level_width)
+{
+	int rand_var = (rand() % 10) + 1;
+
+	// si ferma
+	if (rand_var > 0 && rand_var < 4)
+	{
+		if (vel_h < 0)
+			vel_h += .00025;
+		else if (vel_h > 0)
+			vel_h -= .00025;
+
+		if (vel_h  < .00025 && vel_h > -.00025)
+			vel_h = 0;
+	}
+	// va verso il personaggio
+	if (rand_var > 3 && rand_var < 9)
+	{
+		double vel = .001;
+		// vai verso destra se il personaggio è a destra
+		if (hero_player_x >= player_x && player_x < (level_width * .05)) {
+			double nvel_h = vel_h + vel;
+
+			MoveOrCollide(nvel_h);
+		}
+		// vai verso sinistra se il personaggio è a sinistra
+		else if (hero_player_x < player_x && player_x > 1) {
+			double nvel_h = vel_h - vel;
+
+			MoveOrCollide(nvel_h);
+		}
+	}
+	// salta
+	else
+	{
+		Jump_personaggio();
+	}
+}
+
+void Enemy::Die()
+{
+	alive = false;
+}

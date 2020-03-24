@@ -128,6 +128,7 @@ public:
 	void Setup_position();
 	void Gravity();
 	bool Is_on_tile();
+	virtual void Die();
 	void Convert_coordinate_for_translation();
 	Bullet shoot();
 };
@@ -148,6 +149,7 @@ class Personaggio : public Character
 			personaggio.push_back(Vertex(-0.05, 0.1, -1, 0, 1));
 
 		}
+		void Die();
 		~Personaggio(){
 		}
 
@@ -156,10 +158,14 @@ class Personaggio : public Character
 class Enemy : public Character
 {
 	public:
-		Enemy(int x, int y) : Character()
+		int id;
+		bool alive;
+		Enemy(int x, int y, int my_id) : Character()
 		{
-			player_x = 1;
-			player_y = 0.55;
+			id = my_id;
+			alive = true;
+			player_x = .05 * (x+1);
+			player_y = .05 * (y+1);
 			vel_h = 0;
 			vel_v = 0;
 			personaggio.clear();
@@ -168,6 +174,9 @@ class Enemy : public Character
 			personaggio.push_back(Vertex(0.05, 0.1, -1, 1, 1));
 			personaggio.push_back(Vertex(-0.05, 0.1, -1, 0, 1));
 		}
+		void random_move(float hero_player_x, int level_width);
+		bool operator == (const Enemy& e) const { return id == e.id; }
+		void Die();
 		~Enemy() {
 		}
 };
