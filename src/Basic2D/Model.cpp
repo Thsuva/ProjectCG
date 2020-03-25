@@ -232,7 +232,7 @@ bool MyModel::DrawGLScene(void)
 				glBindTexture(GL_TEXTURE_2D, texture[3]);
 				glBegin(GL_QUADS);
 				// ad ogni tic mi muovo o verso il personaggio, o dalla parte opposta oppure salto
-				//it->random_move(Player.player_x, my_level_width);
+				it->random_move(Player.player_x, my_level_width);
 				it->Setup_position();
 				for (int i = 0; i < 4; i++) {
 					glTexCoord2f(it->personaggio[i].u, it->personaggio[i].v);
@@ -251,17 +251,26 @@ bool MyModel::DrawGLScene(void)
 		// bullets
 		std::list<Bullet>::iterator bullet_it;
 
+		// definisco lista temp
+		std::list<Bullet> temp_list_b(bullet_list);
+		// cancello la lista dei nemici
+		bullet_list.clear();
 		// printo tutta la coda ad ogni iterazione
-		for (bullet_it = bullet_list.begin(); bullet_it != bullet_list.end(); ++bullet_it) {
-			bullet_it->Update_position();
-			glBindTexture(GL_TEXTURE_2D, texture[2]);
-			glBegin(GL_QUADS);
-			for (int i = 0; i < 4; i++) {
-				glTexCoord2f(bullet_it->bullet[i].u, bullet_it->bullet[i].v);
-				glVertex3f(bullet_it->bullet[i].x - bullet_it->bullet_horizontal_transl + Player.player_horizontal_transl,
-					bullet_it->bullet[i].y - bullet_it->bullet_vertical_transl + Player.player_vertical_transl, bullet_it->bullet[i].z);
+		for (bullet_it = temp_list_b.begin(); bullet_it != temp_list_b.end(); ++bullet_it) {
+
+			if (bullet_it->alive) {
+				bullet_it->Update_position();
+				glBindTexture(GL_TEXTURE_2D, texture[2]);
+				glBegin(GL_QUADS);
+				for (int i = 0; i < 4; i++) {
+					glTexCoord2f(bullet_it->bullet[i].u, bullet_it->bullet[i].v);
+					glVertex3f(bullet_it->bullet[i].x - bullet_it->bullet_horizontal_transl + Player.player_horizontal_transl,
+						bullet_it->bullet[i].y - bullet_it->bullet_vertical_transl + Player.player_vertical_transl, bullet_it->bullet[i].z);
+				}
+				glEnd();
+
+				bullet_list.push_back(*bullet_it);
 			}
-			glEnd();
 
 		}
 		
@@ -551,10 +560,12 @@ void Character::Die()
 
 
 Bullet Character::shoot() {
-	float start_x = ((p_width / 2) * 20) - (player_x - (0.05 * character_direction));
-	float start_y = player_y - ((p_height / 2) * 11);
+	float b_x = player_x - (0.05 * character_direction);
+	float b_y = player_y;
+	float trasl_x = ((p_width / 2) * 20) - b_x;
+	float trasl_y = b_y - ((p_height / 2) * 11);
 
-	Bullet bullet = Bullet(start_x, start_y, (MAX_VEL_H * 2)*character_direction);
+	Bullet bullet = Bullet(b_x, b_y, trasl_x, trasl_y, (0.01)*character_direction);
 
 	return bullet;
 }
@@ -600,7 +611,7 @@ int Character::round(double value) {
 	return int_value;
 }
 
-// verifico se il personaggio tocca un nemico, oppure se il nemico è toccato da un bullet, oppure se un bullet scontra una tile
+// verifico se il personaggio tocca un nemico, oppure se il nemico è toccato da un bullet, oppure se un bullet scontra una tile (o esce dallo schermo)
 void MyModel::Check_collisions()
 {
 	std::list<Enemy>::iterator enemy_it;
@@ -619,10 +630,50 @@ void MyModel::Check_collisions()
 
 		// tocco tra personaggio e nemico
 		if (((enemy_left > player_left && enemy_left < player_right) || (enemy_right > player_left && enemy_right < player_right)) 
-			&& ((enemy_bottom > player_top && enemy_bottom < player_bottom) || (enemy_top <= player_bottom && enemy_top > player_top)))
+			&& ((enemy_bottom > player_top && enemy_bottom < player_bottom) || (enemy_top < player_bottom && enemy_top > player_top)))
 			Player.Die();
+		else 
+		{
+			std::list<Bullet>::iterator bullet_it;
+			// per ogni bullet controllo che non ci sia collisione con:
+			// 1) nemico -> nemico muore, bullet muore
+			// 2) tile -> bullet muore
+			// 3) bordo schermo -> bullet muore
+			for (bullet_it = bullet_list.begin(); bullet_it != bullet_list.end(); ++bullet_it) {
+				int bullet_rounded_x = bullet_it->round(bullet_it->bullet_x);
+				int bullet_rounded_y = bullet_it->round(bullet_it->bullet_y);
+				int row_bullet = bullet_it->round(bullet_it->bullet_y / .05) / 100;
+				int col_bullet = bullet_it->round(bullet_it->bullet_x / .05) / 100;
+
+				// caso 1)
+				if ((bullet_rounded_x < enemy_right && bullet_rounded_x > enemy_left) && (bullet_rounded_y > enemy_top && bullet_rounded_y < enemy_bottom))
+				{
+					enemy_it->Die();
+					bullet_it->Die();
+				}
+
+				// caso 2)
+				else if (Get_tile(col_bullet, row_bullet) == '#')
+					bullet_it->Die();
+
+				// caso 3)
+				else if (abs(bullet_it->bullet_x - Player.player_x) > ((screen_width / 2) * (Player.p_width / 2)))
+					bullet_it->Die();
+			}
+
+		}
 	}
 
+}
+
+double MyModel::Get_last_shot_elapsed()
+{
+	return Full_elapsed - Shot_elapsed;
+}
+
+void MyModel::Set_shot_elapsed()
+{
+	Shot_elapsed = Full_elapsed;
 }
 
 void Enemy::random_move(float hero_player_x, int level_width)
@@ -666,5 +717,21 @@ void Enemy::random_move(float hero_player_x, int level_width)
 
 void Bullet::Update_position() {
 
-	bullet_horizontal_transl += vel_h;
+	bullet_horizontal_transl += bullet_vel_h;
+
+	bullet_x = (.05 * 20) - bullet_horizontal_transl;
+}
+
+void Bullet::Die()
+{
+	alive = false;
+}
+
+int Bullet::round(double value) {
+
+	value *= 100;
+	value += .5;
+	int int_value = (int)value;
+
+	return int_value;
 }

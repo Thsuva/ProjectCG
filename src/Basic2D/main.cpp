@@ -427,9 +427,10 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 					else explosion->play();
 				}
 				//test shooting
-				if (Data.keys['S'])						// Is S Being Pressed?
+				if (Data.keys['S'] && Data.Get_last_shot_elapsed() > 1)						// Is S Being Pressed?
 				{
-					Data.keys['S'] = FALSE;
+					// Data.keys['S'] = FALSE;
+					Data.Set_shot_elapsed();
 					Bullet bullet = Data.Player.shoot();
 					Data.bullet_list.push_back(bullet);
 				}

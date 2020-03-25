@@ -47,19 +47,26 @@ class Bullet {
 public:
 	std::vector<Vertex> bullet;  // floating personaggio
 
+	bool alive;
 	// per i movimenti
+	float bullet_x;
+	float bullet_y;
 	float bullet_horizontal_transl;
 	float bullet_vertical_transl;
-	float vel_h;
-
+	float bullet_vel_h;
+	float b_height = 0.01;
+	float b_width = 0.01;
 
 public:
 	//  methods
-	Bullet(float start_x, float start_y, float my_vel) 
+	Bullet(float b_x, float b_y, float trasl_x, float trasl_y, float my_vel) 
 	{
-		bullet_horizontal_transl = start_x;
-		bullet_vertical_transl = start_y;
-		vel_h = my_vel;
+		alive = true;
+		bullet_x = b_x;
+		bullet_y = b_y;
+		bullet_horizontal_transl = trasl_x;
+		bullet_vertical_transl = trasl_y;
+		bullet_vel_h = my_vel;
 		bullet.clear();
 		bullet.push_back(Vertex(-0.005, 0.045, -1, 0, 0));
 		bullet.push_back(Vertex(0.005, 0.045, -1, 1, 0));
@@ -68,6 +75,8 @@ public:
 
 	}
 	void Update_position();
+	void Die();
+	int round(double value);
 	~Bullet() {
 	}
 
@@ -206,6 +215,7 @@ private:
 	std::vector<Vertex> tile;		  // blocco base
 	clock_t Tstamp, Tstart;
 	double Full_elapsed;  // elapsed time in seconds from the beginning of the program
+	double Shot_elapsed;
 
 	GLuint	texture[28];			// Storage For 28 Textures!
 	GLuint	base;				// Base Display List For The Font Set
@@ -219,6 +229,8 @@ public:
 	//  methods
 	MyModel() : hDC(NULL), hRC(NULL), hWnd(NULL), active(true),
 		fullscreen(true), frames(0), fps(0){
+
+		Shot_elapsed = 1;
 		Background.clear();
 
 		// i primi 2 valori dei vertex sono stati cambiati per fittare il 16/9
@@ -254,6 +266,8 @@ public:
 	int Get_level_width();
 	int Get_level_height();
 	void Check_collisions();
+	double Get_last_shot_elapsed();
+	void Set_shot_elapsed();
 
 private:
 	bool LoadGLTextures(void);
