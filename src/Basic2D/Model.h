@@ -196,6 +196,8 @@ public:
 	bool	keys[256];			// Array Used For The Keyboard Routine
 	bool	active;		      // Window Active Flag Set To TRUE By Default
 	bool	fullscreen;	    // Fullscreen Flag 
+	bool game_started;
+	int texture_delay;
 	Personaggio Player;
 	std::list<Enemy> enemy_list;
 	std::list<Bullet> bullet_list;
@@ -230,6 +232,8 @@ public:
 	MyModel() : hDC(NULL), hRC(NULL), hWnd(NULL), active(true),
 		fullscreen(true), frames(0), fps(0){
 
+		game_started = false;
+		texture_delay = 0;
 		Shot_elapsed = 1;
 		Background.clear();
 

@@ -37,6 +37,7 @@
 #include <gl\glu.h>			// Header File For The GLu32 Library
 #include <cstdlib>
 #include <cmath>
+#include <string.h>
 
 #include "Model.h"
 
@@ -420,6 +421,22 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 						return 0;						// Quit If Window Was Not Created
 					}
 				}
+
+				if (Data.keys['F'] && !Data.game_started)						// Is S Being Pressed?
+				{
+					Data.keys['F'] = FALSE;
+					Data.game_started = true;
+				}
+
+				if (Data.keys['J'] && !Data.game_started)						// Is S Being Pressed?
+				{
+					Data.keys['J'] = FALSE;
+					Data.game_started = true;
+
+					// funzione che setta jacopo
+					Data.texture_delay = 1;
+				}
+
 				if (Data.keys[VK_F2])						// Is F2 Being Pressed?
 				{
 					Data.keys[VK_F2] = FALSE;					// If So Make Key FALSE
@@ -427,7 +444,7 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 					else explosion->play();
 				}
 				//test shooting
-				if (Data.keys['S'] && Data.Get_last_shot_elapsed() > 1)						// Is S Being Pressed?
+				if (Data.keys['S'] && Data.Get_last_shot_elapsed() > .5)						// Is S Being Pressed?
 				{
 					// Data.keys['S'] = FALSE;
 					Data.Set_shot_elapsed();

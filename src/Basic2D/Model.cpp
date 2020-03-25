@@ -95,15 +95,19 @@ bool MyModel::LoadGLTextures(void)
 
 	//  Load 27 personaggio textures
 	char ll[200];
-	for (int i = 0; i < 4; i++) {
-		if (i==0)
-			sprintf(ll, "../Data/fabrizio_00.png", i);
-		else if (i==1)
+	for (int i = 0; i < 6; i++) {
+		if (i == 0)
 			sprintf(ll, "../Data/blank_tile.png", i);
+		else if (i==1)
+			sprintf(ll, "../Data/morro.png", i);
 		else if (i == 2)
-			sprintf(ll, "../Data/enemy.png", i);
-		else if (i == 3)
 			sprintf(ll, "../Data/died.png", i);
+		else if (i == 3)
+			sprintf(ll, "../Data/start_menu.png", i);
+		else if (i == 4)
+			sprintf(ll, "../Data/fabrizio_still.png", i);
+		else if (i == 5)
+			sprintf(ll, "../Data/jacopo_still.png", i);
 
 		this->texture[i + 1] = SOIL_load_OGL_texture(
 			ll, SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
@@ -125,199 +129,241 @@ bool MyModel::LoadGLTextures(void)
 
 bool MyModel::DrawGLScene(void)
 {
-	//  TIMING - start
-	clock_t t = clock();
-	// elapsed time in seconds from the last draw
-	double elapsed = double(t - Tstamp) / (double)CLOCKS_PER_SEC;
-	// elapsed time in milliseconds from the last draw
-	int ms_elapsed = (int)(t - Tstamp);
-
-	if (ms_elapsed < 10) return true;
-	// elapsed time in seconds from the beginning of the program
-	this->Full_elapsed = double(t - Tstart) / (double)CLOCKS_PER_SEC;
-	this->frameTime += double(t - Tstamp) / (double)CLOCKS_PER_SEC;
-
-	this->Tstamp = t;
-	//  TIMING - end
-
-	if (Player.alive) 
+	if (game_started)
 	{
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear The Screen And The Depth Buffer
-		glMatrixMode(GL_MODELVIEW);				// Select The Modelview Matrix
-		glLoadIdentity();									// Reset The View
+		//  TIMING - start
+		clock_t t = clock();
+		// elapsed time in seconds from the last draw
+		double elapsed = double(t - Tstamp) / (double)CLOCKS_PER_SEC;
+		// elapsed time in milliseconds from the last draw
+		int ms_elapsed = (int)(t - Tstamp);
 
-		// ------------le 3 righe qui sotto servono per spostare il background in orizz di px
-		// vedo se gestire o no il salto
+		if (ms_elapsed < 10) return true;
+		// elapsed time in seconds from the beginning of the program
+		this->Full_elapsed = double(t - Tstart) / (double)CLOCKS_PER_SEC;
+		this->frameTime += double(t - Tstamp) / (double)CLOCKS_PER_SEC;
 
-		// gravità mi sembra funzionante
-		Player.Setup_position();
-		glTranslatef(Player.player_horizontal_transl, Player.player_vertical_transl, 0);
-		// --------------fino a qui
+		this->Tstamp = t;
+		//  TIMING - end
 
-		glBindTexture(GL_TEXTURE_2D, texture[0]);
+		if (Player.alive)
+		{
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear The Screen And The Depth Buffer
+			glMatrixMode(GL_MODELVIEW);				// Select The Modelview Matrix
+			glLoadIdentity();									// Reset The View
 
-		//  Background
-		glBegin(GL_QUADS);
-		for (int i = 0; i < 4; i++) {
-			glTexCoord2f(Background[i].u, Background[i].v);
-			glVertex3f(Background[i].x, Background[i].y, Background[i].z);
-		}
-		glEnd();
+			// ------------le 3 righe qui sotto servono per spostare il background in orizz di px
+			// vedo se gestire o no il salto
 
-		//  Texture for the personaggio, change every 1/19 sec.
-		// int texF = 1 + ((int((Full_elapsed * 19))) % 27);
-		glBindTexture(GL_TEXTURE_2D, texture[1]);
+			// gravità mi sembra funzionante
+			Player.Setup_position();
+			glTranslatef(Player.player_horizontal_transl, Player.player_vertical_transl, 0);
+			// --------------fino a qui
 
-		//  personaggio geometrical trasformations
-		glMatrixMode(GL_MODELVIEW);				// Select The Modelview Matrix
-		glLoadIdentity();									// Reset The View
+			glBindTexture(GL_TEXTURE_2D, texture[0]);
 
-		// Personaggio
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glEnable(GL_ALPHA_TEST);
-		glAlphaFunc(GL_GREATER, 0);
+			//  Background
+			glBegin(GL_QUADS);
+			for (int i = 0; i < 4; i++) {
+				glTexCoord2f(Background[i].u, Background[i].v);
+				glVertex3f(Background[i].x, Background[i].y, Background[i].z);
+			}
+			glEnd();
 
-		glBegin(GL_QUADS);
-		for (int i = 0; i < 4; i++) {
-			glTexCoord2f(Player.personaggio[i].u, Player.personaggio[i].v);
-			glVertex3f(-Player.personaggio[i].x, Player.personaggio[i].y, Player.personaggio[i].z);
-		}
-		glEnd();
+			//  Texture for the personaggio, change every 1/19 sec.
+			// int texF = 1 + ((int((Full_elapsed * 19))) % 27);
 
-		glDisable(GL_BLEND);
-		glDisable(GL_ALPHA_TEST);
+			// sprite del personaggio sono variabili: gestire con opportune funzioni
+			int pos_texture = 5 + texture_delay;
+			glBindTexture(GL_TEXTURE_2D, texture[pos_texture]);
 
-		// Tiles + nemici
-		int enemy_ids = 0;
-		for (int col = 0; col < Data.screen_width * Data.num_of_screens; col++) {
-			for (int row = 0; row < Data.level_height; row++) {
-				char id = Data.Get_tile(col, row);
-				switch (id)
-				{
-				case '#':
+			//  personaggio geometrical trasformations
+			glMatrixMode(GL_MODELVIEW);				// Select The Modelview Matrix
+			glLoadIdentity();									// Reset The View
+
+			// Personaggio
+			glEnable(GL_BLEND);
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			glEnable(GL_ALPHA_TEST);
+			glAlphaFunc(GL_GREATER, 0);
+
+			glBegin(GL_QUADS);
+			for (int i = 0; i < 4; i++) {
+				glTexCoord2f(Player.personaggio[i].u, Player.personaggio[i].v);
+				glVertex3f(Player.character_direction*Player.personaggio[i].x, Player.personaggio[i].y, Player.personaggio[i].z);
+			}
+			glEnd();
+
+			glDisable(GL_BLEND);
+			glDisable(GL_ALPHA_TEST);
+
+			// Tiles + nemici
+			int enemy_ids = 0;
+			for (int col = 0; col < Data.screen_width * Data.num_of_screens; col++) {
+				for (int row = 0; row < Data.level_height; row++) {
+					char id = Data.Get_tile(col, row);
+					switch (id)
+					{
+					case '#':
+						glBindTexture(GL_TEXTURE_2D, texture[1]);
+						glBegin(GL_QUADS);
+						for (int i = 0; i < 4; i++) {
+							glTexCoord2f(tile[i].u, tile[i].v);
+							glVertex3f(-.975 + (.05*col) + tile[i].x + Player.player_horizontal_transl, .55 - (.05*row) + tile[i].y + Player.player_vertical_transl, tile[i].z);
+						}
+						glEnd();
+
+						break;
+					case '*':
+						enemy_list.push_back(Enemy(col, row, enemy_ids));
+						Set_tile(col, row, '.');
+						enemy_ids += 1;
+						break;
+					default:
+						break;
+					}
+				}
+			}
+
+			// Nemici
+			std::list<Enemy>::iterator it;
+
+			// definisco lista temp
+			std::list<Enemy> temp_list(enemy_list);
+			// cancello la lista dei nemici
+			enemy_list.clear();
+
+			int my_level_width = Get_level_width();
+			// printo tutta la coda ad ogni iterazione
+			for (it = temp_list.begin(); it != temp_list.end(); ++it) {
+
+				if (it->alive) {
 					glBindTexture(GL_TEXTURE_2D, texture[2]);
+
+					// PER PNG TRASPARENTE DA QUI---------------------------
+					glMatrixMode(GL_MODELVIEW);				// Select The Modelview Matrix
+					glLoadIdentity();									// Reset The View
+
+					// Personaggio
+					glEnable(GL_BLEND);
+					glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+					glEnable(GL_ALPHA_TEST);
+					glAlphaFunc(GL_GREATER, 0);
+					// PER PNG TRASPARENTE FINO A QUI---------------------------
 					glBegin(GL_QUADS);
+					// ad ogni tic mi muovo o verso il personaggio, o dalla parte opposta oppure salto
+					it->random_move(Player.player_x, my_level_width);
+					it->Setup_position();
 					for (int i = 0; i < 4; i++) {
-						glTexCoord2f(tile[i].u, tile[i].v);
-						glVertex3f(-.975 + (.05*col) + tile[i].x + Player.player_horizontal_transl, .55 - (.05*row) + tile[i].y + Player.player_vertical_transl, tile[i].z);
+						glTexCoord2f(it->personaggio[i].u, it->personaggio[i].v);
+						glVertex3f(it->personaggio[i].x - it->player_horizontal_transl + Player.player_horizontal_transl,
+							it->personaggio[i].y - it->player_vertical_transl + Player.player_vertical_transl, it->personaggio[i].z);
 					}
 					glEnd();
 
-					break;
-				case '*':
-					enemy_list.push_back(Enemy(col, row, enemy_ids));
-					Set_tile(col, row, '.');
-					enemy_ids += 1;
-					break;
-				default:
-					break;
+					// se il nemico è ancora vivo lo appendo alla lista dei nemici, altrimenti muore
+					enemy_list.push_back(*it);
 				}
+
+
 			}
-		}
 
-		// Nemici
-		std::list<Enemy>::iterator it;
+			// bullets
+			std::list<Bullet>::iterator bullet_it;
 
-		// definisco lista temp
-		std::list<Enemy> temp_list(enemy_list);
-		// cancello la lista dei nemici
-		enemy_list.clear();
+			// definisco lista temp
+			std::list<Bullet> temp_list_b(bullet_list);
+			// cancello la lista dei nemici
+			bullet_list.clear();
+			// printo tutta la coda ad ogni iterazione
+			for (bullet_it = temp_list_b.begin(); bullet_it != temp_list_b.end(); ++bullet_it) {
 
-		int my_level_width = Get_level_width();
-		// printo tutta la coda ad ogni iterazione
-		for (it = temp_list.begin(); it != temp_list.end(); ++it) {
+				if (bullet_it->alive) {
+					bullet_it->Update_position();
+					glBindTexture(GL_TEXTURE_2D, texture[1]);
+					glBegin(GL_QUADS);
+					for (int i = 0; i < 4; i++) {
+						glTexCoord2f(bullet_it->bullet[i].u, bullet_it->bullet[i].v);
+						glVertex3f(bullet_it->bullet[i].x - bullet_it->bullet_horizontal_transl + Player.player_horizontal_transl,
+							bullet_it->bullet[i].y - bullet_it->bullet_vertical_transl + Player.player_vertical_transl, bullet_it->bullet[i].z);
+					}
+					glEnd();
 
-			if (it->alive) {
-				glBindTexture(GL_TEXTURE_2D, texture[3]);
-				glBegin(GL_QUADS);
-				// ad ogni tic mi muovo o verso il personaggio, o dalla parte opposta oppure salto
-				it->random_move(Player.player_x, my_level_width);
-				it->Setup_position();
-				for (int i = 0; i < 4; i++) {
-					glTexCoord2f(it->personaggio[i].u, it->personaggio[i].v);
-					glVertex3f(it->personaggio[i].x - it->player_horizontal_transl + Player.player_horizontal_transl,
-						it->personaggio[i].y - it->player_vertical_transl + Player.player_vertical_transl, it->personaggio[i].z);
+					bullet_list.push_back(*bullet_it);
 				}
-				glEnd();
 
-				// se il nemico è ancora vivo lo appendo alla lista dei nemici, altrimenti muore
-				enemy_list.push_back(*it);
 			}
 
 
-		}
-		
-		// bullets
-		std::list<Bullet>::iterator bullet_it;
+			// check delle collisioni
+			Check_collisions();
 
-		// definisco lista temp
-		std::list<Bullet> temp_list_b(bullet_list);
-		// cancello la lista dei nemici
-		bullet_list.clear();
-		// printo tutta la coda ad ogni iterazione
-		for (bullet_it = temp_list_b.begin(); bullet_it != temp_list_b.end(); ++bullet_it) {
+			//  Some text
+			glMatrixMode(GL_MODELVIEW);				// Select The Modelview Matrix
+			glLoadIdentity();						// Reset The Current Modelview Matrix
+			glDisable(GL_TEXTURE_2D);
 
-			if (bullet_it->alive) {
-				bullet_it->Update_position();
-				glBindTexture(GL_TEXTURE_2D, texture[2]);
-				glBegin(GL_QUADS);
-				for (int i = 0; i < 4; i++) {
-					glTexCoord2f(bullet_it->bullet[i].u, bullet_it->bullet[i].v);
-					glVertex3f(bullet_it->bullet[i].x - bullet_it->bullet_horizontal_transl + Player.player_horizontal_transl,
-						bullet_it->bullet[i].y - bullet_it->bullet_vertical_transl + Player.player_vertical_transl, bullet_it->bullet[i].z);
-				}
-				glEnd();
+			// Color
+			glColor3f(1.0f, 1.0f, 1.0f);
 
-				bullet_list.push_back(*bullet_it);
-			}
-
-		}
-		
-
-		// check delle collisioni
-		Check_collisions();
-
-		//  Some text
-		glMatrixMode(GL_MODELVIEW);				// Select The Modelview Matrix
-		glLoadIdentity();						// Reset The Current Modelview Matrix
-		glDisable(GL_TEXTURE_2D);
-
-		// Color
-		glColor3f(1.0f, 1.0f, 1.0f);
-
-		// Position The Text On The Screen
-		glRasterPos3f(-(float)plx + PixToCoord_X(10), (float)ply - PixToCoord_Y(21),
-			-4);
-
-		// compute fps and write text
-		this->frames++;
-		if (this->frames > 18) {
-			this->fps = frames / frameTime;
-			this->frames = 0; this->frameTime = 0;
-		}
-		this->glPrint("Elapsed time: %6.2f sec.  -  Fps %6.2f",
-			Full_elapsed, fps);
-
-		//////// QUI ///////////////
-		if (true) {
-			glRasterPos3f(-(float)plx + PixToCoord_X(10), (float)-ply + PixToCoord_Y(21),
+			// Position The Text On The Screen
+			glRasterPos3f(-(float)plx + PixToCoord_X(10), (float)ply - PixToCoord_Y(21),
 				-4);
-			this->glPrint("bt: %d, mbt: %d, tt: %d, lt: %d, mft: %d, rt: %d plx: %f, ply: %f, trx: %f try: %f",
-				Player.bottom_tile, Player.middle_body_tile, Player.top_tile, Player.left_tile, Player.middle_feet_tile, Player.right_tile, Player.player_x, Player.player_y, Player.player_horizontal_transl, Player.player_vertical_transl);
+
+			// compute fps and write text
+			this->frames++;
+			if (this->frames > 18) {
+				this->fps = frames / frameTime;
+				this->frames = 0; this->frameTime = 0;
+			}
+			this->glPrint("Elapsed time: %6.2f sec.  -  Fps %6.2f",
+				Full_elapsed, fps);
+
+			//////// QUI ///////////////
+			if (true) {
+				glRasterPos3f(-(float)plx + PixToCoord_X(10), (float)-ply + PixToCoord_Y(21),
+					-4);
+				this->glPrint("bt: %d, mbt: %d, tt: %d, lt: %d, mft: %d, rt: %d plx: %f, ply: %f, trx: %f try: %f",
+					Player.bottom_tile, Player.middle_body_tile, Player.top_tile, Player.left_tile, Player.middle_feet_tile, Player.right_tile, Player.player_x, Player.player_y, Player.player_horizontal_transl, Player.player_vertical_transl);
+			}
+
+			glEnable(GL_TEXTURE_2D);							// Enable Texture Mapping
 		}
 
-		glEnable(GL_TEXTURE_2D);							// Enable Texture Mapping
+		// quando muoio printo il relativo messaggio
+		else
+		{
+			std::vector<Vertex> Background_dead;
+			Background_dead.push_back(Vertex(-1, -0.6, -5, 0, 0));
+			Background_dead.push_back(Vertex(1, -0.6, -5, 1, 0));
+			Background_dead.push_back(Vertex(1, 0.6, -5, 1, 1));
+			Background_dead.push_back(Vertex(-1, 0.6, -5, 0, 1));
+
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear The Screen And The Depth Buffer
+			glMatrixMode(GL_MODELVIEW);				// Select The Modelview Matrix
+			glLoadIdentity();									// Reset The View
+
+
+			glBindTexture(GL_TEXTURE_2D, texture[3]);
+
+			//  Background
+			glBegin(GL_QUADS);
+			for (int i = 0; i < 4; i++) {
+				glTexCoord2f(Background_dead[i].u, Background_dead[i].v);
+				glVertex3f(Background_dead[i].x, Background_dead[i].y, Background_dead[i].z);
+			}
+			glEnd();
+
+		}
 	}
 
-	// quando muoio printo il relativo messaggio
-	else 
+	else
 	{
-		std::vector<Vertex> Background_dead;
-		Background_dead.push_back(Vertex(-1, -0.6, -5, 0, 0));
-		Background_dead.push_back(Vertex(1, -0.6, -5, 1, 0));
-		Background_dead.push_back(Vertex(1, 0.6, -5, 1, 1));
-		Background_dead.push_back(Vertex(-1, 0.6, -5, 0, 1));
+		std::vector<Vertex> Background_start_menu;
+		Background_start_menu.push_back(Vertex(-1, -0.6, -5, 0, 0));
+		Background_start_menu.push_back(Vertex(1, -0.6, -5, 1, 0));
+		Background_start_menu.push_back(Vertex(1, 0.6, -5, 1, 1));
+		Background_start_menu.push_back(Vertex(-1, 0.6, -5, 0, 1));
 
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear The Screen And The Depth Buffer
 		glMatrixMode(GL_MODELVIEW);				// Select The Modelview Matrix
@@ -329,11 +375,10 @@ bool MyModel::DrawGLScene(void)
 		//  Background
 		glBegin(GL_QUADS);
 		for (int i = 0; i < 4; i++) {
-			glTexCoord2f(Background_dead[i].u, Background_dead[i].v);
-			glVertex3f(Background_dead[i].x, Background_dead[i].y, Background_dead[i].z);
+			glTexCoord2f(Background_start_menu[i].u, Background_start_menu[i].v);
+			glVertex3f(Background_start_menu[i].x, Background_start_menu[i].y, Background_start_menu[i].z);
 		}
 		glEnd();
-
 	}
 	
 	return true;
@@ -629,7 +674,7 @@ void MyModel::Check_collisions()
 		int enemy_bottom = enemy_it->round(enemy_it->player_y + (enemy_it->p_height / 2));
 
 		// tocco tra personaggio e nemico
-		if (((enemy_left > player_left && enemy_left < player_right) || (enemy_right > player_left && enemy_right < player_right)) 
+		if (((enemy_left >= player_left && enemy_left <= player_right) || (enemy_right > player_left && enemy_right < player_right)) 
 			&& ((enemy_bottom > player_top && enemy_bottom < player_bottom) || (enemy_top < player_bottom && enemy_top > player_top)))
 			Player.Die();
 		else 
