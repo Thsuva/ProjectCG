@@ -427,9 +427,9 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 					else explosion->play();
 				}
 				//test shooting
-				if (Data.keys[VK_F3])						// Is F3 Being Pressed?
+				if (Data.keys['S'])						// Is S Being Pressed?
 				{
-					Data.keys[VK_F3] = FALSE;
+					Data.keys['S'] = FALSE;
 					Bullet bullet = Data.Player.shoot();
 					Data.bullet_list.push_back(bullet);
 				}
@@ -446,6 +446,7 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 					if (Data.Player.player_x > 1) {
 						double vel = .00025;
 						double nvel_h = Data.Player.vel_h - vel;
+						Data.Player.character_direction = 1;
 
 						Data.Player.MoveOrCollide(nvel_h);
 					}
@@ -456,6 +457,7 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 					if (Data.Player.player_x < (Data.Get_level_width() * .05)) {
 						double vel = .00025;
 						double nvel_h = Data.Player.vel_h + vel;
+						Data.Player.character_direction = -1;
 
 						Data.Player.MoveOrCollide(nvel_h);
 					}

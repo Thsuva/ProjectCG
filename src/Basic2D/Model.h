@@ -48,36 +48,29 @@ public:
 	std::vector<Vertex> bullet;  // floating personaggio
 
 	// per i movimenti
-	float pos_x;
-	float pos_y;
+	float bullet_horizontal_transl;
+	float bullet_vertical_transl;
 	float vel_h;
-	float vel_v;
 
 
 public:
 	//  methods
-	Bullet(float start_x, float start_y, float target_x, float target_y) : pos_x(start_x
-	), pos_y(start_y), vel_h(0), vel_v(0.005) {
-
+	Bullet(float start_x, float start_y, float my_vel) 
+	{
+		bullet_horizontal_transl = start_x;
+		bullet_vertical_transl = start_y;
+		vel_h = my_vel;
 		bullet.clear();
-		bullet.push_back(Vertex(start_x - .005, start_y - .005, -1, 0, 0));
-		bullet.push_back(Vertex(start_x + .005, start_y - .005, -1, 1, 0));
-		bullet.push_back(Vertex(start_x + .005, start_y + .005, -1, 1, 1));
-		bullet.push_back(Vertex(start_x - .005, start_y + .005, -1, 0, 1));
-
-		float dx = pos_x - target_x;
-		float dy = pos_x - target_y;
+		bullet.push_back(Vertex(-0.005, 0.045, -1, 0, 0));
+		bullet.push_back(Vertex(0.005, 0.045, -1, 1, 0));
+		bullet.push_back(Vertex(0.005, 0.055, -1, 1, 1));
+		bullet.push_back(Vertex(-0.005, 0.055, -1, 0, 1));
 
 	}
+	void Update_position();
 	~Bullet() {
 	}
 
-	void update_position() {
-		pos_x = pos_x + vel_h;
-		pos_y = pos_y + vel_v;
-
-		//if outofscreen: self.distruttore 
-	}
 };
 
 
@@ -90,6 +83,7 @@ public:
 	bool alive;
 
 	// per i movimenti
+	int character_direction;
 	float player_x;
 	float player_y;
 	float player_horizontal_transl;
@@ -119,6 +113,8 @@ public:
 	//  methods
 	Character() {
 		alive = true;
+		// inizialmente il personaggio è orientato verso destra
+		character_direction = -1;
 	}
 	~Character() {
 	}

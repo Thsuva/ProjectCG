@@ -247,23 +247,24 @@ bool MyModel::DrawGLScene(void)
 
 
 		}
-		/*
+		
 		// bullets
-		std::list<Bullet>::iterator it = bullet_list.begin();
+		std::list<Bullet>::iterator bullet_it;
 
 		// printo tutta la coda ad ogni iterazione
-		for (it = bullet_list.begin(); it != bullet_list.end(); ++it) {
-			// it->update_position();
+		for (bullet_it = bullet_list.begin(); bullet_it != bullet_list.end(); ++bullet_it) {
+			bullet_it->Update_position();
 			glBindTexture(GL_TEXTURE_2D, texture[2]);
 			glBegin(GL_QUADS);
 			for (int i = 0; i < 4; i++) {
-				glTexCoord2f(it->bullet[i].u, it->bullet[i].v);
-				glVertex3f(it->bullet[i].x + Player.player_x + it->pos_x, it->bullet[i].y - Player.player_y - it->pos_y, it->bullet[i].z);
+				glTexCoord2f(bullet_it->bullet[i].u, bullet_it->bullet[i].v);
+				glVertex3f(bullet_it->bullet[i].x - bullet_it->bullet_horizontal_transl + Player.player_horizontal_transl,
+					bullet_it->bullet[i].y - bullet_it->bullet_vertical_transl + Player.player_vertical_transl, bullet_it->bullet[i].z);
 			}
 			glEnd();
 
 		}
-		*/
+		
 
 		// check delle collisioni
 		Check_collisions();
@@ -550,13 +551,12 @@ void Character::Die()
 
 
 Bullet Character::shoot() {
-	float start_x = player_x + 0.05;
-	float start_y = player_y - 0.05;
+	float start_x = ((p_width / 2) * 20) - (player_x - (0.05 * character_direction));
+	float start_y = player_y - ((p_height / 2) * 11);
 
-	Bullet bullet = Bullet(start_x, start_y, player_x, player_y);
+	Bullet bullet = Bullet(start_x, start_y, (MAX_VEL_H * 2)*character_direction);
 
 	return bullet;
-
 }
 
 
@@ -603,25 +603,26 @@ int Character::round(double value) {
 // verifico se il personaggio tocca un nemico, oppure se il nemico è toccato da un bullet, oppure se un bullet scontra una tile
 void MyModel::Check_collisions()
 {
-	// Nemici
 	std::list<Enemy>::iterator enemy_it;
-	float player_right = Player.player_x + (Player.p_width / 2);
-	float player_left = Player.player_x - (Player.p_width / 2);
-	float player_top = Player.player_y - (Player.p_height / 2);
-	float player_bottom = Player.player_y + (Player.p_height / 2);
+	int player_right = Player.round(Player.player_x + (Player.p_width / 2));
+	int player_left = Player.round(Player.player_x - (Player.p_width / 2));
+	int player_top = Player.round(Player.player_y - (Player.p_height / 2));
+	int player_bottom = Player.round(Player.player_y + (Player.p_height / 2));
 
-	// printo tutta la coda ad ogni iterazione
+	// Nemici toccano il personaggio oppure vengono toccati da bullet
 	for (enemy_it = enemy_list.begin(); enemy_it != enemy_list.end(); ++enemy_it) {
 
-		float enemy_right = enemy_it->player_x + (enemy_it->p_width / 2);
-		float enemy_left = enemy_it->player_x - (enemy_it->p_width / 2);
-		float enemy_top = enemy_it->player_y - (enemy_it->p_height / 2);
-		float enemy_bottom = enemy_it->player_y + (enemy_it->p_height / 2);
+		int enemy_right = enemy_it->round(enemy_it->player_x + (enemy_it->p_width / 2));
+		int enemy_left = enemy_it->round(enemy_it->player_x - (enemy_it->p_width / 2));
+		int enemy_top = enemy_it->round(enemy_it->player_y - (enemy_it->p_height / 2));
+		int enemy_bottom = enemy_it->round(enemy_it->player_y + (enemy_it->p_height / 2));
 
-		// QUI CONTROLLARE CHE FUNZIONI METTENDO BREAKPOINT A RIGA 623 + FARE APPROSSIMAZIONI COME QUELLA FATTA A RIGA 430 PER CONSIDERARE SOLO I PRIMI 2-3 DECIMALI (DA VEDERE)
-		if (enemy_left > player_left && enemy_left <= player_right && ((enemy_bottom >= player_top && enemy_bottom < player_bottom) || (enemy_top <= player_bottom && enemy_top > player_top)))
+		// tocco tra personaggio e nemico
+		if (((enemy_left > player_left && enemy_left < player_right) || (enemy_right > player_left && enemy_right < player_right)) 
+			&& ((enemy_bottom > player_top && enemy_bottom < player_bottom) || (enemy_top <= player_bottom && enemy_top > player_top)))
 			Player.Die();
 	}
+
 }
 
 void Enemy::random_move(float hero_player_x, int level_width)
@@ -661,4 +662,9 @@ void Enemy::random_move(float hero_player_x, int level_width)
 	{
 		Jump_personaggio();
 	}
+}
+
+void Bullet::Update_position() {
+
+	bullet_horizontal_transl += vel_h;
 }
