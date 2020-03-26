@@ -193,18 +193,21 @@ class Enemy : public Character
 class Door 
 {
 public:
-	int id;
-	double door_x;
-	double door_y;
 	std::vector<Vertex> porta;
+
+	int id;
+
+	double door_horizontal_transl;
+	double door_vertical_transl;
+	
 	float p_height = 0.15;
 	float p_width = 0.1;
 
 	Door(int x, int y, int my_id)
 	{
 		id = my_id;
-		door_x = .05 * (x + 1);
-		door_y = .05 * (y + 1);
+		door_horizontal_transl = (.05 * 20) - (.05 * (x + 1));
+		door_vertical_transl = (.05 * (y + 1)) - (.05 * 11);
 	
 		porta.clear();
 		porta.push_back(Vertex(-0.05, 0, -2, 0, 0));

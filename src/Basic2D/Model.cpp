@@ -260,8 +260,8 @@ bool MyModel::DrawGLScene(void)
 				glBegin(GL_QUADS);
 				for (int i = 0; i < 4; i++) {
 					glTexCoord2f(door_it->porta[i].u, door_it->porta[i].v);
-					glVertex3f(door_it->porta[i].x + Player.player_horizontal_transl,
-						door_it->porta[i].y + Player.player_vertical_transl, door_it->porta[i].z);
+					glVertex3f(door_it->porta[i].x - door_it->door_horizontal_transl + Player.player_horizontal_transl,
+						door_it->porta[i].y - door_it->door_vertical_transl + Player.player_vertical_transl, door_it->porta[i].z);
 				}
 				glEnd();
 
@@ -295,7 +295,7 @@ bool MyModel::DrawGLScene(void)
 					// PER PNG TRASPARENTE FINO A QUI---------------------------
 					glBegin(GL_QUADS);
 					// ad ogni tic mi muovo o verso il personaggio, o dalla parte opposta oppure salto
-					//it->random_move(Player.player_x, my_level_width);
+					it->random_move(Player.player_x, my_level_width);
 					it->Setup_position();
 					for (int i = 0; i < 4; i++) {
 						glTexCoord2f(it->personaggio[i].u, it->personaggio[i].v);
@@ -642,7 +642,6 @@ bool Character::Is_on_tile(){
 }
 
 void Character::Convert_coordinate_for_translation() {
-
 
 	player_horizontal_transl = ((p_width / 2 )* 20) - player_x;
 	player_vertical_transl = player_y - ((p_height / 2) * 11);

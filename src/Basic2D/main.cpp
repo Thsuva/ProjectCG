@@ -473,7 +473,7 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 				if (Data.keys[VK_RIGHT] && Data.game_started)      // Is right arrow Being Pressed?
 				{
 					Data.Player.has_moved = true;
-					if (Data.Player.player_x < (Data.Get_level_width() * .05)) {
+					if (Data.Player.player_x < ((Data.Get_level_width() * .05) + 1)) {
 						double vel = .00025;
 						double nvel_h = Data.Player.vel_h + vel;
 						Data.Player.character_direction = -1;
