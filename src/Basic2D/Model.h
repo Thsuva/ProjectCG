@@ -213,6 +213,7 @@ private:
 
 	//  model data
 	std::vector<Vertex> Background;   // background
+	std::vector<Vertex> Background2;   // background
 	
 	std::vector<Vertex> tile;		  // blocco base
 	clock_t Tstamp, Tstart;
@@ -223,7 +224,7 @@ private:
 	GLuint	base;				// Base Display List For The Font Set
 
 	std::string level = "";
-	int num_of_screens = 3;
+	int num_of_screens = 6;
 	int screen_width = 40;
 	int level_height = 24;
 
@@ -236,6 +237,7 @@ public:
 		texture_delay = 0;
 		Shot_elapsed = 1;
 		Background.clear();
+		Background2.clear();
 
 		// i primi 2 valori dei vertex sono stati cambiati per fittare il 16/9
 		// (prima erano tutti -1 e 1 per generare un quadrato di lato 2 centrato in 0,0)
@@ -243,6 +245,11 @@ public:
 		Background.push_back(Vertex(5, -1.8, -5, 1, 0));
 		Background.push_back(Vertex(5, 1.8, -5, 1, 1));
 		Background.push_back(Vertex(-1, 1.8, -5, 0, 1));
+
+		Background2.push_back(Vertex(4.99, -1.8, -5, 0, 0));
+		Background2.push_back(Vertex(11, -1.8, -5, 1, 0));
+		Background2.push_back(Vertex(11, 1.8, -5, 1, 1));
+		Background2.push_back(Vertex(4.99, 1.8, -5, 0, 1));
 
 		tile.clear();
 		tile.push_back(Vertex(-.025, 0, -4, 0, 0));

@@ -99,15 +99,17 @@ bool MyModel::LoadGLTextures(void)
 		if (i == 0)
 			sprintf(ll, "../Data/blank_tile.png", i);
 		else if (i==1)
-			sprintf(ll, "../Data/morro.png", i);
+			sprintf(ll, "../Data/enemy.png", i);
 		else if (i == 2)
 			sprintf(ll, "../Data/died.png", i);
 		else if (i == 3)
 			sprintf(ll, "../Data/start_menu.png", i);
+		// sprite zava
 		else if (i == 4)
-			sprintf(ll, "../Data/fabrizio_still.png", i);
+			sprintf(ll, "../Data/blank_tile.png", i);
+		// sprite fava
 		else if (i == 5)
-			sprintf(ll, "../Data/jacopo_still.png", i);
+			sprintf(ll, "../Data/blank_tile.png", i);
 
 		this->texture[i + 1] = SOIL_load_OGL_texture(
 			ll, SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
@@ -155,7 +157,7 @@ bool MyModel::DrawGLScene(void)
 			// ------------le 3 righe qui sotto servono per spostare il background in orizz di px
 			// vedo se gestire o no il salto
 
-			// gravità mi sembra funzionante
+			// gestione gravità e traslazione
 			Player.Setup_position();
 			glTranslatef(Player.player_horizontal_transl, Player.player_vertical_transl, 0);
 			// --------------fino a qui
@@ -169,6 +171,18 @@ bool MyModel::DrawGLScene(void)
 				glVertex3f(Background[i].x, Background[i].y, Background[i].z);
 			}
 			glEnd();
+
+			//  Background2 da qui---------------------
+			glBindTexture(GL_TEXTURE_2D, texture[0]);
+
+			
+			glBegin(GL_QUADS);
+			for (int i = 0; i < 4; i++) {
+				glTexCoord2f(Background2[i].u, Background2[i].v);
+				glVertex3f(Background2[i].x, Background2[i].y, Background2[i].z);
+			}
+			glEnd();
+			//  Background2 fino a qui---------------------
 
 			//  Texture for the personaggio, change every 1/19 sec.
 			// int texF = 1 + ((int((Full_elapsed * 19))) % 27);
@@ -197,7 +211,7 @@ bool MyModel::DrawGLScene(void)
 			glDisable(GL_BLEND);
 			glDisable(GL_ALPHA_TEST);
 
-			// Tiles + nemici
+			// Tiles + nemici, lettura da file txt
 			int enemy_ids = 0;
 			for (int col = 0; col < Data.screen_width * Data.num_of_screens; col++) {
 				for (int row = 0; row < Data.level_height; row++) {
@@ -252,7 +266,7 @@ bool MyModel::DrawGLScene(void)
 					// PER PNG TRASPARENTE FINO A QUI---------------------------
 					glBegin(GL_QUADS);
 					// ad ogni tic mi muovo o verso il personaggio, o dalla parte opposta oppure salto
-					it->random_move(Player.player_x, my_level_width);
+					//it->random_move(Player.player_x, my_level_width);
 					it->Setup_position();
 					for (int i = 0; i < 4; i++) {
 						glTexCoord2f(it->personaggio[i].u, it->personaggio[i].v);
@@ -659,6 +673,14 @@ int Character::round(double value) {
 // verifico se il personaggio tocca un nemico, oppure se il nemico è toccato da un bullet, oppure se un bullet scontra una tile (o esce dallo schermo)
 void MyModel::Check_collisions()
 {
+	bool there_are_enemies = true;
+
+	if (enemy_list.size() == 0)
+	{
+		enemy_list.push_back(Enemy(0, 0, -1));
+		there_are_enemies = false;
+	}
+
 	std::list<Enemy>::iterator enemy_it;
 	int player_right = Player.round(Player.player_x + (Player.p_width / 2));
 	int player_left = Player.round(Player.player_x - (Player.p_width / 2));
@@ -674,8 +696,12 @@ void MyModel::Check_collisions()
 		int enemy_bottom = enemy_it->round(enemy_it->player_y + (enemy_it->p_height / 2));
 
 		// tocco tra personaggio e nemico
-		if (((enemy_left >= player_left && enemy_left <= player_right) || (enemy_right > player_left && enemy_right < player_right)) 
-			&& ((enemy_bottom > player_top && enemy_bottom < player_bottom) || (enemy_top < player_bottom && enemy_top > player_top)))
+		/*if (((enemy_left >= player_left && enemy_left <= player_right) || (enemy_right > player_left && enemy_right < player_right)) 
+			&& ((enemy_bottom > player_top && enemy_bottom < player_bottom) || (enemy_top < player_bottom && enemy_top > player_top)))*/
+		if ((((player_bottom > enemy_top && player_bottom < enemy_bottom) || (player_top < enemy_bottom && player_top > enemy_top)) &&
+			((player_right < enemy_right && player_right > enemy_left) || (player_left > enemy_left && player_left < enemy_right))) 
+			|| (player_bottom == enemy_top && player_left == enemy_left && player_right == enemy_right) 
+			|| (player_top == enemy_bottom && player_left == enemy_left && player_right == enemy_right))
 			Player.Die();
 		else 
 		{
@@ -708,6 +734,9 @@ void MyModel::Check_collisions()
 
 		}
 	}
+
+	if (!there_are_enemies)
+		enemy_list.clear();
 
 }
 
