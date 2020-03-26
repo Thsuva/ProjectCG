@@ -143,9 +143,14 @@ public:
 
 class Personaggio : public Character
 {
+public:
+	bool has_moved;
+	bool has_won;
+
 	public:
 		Personaggio() : Character(){
-
+			has_moved = false;
+			has_won = false;
 			player_x = 1;
 			player_y = 0.55;
 			vel_h = 0;

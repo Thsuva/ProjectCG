@@ -444,7 +444,7 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 					else explosion->play();
 				}
 				//test shooting
-				if (Data.keys['S'] && Data.Get_last_shot_elapsed() > .5)						// Is S Being Pressed?
+				if (Data.keys['S'] && Data.Get_last_shot_elapsed() > .5 && Data.game_started)						// Is S Being Pressed?
 				{
 					// Data.keys['S'] = FALSE;
 					Data.Set_shot_elapsed();
@@ -459,7 +459,7 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 					else stupid->play();
 				}
 
-				if (Data.keys[VK_LEFT])      // Is left arrow Being Pressed?
+				if (Data.keys[VK_LEFT] && Data.game_started)      // Is left arrow Being Pressed?
 				{
 					if (Data.Player.player_x > 1) {
 						double vel = .00025;
@@ -470,8 +470,9 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 					}
 				}
 
-				if (Data.keys[VK_RIGHT])      // Is right arrow Being Pressed?
+				if (Data.keys[VK_RIGHT] && Data.game_started)      // Is right arrow Being Pressed?
 				{
+					Data.Player.has_moved = true;
 					if (Data.Player.player_x < (Data.Get_level_width() * .05)) {
 						double vel = .00025;
 						double nvel_h = Data.Player.vel_h + vel;
@@ -482,21 +483,26 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 
 				}
 
-				if (Data.keys[VK_UP])						// Is right arrow Being Pressed?
+				if (Data.keys[VK_UP] && Data.game_started)						// Is right arrow Being Pressed?
 				{
+					if (!Data.Player.has_moved) {
+						Data.Player.has_won = true;
+						Data.Player.Die();
+					}
+						
 					//Data.keys[VK_UP] = FALSE;
 
 					Data.Player.Move_up_down_personaggio(-1);
 				}
 
-				if (Data.keys[VK_DOWN])						// Is right arrow Being Pressed?
+				if (Data.keys[VK_DOWN] && Data.game_started)						// Is right arrow Being Pressed?
 				{
 					//Data.keys[VK_DOWN] = FALSE;
 
 					Data.Player.Move_up_down_personaggio(1);
 				}
 
-				if (Data.keys[VK_SPACE])						// Is right arrow Being Pressed?
+				if (Data.keys[VK_SPACE] && Data.game_started)						// Is right arrow Being Pressed?
 				{
 					//Data.keys[VK_SPACE] = FALSE;
 					Data.Player.Jump_personaggio();

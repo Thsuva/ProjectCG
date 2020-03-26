@@ -347,26 +347,35 @@ bool MyModel::DrawGLScene(void)
 		// quando muoio printo il relativo messaggio
 		else
 		{
-			std::vector<Vertex> Background_dead;
-			Background_dead.push_back(Vertex(-1, -0.6, -5, 0, 0));
-			Background_dead.push_back(Vertex(1, -0.6, -5, 1, 0));
-			Background_dead.push_back(Vertex(1, 0.6, -5, 1, 1));
-			Background_dead.push_back(Vertex(-1, 0.6, -5, 0, 1));
+
+			std::vector<Vertex> Background_end;
+			Background_end.push_back(Vertex(-1, -0.6, -5, 0, 0));
+			Background_end.push_back(Vertex(1, -0.6, -5, 1, 0));
+			Background_end.push_back(Vertex(1, 0.6, -5, 1, 1));
+			Background_end.push_back(Vertex(-1, 0.6, -5, 0, 1));
 
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	// Clear The Screen And The Depth Buffer
 			glMatrixMode(GL_MODELVIEW);				// Select The Modelview Matrix
 			glLoadIdentity();									// Reset The View
 
+			if (Player.has_won) {
+				// carico texture di won game
+				glBindTexture(GL_TEXTURE_2D, texture[3]);
+			}
+			else {
+				// carico texture di lost game
+				glBindTexture(GL_TEXTURE_2D, texture[3]);
 
-			glBindTexture(GL_TEXTURE_2D, texture[3]);
+			}
 
 			//  Background
 			glBegin(GL_QUADS);
 			for (int i = 0; i < 4; i++) {
-				glTexCoord2f(Background_dead[i].u, Background_dead[i].v);
-				glVertex3f(Background_dead[i].x, Background_dead[i].y, Background_dead[i].z);
+				glTexCoord2f(Background_end[i].u, Background_end[i].v);
+				glVertex3f(Background_end[i].x, Background_end[i].y, Background_end[i].z);
 			}
 			glEnd();
+			
 
 		}
 	}
@@ -462,7 +471,7 @@ void Character::MoveOrCollide(double nvel_h)
 
 	double npx = player_x + nvel_h;
 
-	int next_pos_col = round((npx / .05)) / 100;
+	int next_pos_col = round((npx / .05)) / 100000;
 
 	if (nvel_h > 0)
 		next_pos_col += 1;
@@ -496,22 +505,22 @@ void Character::Move_up_down_personaggio(int dir)
 void Character::Setup_position()
 {
 	// setto posizione orizzontale
-	middle_feet_tile = round(((player_x) / .05)) / 100;
+	middle_feet_tile = round(((player_x) / .05)) / 100000;
 	left_tile = middle_feet_tile - 1;
 	right_tile = middle_feet_tile;
-	int temp_last_pers_h = (int)(player_x * 100);
-	if (temp_last_pers_h % 5 != 0) {
+	int temp_last_pers_h = (int)(player_x * 100000);
+	if (temp_last_pers_h % 5000 != 0) {
 		right_tile += 1;
 	}
 
 	// setto posizione verticale
-	middle_body_tile = round(((player_y) / .05)) / 100;
+	middle_body_tile = round(((player_y) / .05)) / 100000;
 
 	top_tile = middle_body_tile - 1;
 	bottom_tile = middle_body_tile;
 	// erano rispettivamente: 100000 ; % 5000
-	int temp_last_pers_v = (int)(player_y * 100);
-	if (temp_last_pers_v % 5 != 0)
+	int temp_last_pers_v = (int)(player_y * 100000);
+	if (temp_last_pers_v % 5000 != 0)
 		bottom_tile += 1;
 		
 		
@@ -535,7 +544,7 @@ void Character::Gravity()
 		// posizione a metà corpo di mario + metà altezza di mario + spostamento
 		double npy = player_y + (p_height / 2) + vel_h;
 
-		int next_pos_row_bottom = round((npy / .05)) / 100;
+		int next_pos_row_bottom = round((npy / .05)) / 100000;
 
 		/*
 		if (npy > 0)
@@ -589,7 +598,7 @@ void Character::Jump_personaggio()
 
 bool Character::Is_on_tile(){
 	
-	int next_pos_row_bottom = round(((player_y+(p_height/2)) / .05)) / 100;
+	int next_pos_row_bottom = round(((player_y+(p_height/2)) / .05)) / 100000;
 	/*
 	if (player_y > 0)
 		next_pos_row_bottom += 13;
@@ -663,7 +672,7 @@ void MyModel::Set_tile(int x, int y, char c) {
 
 int Character::round(double value) {
 
-	value *= 100;
+	value *= 100000;
 	value += .5;
 	int int_value = (int)value;
 
@@ -713,8 +722,8 @@ void MyModel::Check_collisions()
 			for (bullet_it = bullet_list.begin(); bullet_it != bullet_list.end(); ++bullet_it) {
 				int bullet_rounded_x = bullet_it->round(bullet_it->bullet_x);
 				int bullet_rounded_y = bullet_it->round(bullet_it->bullet_y);
-				int row_bullet = bullet_it->round(bullet_it->bullet_y / .05) / 100;
-				int col_bullet = bullet_it->round(bullet_it->bullet_x / .05) / 100;
+				int row_bullet = bullet_it->round(bullet_it->bullet_y / .05) / 100000;
+				int col_bullet = bullet_it->round(bullet_it->bullet_x / .05) / 100000;
 
 				// caso 1)
 				if ((bullet_rounded_x < enemy_right && bullet_rounded_x > enemy_left) && (bullet_rounded_y > enemy_top && bullet_rounded_y < enemy_bottom))
@@ -803,7 +812,7 @@ void Bullet::Die()
 
 int Bullet::round(double value) {
 
-	value *= 100;
+	value *= 100000;
 	value += .5;
 	int int_value = (int)value;
 
