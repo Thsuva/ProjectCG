@@ -95,7 +95,7 @@ bool MyModel::LoadGLTextures(void)
 
 	//  Load 27 personaggio textures
 	char ll[200];
-	for (int i = 0; i < 6; i++) {
+	for (int i = 0; i < 8; i++) {
 		if (i == 0)
 			sprintf(ll, "../Data/blank_tile.png", i);
 		else if (i==1)
@@ -110,6 +110,11 @@ bool MyModel::LoadGLTextures(void)
 		// sprite fava
 		else if (i == 5)
 			sprintf(ll, "../Data/blank_tile.png", i);
+		//schermata vittoria
+		else if (i == 6)
+			sprintf(ll, "../Data/won.jpeg", i);
+		else if (i == 7)
+			sprintf(ll, "../Data/door.jpeg", i);
 
 		this->texture[i + 1] = SOIL_load_OGL_texture(
 			ll, SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
@@ -213,6 +218,7 @@ bool MyModel::DrawGLScene(void)
 
 			// Tiles + nemici, lettura da file txt
 			int enemy_ids = 0;
+			int door_ids = 0;
 			for (int col = 0; col < Data.screen_width * Data.num_of_screens; col++) {
 				for (int row = 0; row < Data.level_height; row++) {
 					char id = Data.Get_tile(col, row);
@@ -233,10 +239,33 @@ bool MyModel::DrawGLScene(void)
 						Set_tile(col, row, '.');
 						enemy_ids += 1;
 						break;
+					case '|':
+						door_list.push_back(Door(col, row, door_ids));
+						Set_tile(col, row, '.');
+						door_ids += 1;
+						break;
 					default:
 						break;
 					}
 				}
+			}
+
+			// doors
+			std::list<Door>::iterator door_it;
+
+			// printo tutta la coda ad ogni iterazione
+			for (door_it = door_list.begin(); door_it != door_list.end(); ++door_it) {
+
+				glBindTexture(GL_TEXTURE_2D, texture[8]);
+				glBegin(GL_QUADS);
+				for (int i = 0; i < 4; i++) {
+					glTexCoord2f(door_it->porta[i].u, door_it->porta[i].v);
+					glVertex3f(door_it->porta[i].x + Player.player_horizontal_transl,
+						door_it->porta[i].y + Player.player_vertical_transl, door_it->porta[i].z);
+				}
+				glEnd();
+
+
 			}
 
 			// Nemici
@@ -308,7 +337,6 @@ bool MyModel::DrawGLScene(void)
 
 			}
 
-
 			// check delle collisioni
 			Check_collisions();
 
@@ -360,7 +388,7 @@ bool MyModel::DrawGLScene(void)
 
 			if (Player.has_won) {
 				// carico texture di won game
-				glBindTexture(GL_TEXTURE_2D, texture[3]);
+				glBindTexture(GL_TEXTURE_2D, texture[7]);
 			}
 			else {
 				// carico texture di lost game

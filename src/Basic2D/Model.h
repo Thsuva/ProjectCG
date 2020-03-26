@@ -190,6 +190,33 @@ class Enemy : public Character
 		}
 };
 
+class Door 
+{
+public:
+	int id;
+	double door_x;
+	double door_y;
+	std::vector<Vertex> porta;
+	float p_height = 0.15;
+	float p_width = 0.1;
+
+	Door(int x, int y, int my_id)
+	{
+		id = my_id;
+		door_x = .05 * (x + 1);
+		door_y = .05 * (y + 1);
+	
+		porta.clear();
+		porta.push_back(Vertex(-0.05, 0, -2, 0, 0));
+		porta.push_back(Vertex(0.05, 0, -2, 1, 0));
+		porta.push_back(Vertex(0.05, 0.15, -2, 1, 1));
+		porta.push_back(Vertex(-0.05, 0.15, -2, 0, 1));
+	}
+	
+	~Door() {
+	}
+};
+
 class MyModel {
 public:
 	//  general data for window and input controls
@@ -206,6 +233,7 @@ public:
 	Personaggio Player;
 	std::list<Enemy> enemy_list;
 	std::list<Bullet> bullet_list;
+	std::list<Door> door_list;
 
 private:
 	//  projection limits in X and Y: x in [-plx, plx], y in [-ply, ply]
