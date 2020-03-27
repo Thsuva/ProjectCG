@@ -115,13 +115,14 @@ public:
 	int middle_body_tile = 11;
 	int top_tile = 10;
 
-
 	int weapon = 0;
+	bool bump;
 
 public:
 	//  methods
 	Character() {
 		alive = true;
+		bump = false;
 		// inizialmente il personaggio è orientato verso destra
 		character_direction = -1;
 	}
@@ -129,9 +130,9 @@ public:
 	}
 
 	// inizio nostre funzioni
-	void MoveOrCollide(double nvel_h);
+	bool MoveOrCollide(double nvel_h);
 	void Move_up_down_personaggio(int dir);
-	void Jump_personaggio();
+	bool Jump_personaggio();
 	void Setup_position();
 	void Gravity();
 	bool Is_on_tile();
@@ -255,6 +256,7 @@ private:
 	clock_t Tstamp, Tstart;
 	double Full_elapsed;  // elapsed time in seconds from the beginning of the program
 	double Shot_elapsed;
+	double Bump_elapsed;
 
 	GLuint	texture[28];			// Storage For 28 Textures!
 	GLuint	base;				// Base Display List For The Font Set

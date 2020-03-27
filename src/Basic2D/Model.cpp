@@ -20,6 +20,7 @@
 #include "Model.h"
 #include "SOIL.h"
 
+
 // All Setup For OpenGL Goes Here
 bool MyModel::InitGL(void)
 {
@@ -493,7 +494,7 @@ void MyModel::glPrint(const char *fmt, ...)					// Custom GL "Print" Routine
 // ------------------------------------------------------nostre funzioni
 
 // muove il personaggio
-void Character::MoveOrCollide(double nvel_h)
+bool Character::MoveOrCollide(double nvel_h)
 {
 	nvel_h = (abs(nvel_h) > MAX_VEL_H) ? (MAX_VEL_H * (nvel_h / abs(nvel_h))) : nvel_h;
 
@@ -519,10 +520,14 @@ void Character::MoveOrCollide(double nvel_h)
 	if (Data.Get_tile(next_pos_col, bottom_tile) != '#' && Data.Get_tile(next_pos_col, middle_body_tile) != '#' && Data.Get_tile(next_pos_col, top_tile) != '#') {
 		player_x = npx;
 		vel_h = nvel_h;
+
+		return true;
 	}
 	else {
 		vel_h = 0;
 	}
+
+	return false;
 }
 
 void Character::Move_up_down_personaggio(int dir)
@@ -607,6 +612,8 @@ void Character::Gravity()
 			|| Data.Get_tile(left_tile, next_pos_row_top) == '#') {
 			player_y = ((next_pos_row_bottom + 0.01) * .05);
 			vel_v = 0;
+
+			bump = true;
 		}
 
 	}
@@ -615,13 +622,16 @@ void Character::Gravity()
 	player_y += vel_v;
 }
 
-void Character::Jump_personaggio()
+bool Character::Jump_personaggio()
 {
 	if (Is_on_tile()) {
 		vel_v -= MAX_VEL_V;
 		player_y += vel_v;
+
+		return true;
 	}
 	
+	return false;
 }
 
 bool Character::Is_on_tile(){

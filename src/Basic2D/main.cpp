@@ -372,9 +372,9 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 	// TODO: da rimettere per sentire la musica
 	//stream->play();
 
-	OutputStreamPtr explosion(OpenSound(device, "../Data/explosion.wav", false));
-	OutputStreamPtr bell(OpenSound(device, "../Data/bell.wav", false));
-	OutputStreamPtr stupid(OpenSound(device, "../Data/stupid.wav", false));
+	OutputStreamPtr shoot(OpenSound(device, "../Data/shoot.wav", false));
+	OutputStreamPtr jump(OpenSound(device, "../Data/jump.wav", false));
+	OutputStreamPtr bump(OpenSound(device, "../Data/bump.aiff", false));
 	//  AUDIO - end
 
 	//ShowCursor(FALSE);
@@ -422,6 +422,14 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 					}
 				}
 
+				if (Data.Player.bump)
+				{
+					if (bump->isPlaying()) bump->reset();
+					else bump->play();
+
+					Data.Player.bump = false;
+				}
+
 				if (Data.keys['F'] && !Data.game_started)						// Is S Being Pressed?
 				{
 					Data.keys['F'] = FALSE;
@@ -437,16 +445,13 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 					Data.texture_delay = 1;
 				}
 
-				if (Data.keys[VK_F2])						// Is F2 Being Pressed?
-				{
-					Data.keys[VK_F2] = FALSE;					// If So Make Key FALSE
-					if (explosion->isPlaying()) explosion->reset();
-					else explosion->play();
-				}
 				//test shooting
 				if (Data.keys['S'] && Data.Get_last_shot_elapsed() > .5 && Data.game_started)						// Is S Being Pressed?
 				{
-					// Data.keys['S'] = FALSE;
+
+					if (shoot->isPlaying()) shoot->reset();
+					else shoot->play();
+
 					Data.Set_shot_elapsed();
 					Bullet bullet = Data.Player.shoot();
 					Data.bullet_list.push_back(bullet);
@@ -455,57 +460,69 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 				if (Data.keys[VK_F4])						// Is F4 Being Pressed?
 				{
 					Data.keys[VK_F4] = FALSE;					// If So Make Key FALSE
-					if (stupid->isPlaying()) stupid->reset();
-					else stupid->play();
+					if (bump->isPlaying()) bump->reset();
+					else bump->play();
 				}
 
 				if (Data.keys[VK_LEFT] && Data.game_started)      // Is left arrow Being Pressed?
 				{
+					bool can_move = false;
+
 					if (Data.Player.player_x > 1) {
 						double vel = .00025;
 						double nvel_h = Data.Player.vel_h - vel;
 						Data.Player.character_direction = 1;
 
-						Data.Player.MoveOrCollide(nvel_h);
+						can_move = Data.Player.MoveOrCollide(nvel_h);
+					}
+
+					if (!can_move) {
+						if (bump->isPlaying()) bump->reset();
+						else bump->play();
 					}
 				}
 
 				if (Data.keys[VK_RIGHT] && Data.game_started)      // Is right arrow Being Pressed?
 				{
+					bool can_move = false;
 					Data.Player.has_moved = true;
 					if (Data.Player.player_x < ((Data.Get_level_width() * .05) + 1)) {
 						double vel = .00025;
 						double nvel_h = Data.Player.vel_h + vel;
 						Data.Player.character_direction = -1;
 
-						Data.Player.MoveOrCollide(nvel_h);
+						can_move = Data.Player.MoveOrCollide(nvel_h);
+					}
+
+					if (!can_move) {
+						if (bump->isPlaying()) bump->reset();
+						else bump->play();
 					}
 
 				}
 
-				if (Data.keys[VK_UP] && Data.game_started)						// Is right arrow Being Pressed?
+				if (Data.keys[VK_UP] && Data.game_started)						// entra nelle porte
 				{
-					if (!Data.Player.has_moved) {
+					if (!Data.Player.has_moved || (Data.Player.player_x >= ((Data.Get_level_width() * .05) + 1) && Data.Player.bottom_tile == 11)) {
 						Data.Player.has_won = true;
 						Data.Player.Die();
 					}
-						
-					//Data.keys[VK_UP] = FALSE;
 
-					Data.Player.Move_up_down_personaggio(-1);
+					// Data.Player.Move_up_down_personaggio(-1);
 				}
 
-				if (Data.keys[VK_DOWN] && Data.game_started)						// Is right arrow Being Pressed?
+				/*if (Data.keys[VK_DOWN] && Data.game_started)						// debug
 				{
-					//Data.keys[VK_DOWN] = FALSE;
-
 					Data.Player.Move_up_down_personaggio(1);
-				}
+				}*/
 
 				if (Data.keys[VK_SPACE] && Data.game_started)						// Is right arrow Being Pressed?
 				{
 					//Data.keys[VK_SPACE] = FALSE;
-					Data.Player.Jump_personaggio();
+					if (Data.Player.Jump_personaggio()) {
+						if (jump->isPlaying()) jump->reset();
+						else jump->play();
+					}
 
 				}
 
