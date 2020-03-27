@@ -130,7 +130,7 @@ public:
 	}
 
 	// inizio nostre funzioni
-	bool MoveOrCollide(double nvel_h);
+	void MoveOrCollide(double nvel_h);
 	void Move_up_down_personaggio(int dir);
 	bool Jump_personaggio();
 	void Setup_position();
@@ -147,11 +147,13 @@ class Personaggio : public Character
 public:
 	bool has_moved;
 	bool has_won;
+	bool death_complete;
 
 	public:
 		Personaggio() : Character(){
 			has_moved = false;
 			has_won = false;
+			death_complete = false;
 			player_x = 1;
 			player_y = 0.55;
 			vel_h = 0;
@@ -233,6 +235,7 @@ public:
 	bool	active;		      // Window Active Flag Set To TRUE By Default
 	bool	fullscreen;	    // Fullscreen Flag 
 	bool game_started;
+	bool enemy_hit_by_bullet;
 	int texture_delay;
 	Personaggio Player;
 	std::list<Enemy> enemy_list;
@@ -272,6 +275,7 @@ public:
 		fullscreen(true), frames(0), fps(0){
 
 		game_started = false;
+		enemy_hit_by_bullet = false;
 		texture_delay = 0;
 		Shot_elapsed = 1;
 		Background.clear();
@@ -317,6 +321,8 @@ public:
 	void Check_collisions();
 	double Get_last_shot_elapsed();
 	void Set_shot_elapsed();
+	double Get_last_bump_elapsed();
+	void Set_bump_elapsed();
 
 private:
 	bool LoadGLTextures(void);

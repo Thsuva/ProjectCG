@@ -370,11 +370,15 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 	stream->setVolume(0.5f); // 50% volume
 
 	// TODO: da rimettere per sentire la musica
-	//stream->play();
+	stream->play();
 
 	OutputStreamPtr shoot(OpenSound(device, "../Data/shoot.wav", false));
 	OutputStreamPtr jump(OpenSound(device, "../Data/jump.wav", false));
+	OutputStreamPtr open_door(OpenSound(device, "../Data/open_door.ogg", false));
+	OutputStreamPtr enemy_death(OpenSound(device, "../Data/enemy_death.wav", false));
 	OutputStreamPtr bump(OpenSound(device, "../Data/bump.aiff", false));
+	OutputStreamPtr player_death(OpenSound(device, "../Data/player_death.wav", false));
+	OutputStreamPtr win(OpenSound(device, "../Data/win.wav", false));
 	//  AUDIO - end
 
 	//ShowCursor(FALSE);
@@ -422,21 +426,34 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 					}
 				}
 
+				// rumore scontro con un tile
 				if (Data.Player.bump)
 				{
 					if (bump->isPlaying()) bump->reset();
 					else bump->play();
 
 					Data.Player.bump = false;
+					Data.Set_bump_elapsed();
 				}
 
-				if (Data.keys['F'] && !Data.game_started)						// Is S Being Pressed?
+				// rumore nemico colpito da un proiettile e muore
+				if (Data.enemy_hit_by_bullet)
+				{
+					if (enemy_death->isPlaying()) enemy_death->reset();
+					else enemy_death->play();
+
+					Data.enemy_hit_by_bullet = false;
+				}
+
+				// se si schiaccia F si gioca come fabrizio
+				if (Data.keys['F'] && !Data.game_started)						
 				{
 					Data.keys['F'] = FALSE;
 					Data.game_started = true;
 				}
 
-				if (Data.keys['J'] && !Data.game_started)						// Is S Being Pressed?
+				// se si schiaccia J si gioca come jacopo
+				if (Data.keys['J'] && !Data.game_started)						
 				{
 					Data.keys['J'] = FALSE;
 					Data.game_started = true;
@@ -445,8 +462,8 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 					Data.texture_delay = 1;
 				}
 
-				//test shooting
-				if (Data.keys['S'] && Data.Get_last_shot_elapsed() > .5 && Data.game_started)						// Is S Being Pressed?
+				// sparo
+				if (Data.keys['S'] && Data.Get_last_shot_elapsed() > .5 && Data.game_started)
 				{
 
 					if (shoot->isPlaying()) shoot->reset();
@@ -457,53 +474,50 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 					Data.bullet_list.push_back(bullet);
 				}
 
-				if (Data.keys[VK_F4])						// Is F4 Being Pressed?
+				// vai a sinistra
+				if (Data.keys[VK_LEFT] && Data.game_started)
 				{
-					Data.keys[VK_F4] = FALSE;					// If So Make Key FALSE
-					if (bump->isPlaying()) bump->reset();
-					else bump->play();
-				}
-
-				if (Data.keys[VK_LEFT] && Data.game_started)      // Is left arrow Being Pressed?
-				{
-					bool can_move = false;
 
 					if (Data.Player.player_x > 1) {
 						double vel = .00025;
 						double nvel_h = Data.Player.vel_h - vel;
 						Data.Player.character_direction = 1;
 
-						can_move = Data.Player.MoveOrCollide(nvel_h);
-					}
-
-					if (!can_move) {
-						if (bump->isPlaying()) bump->reset();
-						else bump->play();
+						Data.Player.MoveOrCollide(nvel_h);
 					}
 				}
 
-				if (Data.keys[VK_RIGHT] && Data.game_started)      // Is right arrow Being Pressed?
+				// vai a destra
+				if (Data.keys[VK_RIGHT] && Data.game_started)
 				{
-					bool can_move = false;
 					Data.Player.has_moved = true;
 					if (Data.Player.player_x < ((Data.Get_level_width() * .05) + 1)) {
 						double vel = .00025;
 						double nvel_h = Data.Player.vel_h + vel;
 						Data.Player.character_direction = -1;
 
-						can_move = Data.Player.MoveOrCollide(nvel_h);
-					}
-
-					if (!can_move) {
-						if (bump->isPlaying()) bump->reset();
-						else bump->play();
+						Data.Player.MoveOrCollide(nvel_h);
 					}
 
 				}
-
-				if (Data.keys[VK_UP] && Data.game_started)						// entra nelle porte
+				// entra nelle porte, vittoria
+				if (Data.keys[VK_UP] && Data.game_started)						
 				{
 					if (!Data.Player.has_moved || (Data.Player.player_x >= ((Data.Get_level_width() * .05) + 1) && Data.Player.bottom_tile == 11)) {
+
+						if (open_door->isPlaying()) open_door->reset();
+						else open_door->play();
+
+						// sleep della durata del file audio di apertura porta
+						Sleep(1000);
+
+						// fermo la musica di sottofondo
+						stream->stop();
+
+						// musica della vittoria
+						if (win->isPlaying()) win->reset();
+						else win->play();
+
 						Data.Player.has_won = true;
 						Data.Player.Die();
 					}
@@ -516,6 +530,7 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 					Data.Player.Move_up_down_personaggio(1);
 				}*/
 
+				// salta
 				if (Data.keys[VK_SPACE] && Data.game_started)						// Is right arrow Being Pressed?
 				{
 					//Data.keys[VK_SPACE] = FALSE;
@@ -526,6 +541,7 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 
 				}
 
+				// rallenta il movimento orizzontale
 				if (!Data.keys[VK_LEFT] && !Data.keys[VK_RIGHT]) {
 
 					if (Data.Player.vel_h < 0)
@@ -537,6 +553,18 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 						Data.Player.vel_h = 0;
 				}
 
+			}
+			// se il player muore ed ha perso
+			else if (!Data.Player.alive && !Data.Player.death_complete && !Data.Player.has_won)
+			{
+				// fermo la musica di sottofondo
+				stream->stop();
+
+				// musica sconfitta
+				if (player_death->isPlaying()) player_death->reset();
+				else player_death->play();
+
+				Data.Player.death_complete = true;
 			}
 
 		}

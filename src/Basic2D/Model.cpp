@@ -113,7 +113,7 @@ bool MyModel::LoadGLTextures(void)
 			sprintf(ll, "../Data/blank_tile.png", i);
 		//schermata vittoria
 		else if (i == 6)
-			sprintf(ll, "../Data/won.jpeg", i);
+			sprintf(ll, "../Data/won.png", i);
 		else if (i == 7)
 			sprintf(ll, "../Data/door.jpeg", i);
 
@@ -494,7 +494,7 @@ void MyModel::glPrint(const char *fmt, ...)					// Custom GL "Print" Routine
 // ------------------------------------------------------nostre funzioni
 
 // muove il personaggio
-bool Character::MoveOrCollide(double nvel_h)
+void Character::MoveOrCollide(double nvel_h)
 {
 	nvel_h = (abs(nvel_h) > MAX_VEL_H) ? (MAX_VEL_H * (nvel_h / abs(nvel_h))) : nvel_h;
 
@@ -520,14 +520,15 @@ bool Character::MoveOrCollide(double nvel_h)
 	if (Data.Get_tile(next_pos_col, bottom_tile) != '#' && Data.Get_tile(next_pos_col, middle_body_tile) != '#' && Data.Get_tile(next_pos_col, top_tile) != '#') {
 		player_x = npx;
 		vel_h = nvel_h;
-
-		return true;
 	}
 	else {
 		vel_h = 0;
+
+		/* Per rumore quando scontri lateralmente
+		if (Data.Get_last_bump_elapsed() > .25)
+			bump = true;*/
 	}
 
-	return false;
 }
 
 void Character::Move_up_down_personaggio(int dir)
@@ -766,6 +767,7 @@ void MyModel::Check_collisions()
 				if ((bullet_rounded_x < enemy_right && bullet_rounded_x > enemy_left) && (bullet_rounded_y > enemy_top && bullet_rounded_y < enemy_bottom))
 				{
 					enemy_it->Die();
+					enemy_hit_by_bullet = true;
 					bullet_it->Die();
 				}
 
@@ -794,6 +796,16 @@ double MyModel::Get_last_shot_elapsed()
 void MyModel::Set_shot_elapsed()
 {
 	Shot_elapsed = Full_elapsed;
+}
+
+double MyModel::Get_last_bump_elapsed()
+{
+	return Full_elapsed - Bump_elapsed;
+}
+
+void MyModel::Set_bump_elapsed()
+{
+	Bump_elapsed = Full_elapsed;
 }
 
 void Enemy::random_move(float hero_player_x, int level_width)
