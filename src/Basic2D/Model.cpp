@@ -89,14 +89,14 @@ bool MyModel::LoadGLTextures(void)
 {
 	/* load an image file directly as a new OpenGL texture */
 	texture[0] = SOIL_load_OGL_texture
-	("../Data/skybox_hd.jpg",
+	("../Data/sky_background1.png",
 		SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
 
 	if (texture[0] == 0) return false;
 
 	//  Load 27 personaggio textures
 	char ll[200];
-	for (int i = 0; i < 8; i++) {
+	for (int i = 0; i < 10; i++) {
 		if (i == 0)
 			sprintf(ll, "../Data/blank_tile.png", i);
 		else if (i==1)
@@ -116,6 +116,10 @@ bool MyModel::LoadGLTextures(void)
 			sprintf(ll, "../Data/won.png", i);
 		else if (i == 7)
 			sprintf(ll, "../Data/door.jpeg", i);
+		else if (i == 8)
+			sprintf(ll, "../Data/b1_test.png", i);
+		else if (i==9)
+			sprintf(ll, "../Data/sky_background2.png", i);
 
 		this->texture[i + 1] = SOIL_load_OGL_texture(
 			ll, SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
@@ -179,7 +183,7 @@ bool MyModel::DrawGLScene(void)
 			glEnd();
 
 			//  Background2 da qui---------------------
-			glBindTexture(GL_TEXTURE_2D, texture[0]);
+			glBindTexture(GL_TEXTURE_2D, texture[10]);
 
 			
 			glBegin(GL_QUADS);
@@ -263,6 +267,15 @@ bool MyModel::DrawGLScene(void)
 					glTexCoord2f(door_it->porta[i].u, door_it->porta[i].v);
 					glVertex3f(door_it->porta[i].x - door_it->door_horizontal_transl + Player.player_horizontal_transl,
 						door_it->porta[i].y - door_it->door_vertical_transl + Player.player_vertical_transl, door_it->porta[i].z);
+				}
+				glEnd();
+
+				glBindTexture(GL_TEXTURE_2D, texture[9]);
+				glBegin(GL_QUADS);
+				for (int i = 0; i < 4; i++) {
+					glTexCoord2f(door_it->porta[i].u, door_it->porta[i].v);
+					glVertex3f(door_it->porta[i].x + (-1*i)*(0.05)  - door_it->door_horizontal_transl + Player.player_horizontal_transl,
+						door_it->porta[i].y - door_it->door_vertical_transl + Player.player_vertical_transl + (0.05*1) , door_it->porta[i].z - 1);
 				}
 				glEnd();
 
