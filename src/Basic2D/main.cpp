@@ -367,7 +367,7 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 		return 0;         // failure
 	}
 	stream->setRepeat(true);
-	stream->setVolume(0.5f); // 50% volume
+	stream->setVolume(0.0f); // 0.5 50% volume
 
 	// TODO: da rimettere per sentire la musica
 	stream->play();

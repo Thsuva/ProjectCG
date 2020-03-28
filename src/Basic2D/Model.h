@@ -174,10 +174,12 @@ class Enemy : public Character
 {
 	public:
 		int id;
+		int type;
 		
-		Enemy(int x, int y, int my_id) : Character()
+		Enemy(int x, int y, int my_id, int my_type) : Character()
 		{
 			id = my_id;
+			type = my_type;
 			player_x = .05 * (x+1);
 			player_y = .05 * (y+1);
 			vel_h = 0;
@@ -253,7 +255,8 @@ private:
 
 	//  model data
 	std::vector<Vertex> Background;   // background
-	std::vector<Vertex> Background2;   // background
+	std::vector<Vertex> Background2;   // background2
+	std::vector<Vertex> Background3;   // background3
 	
 	std::vector<Vertex> tile;		  // blocco base
 	clock_t Tstamp, Tstart;
@@ -265,7 +268,7 @@ private:
 	GLuint	base;				// Base Display List For The Font Set
 
 	std::string level = "";
-	int num_of_screens = 6;
+	int num_of_screens = 9;
 	int screen_width = 40;
 	int level_height = 24;
 
@@ -292,6 +295,11 @@ public:
 		Background2.push_back(Vertex(11, -1.8, -5, 1, 0));
 		Background2.push_back(Vertex(11, 1.8, -5, 1, 1));
 		Background2.push_back(Vertex(4.99, 1.8, -5, 0, 1));
+
+		Background3.push_back(Vertex(10.99, -1.8, -5, 0, 0));
+		Background3.push_back(Vertex(17, -1.8, -5, 1, 0));
+		Background3.push_back(Vertex(17, 1.8, -5, 1, 1));
+		Background3.push_back(Vertex(10.99, 1.8, -5, 0, 1));
 
 		tile.clear();
 		tile.push_back(Vertex(-.025, 0, -4, 0, 0));

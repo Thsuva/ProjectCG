@@ -1,4 +1,4 @@
-﻿  Model.cpp
+﻿  main.cpp
 c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(57): warning C4305: 'inizializzazione': troncamento da 'double' a 'float'
 c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(58): warning C4305: 'inizializzazione': troncamento da 'double' a 'float'
 c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(71): warning C4305: 'argomento': troncamento da 'double' a 'float'
@@ -14,73 +14,39 @@ c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\
 c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(163): warning C4305: 'argomento': troncamento da 'double' a 'float'
 c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(164): warning C4305: 'argomento': troncamento da 'double' a 'float'
 c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(165): warning C4305: 'argomento': troncamento da 'double' a 'float'
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(181): warning C4244: '=': conversione da 'double' a 'float'. Possibile perdita di dati.
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(182): warning C4244: '=': conversione da 'double' a 'float'. Possibile perdita di dati.
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(186): warning C4305: 'argomento': troncamento da 'double' a 'float'
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(187): warning C4305: 'argomento': troncamento da 'double' a 'float'
+c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(183): warning C4244: '=': conversione da 'double' a 'float'. Possibile perdita di dati.
+c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(184): warning C4244: '=': conversione da 'double' a 'float'. Possibile perdita di dati.
 c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(188): warning C4305: 'argomento': troncamento da 'double' a 'float'
 c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(189): warning C4305: 'argomento': troncamento da 'double' a 'float'
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(206): warning C4305: 'inizializzazione': troncamento da 'double' a 'float'
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(207): warning C4305: 'inizializzazione': troncamento da 'double' a 'float'
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(216): warning C4305: 'argomento': troncamento da 'double' a 'float'
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(217): warning C4305: 'argomento': troncamento da 'double' a 'float'
+c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(190): warning C4305: 'argomento': troncamento da 'double' a 'float'
+c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(191): warning C4305: 'argomento': troncamento da 'double' a 'float'
+c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(208): warning C4305: 'inizializzazione': troncamento da 'double' a 'float'
+c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(209): warning C4305: 'inizializzazione': troncamento da 'double' a 'float'
 c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(218): warning C4305: 'argomento': troncamento da 'double' a 'float'
 c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(219): warning C4305: 'argomento': troncamento da 'double' a 'float'
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(286): warning C4305: 'argomento': troncamento da 'double' a 'float'
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(287): warning C4305: 'argomento': troncamento da 'double' a 'float'
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(288): warning C4305: 'argomento': troncamento da 'double' a 'float'
+c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(220): warning C4305: 'argomento': troncamento da 'double' a 'float'
+c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(221): warning C4305: 'argomento': troncamento da 'double' a 'float'
 c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(289): warning C4305: 'argomento': troncamento da 'double' a 'float'
+c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(290): warning C4305: 'argomento': troncamento da 'double' a 'float'
 c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(291): warning C4305: 'argomento': troncamento da 'double' a 'float'
 c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(292): warning C4305: 'argomento': troncamento da 'double' a 'float'
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(293): warning C4305: 'argomento': troncamento da 'double' a 'float'
 c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(294): warning C4305: 'argomento': troncamento da 'double' a 'float'
+c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(295): warning C4305: 'argomento': troncamento da 'double' a 'float'
+c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(296): warning C4305: 'argomento': troncamento da 'double' a 'float'
 c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(297): warning C4305: 'argomento': troncamento da 'double' a 'float'
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(298): warning C4305: 'argomento': troncamento da 'double' a 'float'
 c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(299): warning C4305: 'argomento': troncamento da 'double' a 'float'
 c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(300): warning C4305: 'argomento': troncamento da 'double' a 'float'
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(101): warning C4474: 'sprintf': sono stati passati troppi argomenti per la stringa di formato
-  c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(101): note: con i segnaposto e i relativi parametri sono previsti argomenti variadic 0, ma sono stati specificati quelli 1
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(103): warning C4474: 'sprintf': sono stati passati troppi argomenti per la stringa di formato
-  c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(103): note: con i segnaposto e i relativi parametri sono previsti argomenti variadic 0, ma sono stati specificati quelli 1
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(105): warning C4474: 'sprintf': sono stati passati troppi argomenti per la stringa di formato
-  c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(105): note: con i segnaposto e i relativi parametri sono previsti argomenti variadic 0, ma sono stati specificati quelli 1
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(107): warning C4474: 'sprintf': sono stati passati troppi argomenti per la stringa di formato
-  c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(107): note: con i segnaposto e i relativi parametri sono previsti argomenti variadic 0, ma sono stati specificati quelli 1
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(110): warning C4474: 'sprintf': sono stati passati troppi argomenti per la stringa di formato
-  c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(110): note: con i segnaposto e i relativi parametri sono previsti argomenti variadic 0, ma sono stati specificati quelli 1
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(113): warning C4474: 'sprintf': sono stati passati troppi argomenti per la stringa di formato
-  c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(113): note: con i segnaposto e i relativi parametri sono previsti argomenti variadic 0, ma sono stati specificati quelli 1
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(116): warning C4474: 'sprintf': sono stati passati troppi argomenti per la stringa di formato
-  c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(116): note: con i segnaposto e i relativi parametri sono previsti argomenti variadic 0, ma sono stati specificati quelli 1
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(118): warning C4474: 'sprintf': sono stati passati troppi argomenti per la stringa di formato
-  c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(118): note: con i segnaposto e i relativi parametri sono previsti argomenti variadic 0, ma sono stati specificati quelli 1
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(120): warning C4474: 'sprintf': sono stati passati troppi argomenti per la stringa di formato
-  c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(120): note: con i segnaposto e i relativi parametri sono previsti argomenti variadic 0, ma sono stati specificati quelli 1
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(122): warning C4474: 'sprintf': sono stati passati troppi argomenti per la stringa di formato
-  c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(122): note: con i segnaposto e i relativi parametri sono previsti argomenti variadic 0, ma sono stati specificati quelli 1
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(237): warning C4244: 'argomento': conversione da 'double' a 'GLfloat'. Possibile perdita di dati.
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(269): warning C4244: 'argomento': conversione da 'double' a 'GLfloat'. Possibile perdita di dati.
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(268): warning C4244: 'argomento': conversione da 'double' a 'GLfloat'. Possibile perdita di dati.
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(278): warning C4244: 'argomento': conversione da 'double' a 'GLfloat'. Possibile perdita di dati.
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(277): warning C4244: 'argomento': conversione da 'double' a 'GLfloat'. Possibile perdita di dati.
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(394): warning C4305: 'argomento': troncamento da 'double' a 'float'
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(395): warning C4305: 'argomento': troncamento da 'double' a 'float'
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(396): warning C4305: 'argomento': troncamento da 'double' a 'float'
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(397): warning C4305: 'argomento': troncamento da 'double' a 'float'
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(428): warning C4305: 'argomento': troncamento da 'double' a 'float'
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(429): warning C4305: 'argomento': troncamento da 'double' a 'float'
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(430): warning C4305: 'argomento': troncamento da 'double' a 'float'
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(431): warning C4305: 'argomento': troncamento da 'double' a 'float'
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(534): warning C4244: '=': conversione da 'double' a 'float'. Possibile perdita di dati.
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(535): warning C4244: '=': conversione da 'double' a 'float'. Possibile perdita di dati.
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(549): warning C4244: '+=': conversione da 'double' a 'float'. Possibile perdita di dati.
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(584): warning C4305: '+=': troncamento da 'double' a 'float'
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(619): warning C4244: '=': conversione da 'double' a 'float'. Possibile perdita di dati.
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(627): warning C4244: '=': conversione da 'double' a 'float'. Possibile perdita di dati.
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(682): warning C4244: 'inizializzazione': conversione da 'double' a 'float'. Possibile perdita di dati.
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(687): warning C4244: 'argomento': conversione da 'double' a 'float'. Possibile perdita di dati.
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(832): warning C4305: '+=': troncamento da 'double' a 'float'
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(834): warning C4305: '-=': troncamento da 'double' a 'float'
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(867): warning C4244: '=': conversione da 'double' a 'float'. Possibile perdita di dati.
-c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.cpp(717): warning C4715: 'MyModel::Get_tile': non tutti i percorsi di controllo restituiscono un valore
+c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(301): warning C4305: 'argomento': troncamento da 'double' a 'float'
+c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(302): warning C4305: 'argomento': troncamento da 'double' a 'float'
+c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(305): warning C4305: 'argomento': troncamento da 'double' a 'float'
+c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(306): warning C4305: 'argomento': troncamento da 'double' a 'float'
+c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(307): warning C4305: 'argomento': troncamento da 'double' a 'float'
+c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\model.h(308): warning C4305: 'argomento': troncamento da 'double' a 'float'
+c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\main.cpp(218): warning C4838: la conversione da 'int' a 'BYTE' richiede una conversione verso un tipo di dati più piccolo
+c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\main.cpp(548): warning C4305: '+=': troncamento da 'double' a 'float'
+c:\users\fabrizio\desktop\universitazione\magistrale\computergraphics\projectcg\src\basic2d\main.cpp(550): warning C4305: '-=': troncamento da 'double' a 'float'
+SOIL.lib(image_DXT.obj) : warning LNK4099: impossibile trovare il PDB 'vc100.pdb' con 'SOIL.lib(image_DXT.obj)' o in 'C:\Users\fabrizio\Desktop\Universitazione\Magistrale\ComputerGraphics\ProjectCG\src\Debug\vc100.pdb'; oggetto collegato senza informazioni di debug
+SOIL.lib(image_helper.obj) : warning LNK4099: impossibile trovare il PDB 'vc100.pdb' con 'SOIL.lib(image_helper.obj)' o in 'C:\Users\fabrizio\Desktop\Universitazione\Magistrale\ComputerGraphics\ProjectCG\src\Debug\vc100.pdb'; oggetto collegato senza informazioni di debug
+SOIL.lib(SOIL.obj) : warning LNK4099: impossibile trovare il PDB 'vc100.pdb' con 'SOIL.lib(SOIL.obj)' o in 'C:\Users\fabrizio\Desktop\Universitazione\Magistrale\ComputerGraphics\ProjectCG\src\Debug\vc100.pdb'; oggetto collegato senza informazioni di debug
+SOIL.lib(stb_image_aug.obj) : warning LNK4099: impossibile trovare il PDB 'vc100.pdb' con 'SOIL.lib(stb_image_aug.obj)' o in 'C:\Users\fabrizio\Desktop\Universitazione\Magistrale\ComputerGraphics\ProjectCG\src\Debug\vc100.pdb'; oggetto collegato senza informazioni di debug
   Basic2D.vcxproj -> C:\Users\fabrizio\Desktop\Universitazione\Magistrale\ComputerGraphics\ProjectCG\src\Debug\Basic2D.exe

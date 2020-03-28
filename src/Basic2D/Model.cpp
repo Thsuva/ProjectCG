@@ -96,30 +96,60 @@ bool MyModel::LoadGLTextures(void)
 
 	//  Load 27 personaggio textures
 	char ll[200];
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 20; i++) {
 		if (i == 0)
 			sprintf(ll, "../Data/blank_tile.png", i);
 		else if (i==1)
-			sprintf(ll, "../Data/enemy.png", i);
+			//cambiare in qualcos'altro ora i nemici sono gestiti coi numeri
+			sprintf(ll, "../Data/bullet.png", i);
 		else if (i == 2)
 			sprintf(ll, "../Data/died.png", i);
 		else if (i == 3)
 			sprintf(ll, "../Data/start_menu.png", i);
 		// sprite zava
 		else if (i == 4)
-			sprintf(ll, "../Data/blank_tile.png", i);
+			sprintf(ll, "../Data/fabrizio_still.png", i);
 		// sprite fava
 		else if (i == 5)
-			sprintf(ll, "../Data/blank_tile.png", i);
+			sprintf(ll, "../Data/jacopo_still.png", i);
 		//schermata vittoria
 		else if (i == 6)
 			sprintf(ll, "../Data/won.png", i);
 		else if (i == 7)
 			sprintf(ll, "../Data/door.jpeg", i);
 		else if (i == 8)
-			sprintf(ll, "../Data/b1_test.png", i);
+			sprintf(ll, "../Data/aula.png", i);
 		else if (i==9)
 			sprintf(ll, "../Data/sky_background2.png", i);
+		else if (i == 10)
+			sprintf(ll, "../Data/sky_background3.png", i);
+		else if (i == 11)
+			// prof 1 Morro i numeri sono 10+id
+			sprintf(ll, "../Data/morro.png", i); 
+		else if (i == 12)
+			// prof 2 Barberis i numeri sono 10+id
+			sprintf(ll, "../Data/barberis.png", i);
+		else if (i == 13)
+			// prof 3 Zaccaria i numeri sono 10+id
+			sprintf(ll, "../Data/zaccaria.png", i);
+		else if (i == 14)
+			// prof 4 Aicardi i numeri sono 10+id
+			sprintf(ll, "../Data/aicardi.png", i);
+		else if (i == 15)
+			// prof 5 Boccalatte i numeri sono 10+id
+			sprintf(ll, "../Data/boccalatte.png", i);
+		else if (i == 16)
+			// prof 6 Grattarola i numeri sono 10+id
+			sprintf(ll, "../Data/grattarola.png", i);
+		else if (i == 17)
+			// prof 7 Cannata i numeri sono 10+id
+			sprintf(ll, "../Data/cannata.png", i);
+		else if (i == 18)
+			// prof 8 Casalino i numeri sono 10+id
+			sprintf(ll, "../Data/casalino.png", i);
+		else if (i == 19)
+			// prof 9 Tacchella i numeri sono 10+id
+			sprintf(ll, "../Data/tacchella.png", i);
 
 		this->texture[i + 1] = SOIL_load_OGL_texture(
 			ll, SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
@@ -130,9 +160,6 @@ bool MyModel::LoadGLTextures(void)
 	glBindTexture(GL_TEXTURE_2D, texture[0]);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	// TODO: da togliere
-	// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 	return true;										// Return Success
 }
@@ -194,6 +221,20 @@ bool MyModel::DrawGLScene(void)
 			glEnd();
 			//  Background2 fino a qui---------------------
 
+			
+			//  Background3 da qui---------------------
+			glBindTexture(GL_TEXTURE_2D, texture[11]);
+
+			
+			glBegin(GL_QUADS);
+			for (int i = 0; i < 4; i++) {
+				glTexCoord2f(Background3[i].u, Background3[i].v);
+				glVertex3f(Background3[i].x, Background3[i].y, Background3[i].z);
+			}
+			glEnd();
+			//  Background3 fino a qui---------------------
+			
+
 			//  Texture for the personaggio, change every 1/19 sec.
 			// int texF = 1 + ((int((Full_elapsed * 19))) % 27);
 
@@ -240,16 +281,23 @@ bool MyModel::DrawGLScene(void)
 
 						break;
 					case '*':
-						enemy_list.push_back(Enemy(col, row, enemy_ids));
+						/*enemy_list.push_back(Enemy(col, row, enemy_ids, type));
 						Set_tile(col, row, '.');
 						enemy_ids += 1;
 						break;
+						*/
 					case '|':
 						door_list.push_back(Door(col, row, door_ids));
 						Set_tile(col, row, '.');
 						door_ids += 1;
 						break;
+					case '.':
+						break;
 					default:
+						int type = id - '0';
+						enemy_list.push_back(Enemy(col, row, enemy_ids, type));
+						Set_tile(col, row, '.');
+						enemy_ids += 1;
 						break;
 					}
 				}
@@ -270,16 +318,34 @@ bool MyModel::DrawGLScene(void)
 				}
 				glEnd();
 
-				glBindTexture(GL_TEXTURE_2D, texture[9]);
-				glBegin(GL_QUADS);
-				for (int i = 0; i < 4; i++) {
-					glTexCoord2f(door_it->porta[i].u, door_it->porta[i].v);
-					glVertex3f(door_it->porta[i].x + (-1*i)*(0.05)  - door_it->door_horizontal_transl + Player.player_horizontal_transl,
-						door_it->porta[i].y - door_it->door_vertical_transl + Player.player_vertical_transl + (0.05*1) , door_it->porta[i].z - 1);
+				if (door_it != door_list.begin()) {
+					glBindTexture(GL_TEXTURE_2D, texture[9]);
+					glBegin(GL_QUADS);
+					for (int i = 0; i < 4; i++) {
+						int horizontal_adj;
+						int vertical_adj = 0;
+
+						if (i == 0)
+							horizontal_adj = -5;
+						else if (i == 1)
+							horizontal_adj = 5;
+						else if (i == 2) {
+							horizontal_adj = 5;
+							vertical_adj = 6;
+						}
+						else if (i == 3) {
+							horizontal_adj = -5;
+							vertical_adj = 6;
+						}
+
+
+						glTexCoord2f(door_it->porta[i].u, door_it->porta[i].v);
+						glVertex3f(door_it->porta[i].x + (horizontal_adj)*(0.05) - door_it->door_horizontal_transl + Player.player_horizontal_transl,
+							door_it->porta[i].y - door_it->door_vertical_transl + Player.player_vertical_transl + vertical_adj * (0.025), door_it->porta[i].z - 1);
+					}
+					glEnd();
 				}
-				glEnd();
-
-
+				
 			}
 
 			// Nemici
@@ -295,7 +361,7 @@ bool MyModel::DrawGLScene(void)
 			for (it = temp_list.begin(); it != temp_list.end(); ++it) {
 
 				if (it->alive) {
-					glBindTexture(GL_TEXTURE_2D, texture[2]);
+					glBindTexture(GL_TEXTURE_2D, texture[11+it->type]);
 
 					// PER PNG TRASPARENTE DA QUI---------------------------
 					glMatrixMode(GL_MODELVIEW);				// Select The Modelview Matrix
@@ -337,7 +403,7 @@ bool MyModel::DrawGLScene(void)
 
 				if (bullet_it->alive) {
 					bullet_it->Update_position();
-					glBindTexture(GL_TEXTURE_2D, texture[1]);
+					glBindTexture(GL_TEXTURE_2D, texture[2]);
 					glBegin(GL_QUADS);
 					for (int i = 0; i < 4; i++) {
 						glTexCoord2f(bullet_it->bullet[i].u, bullet_it->bullet[i].v);
@@ -737,7 +803,7 @@ void MyModel::Check_collisions()
 
 	if (enemy_list.size() == 0)
 	{
-		enemy_list.push_back(Enemy(0, 0, -1));
+		enemy_list.push_back(Enemy(0, 0, -1, 0));
 		there_are_enemies = false;
 	}
 
