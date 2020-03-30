@@ -367,7 +367,7 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 		return 0;         // failure
 	}
 	stream->setRepeat(true);
-	stream->setVolume(0.0f); // 0.5 50% volume
+	stream->setVolume(0.4f); // 40% volume
 
 	// TODO: da rimettere per sentire la musica
 	stream->play();
@@ -379,6 +379,14 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 	OutputStreamPtr bump(OpenSound(device, "../Data/bump.aiff", false));
 	OutputStreamPtr player_death(OpenSound(device, "../Data/player_death.wav", false));
 	OutputStreamPtr win(OpenSound(device, "../Data/win.wav", false));
+
+	shoot->setVolume(0.4f); // 50% volume
+	jump->setVolume(0.4f); // 50% volume
+	open_door->setVolume(0.4f); // 50% volume
+	enemy_death->setVolume(0.4f); // 50% volume
+	bump->setVolume(0.4f); // 50% volume
+	player_death->setVolume(0.4f); // 50% volume
+	win->setVolume(0.4f); // 50% volume
 	//  AUDIO - end
 
 	//ShowCursor(FALSE);
@@ -427,7 +435,7 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 				}
 
 				// rumore scontro con un tile
-				if (Data.Player.bump)
+				if (Data.Player.bump && Data.Get_last_bump_elapsed() > .5)
 				{
 					if (bump->isPlaying()) bump->reset();
 					else bump->play();
@@ -462,6 +470,14 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 					Data.texture_delay = 4;
 				}
 
+				// se si schiaccia G si attiva/disattiva la modalità Dio in cui non puoi morire
+				if (Data.keys['G'])
+				{
+					Data.keys['G'] = FALSE;
+
+					Data.Player.god_mode = !Data.Player.god_mode;
+				}
+
 				// sparo
 				if (Data.keys['S'] && Data.Get_last_shot_elapsed() > .5 && Data.game_started)
 				{
@@ -475,7 +491,7 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 				}
 
 				// vai a sinistra
-				if (Data.keys[VK_LEFT] && Data.game_started)
+				if (Data.keys[VK_LEFT] && Data.game_started && !Data.keys[VK_RIGHT])
 				{
 
 					if (Data.Player.player_x > 1) {
@@ -495,7 +511,7 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 				}
 
 				// vai a destra
-				if (Data.keys[VK_RIGHT] && Data.game_started)
+				if (Data.keys[VK_RIGHT] && Data.game_started && !Data.keys[VK_LEFT])
 				{
 					Data.Player.has_moved = true;
 					if (Data.Player.player_x < ((Data.Get_level_width() * .05) + 1)) {
@@ -549,8 +565,14 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 				{
 					//Data.keys[VK_SPACE] = FALSE;
 					if (Data.Player.Jump_personaggio()) {
-						if (jump->isPlaying()) jump->reset();
-						else jump->play();
+
+						if (Data.Get_last_jump_elapsed() > .5) {
+							if (jump->isPlaying()) jump->reset();
+							else jump->play();
+
+							Data.Set_jump_elapsed();
+						}
+						
 
 						Data.Player.motion_status = 3;
 					}

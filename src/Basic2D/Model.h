@@ -90,7 +90,7 @@ public:
 	std::vector<Vertex> personaggio;  // floating personaggio
 
 	bool alive;
-
+	bool god_mode;
 	// per i movimenti
 	int character_direction;
 	float player_x;
@@ -101,7 +101,7 @@ public:
 	float p_width = 0.1;
 	float vel_h;
 	float vel_v;
-	float MAX_VEL_H = 0.00025 * 2;
+	float MAX_VEL_H = 0.00025 * 5;
 	float MAX_VEL_V = 0.00025 * 50;
 	
 	//collision tile of feet
@@ -123,6 +123,7 @@ public:
 	Character() {
 		alive = true;
 		bump = false;
+		god_mode = false;
 		// inizialmente il personaggio è orientato verso destra
 		character_direction = -1;
 	}
@@ -155,6 +156,7 @@ public:
 			has_moved = false;
 			has_won = false;
 			death_complete = false;
+			
 			player_x = 1;
 			player_y = 0.55;
 			vel_h = 0;
@@ -266,6 +268,7 @@ private:
 	double Shot_elapsed;
 	double Bump_elapsed;
 	double Motion_elapsed;
+	double Jump_elapsed;
 
 	GLuint	texture[28];			// Storage For 28 Textures!
 	GLuint	base;				// Base Display List For The Font Set
@@ -284,8 +287,11 @@ public:
 		enemy_hit_by_bullet = false;
 		texture_delay = 0;
 		Shot_elapsed = 1;
+		Jump_elapsed = 1;
 		Background.clear();
 		Background2.clear();
+		Background3.clear();
+		tile.clear();
 
 		// i primi 2 valori dei vertex sono stati cambiati per fittare il 16/9
 		// (prima erano tutti -1 e 1 per generare un quadrato di lato 2 centrato in 0,0)
@@ -304,7 +310,6 @@ public:
 		Background3.push_back(Vertex(17, 1.8, -5, 1, 1));
 		Background3.push_back(Vertex(10.99, 1.8, -5, 0, 1));
 
-		tile.clear();
 		tile.push_back(Vertex(-.025, 0, -4, 0, 0));
 		tile.push_back(Vertex(.025, 0, -4, 1, 0));
 		tile.push_back(Vertex(.025, .05, -4, 1, 1));
@@ -336,6 +341,8 @@ public:
 	void Set_bump_elapsed();
 	double Get_last_motion_elapsed();
 	void Set_motion_elapsed();
+	double Get_last_jump_elapsed();
+	void Set_jump_elapsed();
 
 private:
 	bool LoadGLTextures(void);

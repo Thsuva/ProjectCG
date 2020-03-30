@@ -208,7 +208,7 @@ bool MyModel::DrawGLScene(void)
 		// elapsed time in milliseconds from the last draw
 		int ms_elapsed = (int)(t - Tstamp);
 
-		if (ms_elapsed < 10) return true;
+		if (ms_elapsed < 8) return true;
 		// elapsed time in seconds from the beginning of the program
 		this->Full_elapsed = double(t - Tstart) / (double)CLOCKS_PER_SEC;
 		this->frameTime += double(t - Tstamp) / (double)CLOCKS_PER_SEC;
@@ -265,7 +265,7 @@ bool MyModel::DrawGLScene(void)
 
 			//  gestione del movimento delle gambe quando si corre in orizzontale
 			if (Player.motion_status > 0 && Player.motion_status < 3)
-				Player.motion_status = 1 + ((int((Get_last_motion_elapsed() * 19))) % 2);
+				Player.motion_status = 1 + ((int((Get_last_motion_elapsed() * 10))) % 2);
 
 			// sprite del personaggio sono variabili: 10 è la posizione base (fabrizio still) a cui viene sommato lo status 
 			// (fermo, movimento, jump) e un eventuale delay per cambiare personaggio da fabrizio a jacopo
@@ -470,12 +470,18 @@ bool MyModel::DrawGLScene(void)
 
 			// compute fps and write text
 			this->frames++;
+			char on_off_god[20];
+			
 			if (this->frames > 18) {
 				this->fps = frames / frameTime;
 				this->frames = 0; this->frameTime = 0;
 			}
-			this->glPrint("Elapsed time: %6.2f sec.  -  Fps %6.2f",
-				Full_elapsed, fps);
+			if (Player.god_mode)
+				strcpy(on_off_god, "ON");
+			else
+				strcpy(on_off_god, "OFF");
+			this->glPrint("Elapsed time: %6.2f sec.  -  Fps %6.2f, God mode is %s",
+				Full_elapsed, fps, on_off_god);
 
 			//////// QUI ///////////////
 			if (true) {
@@ -623,16 +629,6 @@ void Character::MoveOrCollide(double nvel_h)
 	else
 		next_pos_col -= 1;
 
-	/*if (nvel_h < 0)
-		next_pos_col = 21 - (int)((npx) / .05);
-	else if (nvel_h > 0)
-		next_pos_col = 19 - (int)((npx) / .05);*/
-
-	/*if (player_y > 0)
-		bottom_tile += 12;
-	else
-		bottom_tile += 11;*/
-
 	if (Data.Get_tile(next_pos_col, bottom_tile) != '#' && Data.Get_tile(next_pos_col, middle_body_tile) != '#' && Data.Get_tile(next_pos_col, top_tile) != '#') {
 		player_x = npx;
 		vel_h = nvel_h;
@@ -658,7 +654,7 @@ void Character::Setup_position()
 	middle_feet_tile = round(((player_x) / .05)) / 100000;
 	left_tile = middle_feet_tile - 1;
 	right_tile = middle_feet_tile;
-	int temp_last_pers_h = (int)(player_x * 100000);
+	int temp_last_pers_h = round(player_x);
 	if (temp_last_pers_h % 5000 != 0) {
 		right_tile += 1;
 	}
@@ -669,7 +665,7 @@ void Character::Setup_position()
 	top_tile = middle_body_tile - 1;
 	bottom_tile = middle_body_tile;
 	// erano rispettivamente: 100000 ; % 5000
-	int temp_last_pers_v = (int)(player_y * 100000);
+	int temp_last_pers_v = round(player_y);
 	if (temp_last_pers_v % 5000 != 0)
 		bottom_tile += 1;
 		
@@ -696,21 +692,6 @@ void Character::Gravity()
 
 		int next_pos_row_bottom = round((npy / .05)) / 100000;
 
-		/*
-		if (npy > 0)
-			next_pos_row_bottom += 12;
-		else
-			next_pos_row_bottom += 11;
-        */
-		/*
-		middle_feet_tile = (int)((player_x) / .05) - 1;
-		right_tile = middle_feet_tile + 1;
-		left_tile = middle_feet_tile;
-		int temp_last_pers_h = (int)(player_x * 100000);
-		if (temp_last_pers_h % 5000 != 0) {
-			left_tile -= 1;
-		}*/
-
 		if (next_pos_row_bottom == 23) {
 			vel_v = 0;
 			Die();
@@ -727,7 +708,7 @@ void Character::Gravity()
 		if (Data.Get_tile(right_tile, next_pos_row_top) == '#'
 			|| Data.Get_tile(middle_feet_tile, next_pos_row_top) == '#'
 			|| Data.Get_tile(left_tile, next_pos_row_top) == '#') {
-			player_y = ((next_pos_row_bottom + 0.01) * .05);
+			player_y = ((next_pos_row_bottom + 0.05) * .05);
 			vel_v = 0;
 
 			bump = true;
@@ -754,13 +735,8 @@ bool Character::Jump_personaggio()
 bool Character::Is_on_tile(){
 	
 	int next_pos_row_bottom = round(((player_y+(p_height/2)) / .05)) / 100000;
-	/*
-	if (player_y > 0)
-		next_pos_row_bottom += 13;
-	else
-		next_pos_row_bottom += 12;
-	*/
-	int temp_last_pers_v = (int)(player_y * 100000);
+
+	int temp_last_pers_v = round(player_y);
 	if (temp_last_pers_v % 5000 == 0 && (Data.Get_tile(right_tile, next_pos_row_bottom) == '#'
 		|| Data.Get_tile(middle_feet_tile, next_pos_row_bottom) == '#' || Data.Get_tile(left_tile, next_pos_row_bottom) == '#')) {
 		return true;
@@ -777,7 +753,8 @@ void Character::Convert_coordinate_for_translation() {
 
 void Character::Die()
 {
-	alive = false;
+	if (!god_mode)
+		alive = false;
 }
 
 
@@ -934,12 +911,22 @@ void MyModel::Set_motion_elapsed()
 	Motion_elapsed = Full_elapsed;
 }
 
+double MyModel::Get_last_jump_elapsed()
+{
+	return Full_elapsed - Jump_elapsed;
+}
+
+void MyModel::Set_jump_elapsed()
+{
+	Jump_elapsed = Full_elapsed;
+}
+
 void Enemy::random_move(float hero_player_x, int level_width)
 {
 	int rand_var = (rand() % 10) + 1;
 
 	// si ferma
-	if (rand_var > 0 && rand_var < 4)
+	/*if (rand_var > 0 && rand_var < 4)
 	{
 		if (vel_h < 0)
 			vel_h += .00025;
@@ -948,9 +935,9 @@ void Enemy::random_move(float hero_player_x, int level_width)
 
 		if (vel_h  < .00025 && vel_h > -.00025)
 			vel_h = 0;
-	}
+	}*/
 	// va verso il personaggio
-	if (rand_var > 3 && rand_var < 9)
+	if (rand_var > 0 && rand_var < 9)
 	{
 		double vel = .001;
 		// vai verso destra se il personaggio è a destra
