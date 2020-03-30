@@ -458,8 +458,8 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 					Data.keys['J'] = FALSE;
 					Data.game_started = true;
 
-					// funzione che setta jacopo
-					Data.texture_delay = 1;
+					// variabile che setta jacopo
+					Data.texture_delay = 4;
 				}
 
 				// sparo
@@ -483,6 +483,13 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 						double nvel_h = Data.Player.vel_h - vel;
 						Data.Player.character_direction = 1;
 
+						// memorizzo il tempo iniziale di movimento per generare correttamente il ciclo delle texture
+						if (Data.Player.vel_h == 0)
+							Data.Set_motion_elapsed();
+						// muovo le gambe SOLO SE sono on tile
+						if (Data.Player.Is_on_tile())
+							Data.Player.motion_status = 1;
+
 						Data.Player.MoveOrCollide(nvel_h);
 					}
 				}
@@ -495,6 +502,13 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 						double vel = .00025;
 						double nvel_h = Data.Player.vel_h + vel;
 						Data.Player.character_direction = -1;
+
+						// memorizzo il tempo iniziale di movimento per generare correttamente il ciclo delle texture
+						if (Data.Player.vel_h == 0)
+							Data.Set_motion_elapsed();
+						// muovo le gambe SOLO SE sono on tile
+						if (Data.Player.Is_on_tile())
+							Data.Player.motion_status = 1;
 
 						Data.Player.MoveOrCollide(nvel_h);
 					}
@@ -537,6 +551,8 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 					if (Data.Player.Jump_personaggio()) {
 						if (jump->isPlaying()) jump->reset();
 						else jump->play();
+
+						Data.Player.motion_status = 3;
 					}
 
 				}
@@ -549,10 +565,14 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 					else if (Data.Player.vel_h > 0)
 						Data.Player.vel_h -= .00025;
 
-					if (Data.Player.vel_h  < .00025 && Data.Player.vel_h > -.00025)
+					if (Data.Player.vel_h  < .00025 && Data.Player.vel_h > -.00025) {
 						Data.Player.vel_h = 0;
+					}
+						
 				}
 
+				if (Data.Player.vel_h == 0 && Data.Player.vel_v == 0)
+					Data.Player.motion_status = 0;
 			}
 			// se il player muore ed ha perso
 			else if (!Data.Player.alive && !Data.Player.death_complete && !Data.Player.has_won)

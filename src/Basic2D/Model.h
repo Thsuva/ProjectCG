@@ -148,6 +148,7 @@ public:
 	bool has_moved;
 	bool has_won;
 	bool death_complete;
+	int motion_status;
 
 	public:
 		Personaggio() : Character(){
@@ -158,6 +159,7 @@ public:
 			player_y = 0.55;
 			vel_h = 0;
 			vel_v = 0;
+			motion_status = 0;
 			personaggio.clear();
 			personaggio.push_back(Vertex(-0.05, 0, -1, 0, 0));
 			personaggio.push_back(Vertex(0.05, 0, -1, 1, 0));
@@ -263,6 +265,7 @@ private:
 	double Full_elapsed;  // elapsed time in seconds from the beginning of the program
 	double Shot_elapsed;
 	double Bump_elapsed;
+	double Motion_elapsed;
 
 	GLuint	texture[28];			// Storage For 28 Textures!
 	GLuint	base;				// Base Display List For The Font Set
@@ -331,6 +334,8 @@ public:
 	void Set_shot_elapsed();
 	double Get_last_bump_elapsed();
 	void Set_bump_elapsed();
+	double Get_last_motion_elapsed();
+	void Set_motion_elapsed();
 
 private:
 	bool LoadGLTextures(void);

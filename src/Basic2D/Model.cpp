@@ -96,59 +96,90 @@ bool MyModel::LoadGLTextures(void)
 
 	//  Load 27 personaggio textures
 	char ll[200];
-	for (int i = 0; i < 20; i++) {
+	for (int i = 0; i < 26; i++) {
+		// sfondo 2^ anno
 		if (i == 0)
-			sprintf(ll, "../Data/blank_tile.png", i);
+			sprintf(ll, "../Data/sky_background2.png", i);
+
+		// sfondo 3^ anno
 		else if (i==1)
-			//cambiare in qualcos'altro ora i nemici sono gestiti coi numeri
-			sprintf(ll, "../Data/bullet.png", i);
+			sprintf(ll, "../Data/sky_background3.png", i);
+
+		// tile
 		else if (i == 2)
-			sprintf(ll, "../Data/died.png", i);
+			sprintf(ll, "../Data/tile.png", i);
+
+		// menu iniziale
 		else if (i == 3)
 			sprintf(ll, "../Data/start_menu.png", i);
-		// sprite zava
+
+		// schermata game over
 		else if (i == 4)
-			sprintf(ll, "../Data/fabrizio_still.png", i);
-		// sprite fava
+			sprintf(ll, "../Data/died.png", i);
+
+		// schermata vittoria
 		else if (i == 5)
-			sprintf(ll, "../Data/jacopo_still.png", i);
-		//schermata vittoria
-		else if (i == 6)
 			sprintf(ll, "../Data/won.png", i);
+
+		// proiettile
+		else if (i == 6)
+			sprintf(ll, "../Data/bullet.png", i);
+
+		// porta
 		else if (i == 7)
 			sprintf(ll, "../Data/door.jpeg", i);
+
+		// aula B1
 		else if (i == 8)
 			sprintf(ll, "../Data/aula.png", i);
+
+		// sprites di fabrizio, i numeri sono 9 + numeri da 1 a 4
 		else if (i==9)
-			sprintf(ll, "../Data/sky_background2.png", i);
+			sprintf(ll, "../Data/fabrizio_still.png", i);
 		else if (i == 10)
-			sprintf(ll, "../Data/sky_background3.png", i);
+			sprintf(ll, "../Data/fabrizio_move1.png", i);
 		else if (i == 11)
-			// prof 1 Morro i numeri sono 10+id
-			sprintf(ll, "../Data/morro.png", i); 
+			sprintf(ll, "../Data/fabrizio_move2.png", i);
 		else if (i == 12)
-			// prof 2 Barberis i numeri sono 10+id
-			sprintf(ll, "../Data/barberis.png", i);
+			sprintf(ll, "../Data/fabrizio_jump.png", i);
+
+		// sprites di jacopo, i numeri sono 13 + numeri da 1 a 4
 		else if (i == 13)
-			// prof 3 Zaccaria i numeri sono 10+id
-			sprintf(ll, "../Data/zaccaria.png", i);
+			sprintf(ll, "../Data/jacopo_still.png", i);
 		else if (i == 14)
-			// prof 4 Aicardi i numeri sono 10+id
-			sprintf(ll, "../Data/aicardi.png", i);
+			sprintf(ll, "../Data/jacopo_move1.png", i);
 		else if (i == 15)
-			// prof 5 Boccalatte i numeri sono 10+id
-			sprintf(ll, "../Data/boccalatte.png", i);
+			sprintf(ll, "../Data/jacopo_move2.png", i);
 		else if (i == 16)
-			// prof 6 Grattarola i numeri sono 10+id
-			sprintf(ll, "../Data/grattarola.png", i);
+			sprintf(ll, "../Data/jacopo_jump.png", i);
+
+		//  per i prof i numeri sono 17+id
 		else if (i == 17)
-			// prof 7 Cannata i numeri sono 10+id
-			sprintf(ll, "../Data/cannata.png", i);
+			// prof 1 Morro
+			sprintf(ll, "../Data/morro.png", i); 
 		else if (i == 18)
-			// prof 8 Casalino i numeri sono 10+id
-			sprintf(ll, "../Data/casalino.png", i);
+			// prof 2 Barberis
+			sprintf(ll, "../Data/barberis.png", i);
 		else if (i == 19)
-			// prof 9 Tacchella i numeri sono 10+id
+			// prof 3 Zaccaria
+			sprintf(ll, "../Data/zaccaria.png", i);
+		else if (i == 20)
+			// prof 4 Aicardi
+			sprintf(ll, "../Data/aicardi.png", i);
+		else if (i == 21)
+			// prof 5 Boccalatte
+			sprintf(ll, "../Data/boccalatte.png", i);
+		else if (i == 22)
+			// prof 6 Grattarola
+			sprintf(ll, "../Data/grattarola.png", i);
+		else if (i == 23)
+			// prof 7 Cannata
+			sprintf(ll, "../Data/cannata.png", i);
+		else if (i == 24)
+			// prof 8 Casalino
+			sprintf(ll, "../Data/casalino.png", i);
+		else if (i == 25)
+			// prof 9 Tacchella
 			sprintf(ll, "../Data/tacchella.png", i);
 
 		this->texture[i + 1] = SOIL_load_OGL_texture(
@@ -191,9 +222,6 @@ bool MyModel::DrawGLScene(void)
 			glMatrixMode(GL_MODELVIEW);				// Select The Modelview Matrix
 			glLoadIdentity();									// Reset The View
 
-			// ------------le 3 righe qui sotto servono per spostare il background in orizz di px
-			// vedo se gestire o no il salto
-
 			// gestione gravità e traslazione
 			Player.Setup_position();
 			glTranslatef(Player.player_horizontal_transl, Player.player_vertical_transl, 0);
@@ -210,7 +238,7 @@ bool MyModel::DrawGLScene(void)
 			glEnd();
 
 			//  Background2 da qui---------------------
-			glBindTexture(GL_TEXTURE_2D, texture[10]);
+			glBindTexture(GL_TEXTURE_2D, texture[1]);
 
 			
 			glBegin(GL_QUADS);
@@ -223,7 +251,7 @@ bool MyModel::DrawGLScene(void)
 
 			
 			//  Background3 da qui---------------------
-			glBindTexture(GL_TEXTURE_2D, texture[11]);
+			glBindTexture(GL_TEXTURE_2D, texture[2]);
 
 			
 			glBegin(GL_QUADS);
@@ -235,11 +263,13 @@ bool MyModel::DrawGLScene(void)
 			//  Background3 fino a qui---------------------
 			
 
-			//  Texture for the personaggio, change every 1/19 sec.
-			// int texF = 1 + ((int((Full_elapsed * 19))) % 27);
+			//  gestione del movimento delle gambe quando si corre in orizzontale
+			if (Player.motion_status > 0 && Player.motion_status < 3)
+				Player.motion_status = 1 + ((int((Get_last_motion_elapsed() * 19))) % 2);
 
-			// sprite del personaggio sono variabili: gestire con opportune funzioni
-			int pos_texture = 5 + texture_delay;
+			// sprite del personaggio sono variabili: 10 è la posizione base (fabrizio still) a cui viene sommato lo status 
+			// (fermo, movimento, jump) e un eventuale delay per cambiare personaggio da fabrizio a jacopo
+			int pos_texture = 10 + Player.motion_status + texture_delay;
 			glBindTexture(GL_TEXTURE_2D, texture[pos_texture]);
 
 			//  personaggio geometrical trasformations
@@ -271,7 +301,7 @@ bool MyModel::DrawGLScene(void)
 					switch (id)
 					{
 					case '#':
-						glBindTexture(GL_TEXTURE_2D, texture[1]);
+						glBindTexture(GL_TEXTURE_2D, texture[3]);
 						glBegin(GL_QUADS);
 						for (int i = 0; i < 4; i++) {
 							glTexCoord2f(tile[i].u, tile[i].v);
@@ -280,12 +310,6 @@ bool MyModel::DrawGLScene(void)
 						glEnd();
 
 						break;
-					case '*':
-						/*enemy_list.push_back(Enemy(col, row, enemy_ids, type));
-						Set_tile(col, row, '.');
-						enemy_ids += 1;
-						break;
-						*/
 					case '|':
 						door_list.push_back(Door(col, row, door_ids));
 						Set_tile(col, row, '.');
@@ -318,30 +342,42 @@ bool MyModel::DrawGLScene(void)
 				}
 				glEnd();
 
+				// se non è la prima porta, disegno l'aula intorno alla porta i-esima
 				if (door_it != door_list.begin()) {
+					// setto la nuova texture
 					glBindTexture(GL_TEXTURE_2D, texture[9]);
 					glBegin(GL_QUADS);
+
+					// per ogni vertice...
 					for (int i = 0; i < 4; i++) {
+						// calcolati in tile
 						int horizontal_adj;
 						int vertical_adj = 0;
 
+						// ...se è quello in basso a sinistra, voglio lo spostamento verticale a zero e quello orizzontale a -5...
 						if (i == 0)
 							horizontal_adj = -5;
+
+						// ...se è quello in basso a destra, voglio lo spostamento verticale a zero e quello orizzontale a 5...
 						else if (i == 1)
 							horizontal_adj = 5;
+
+						// ...se è quello in alto a destra, voglio lo spostamento verticale a 3 e quello orizzontale a 5...
 						else if (i == 2) {
 							horizontal_adj = 5;
-							vertical_adj = 6;
+							vertical_adj = 3;
 						}
+
+						// ...se è quello in alto a sinistra, voglio lo spostamento verticale a 3 e quello orizzontale a -5
 						else if (i == 3) {
 							horizontal_adj = -5;
-							vertical_adj = 6;
+							vertical_adj = 3;
 						}
 
 
 						glTexCoord2f(door_it->porta[i].u, door_it->porta[i].v);
-						glVertex3f(door_it->porta[i].x + (horizontal_adj)*(0.05) - door_it->door_horizontal_transl + Player.player_horizontal_transl,
-							door_it->porta[i].y - door_it->door_vertical_transl + Player.player_vertical_transl + vertical_adj * (0.025), door_it->porta[i].z - 1);
+						glVertex3f(door_it->porta[i].x + (horizontal_adj * 0.05) - door_it->door_horizontal_transl + Player.player_horizontal_transl,
+							door_it->porta[i].y - door_it->door_vertical_transl + Player.player_vertical_transl + (vertical_adj * 0.05), door_it->porta[i].z - 1);
 					}
 					glEnd();
 				}
@@ -361,7 +397,7 @@ bool MyModel::DrawGLScene(void)
 			for (it = temp_list.begin(); it != temp_list.end(); ++it) {
 
 				if (it->alive) {
-					glBindTexture(GL_TEXTURE_2D, texture[11+it->type]);
+					glBindTexture(GL_TEXTURE_2D, texture[17+it->type]);
 
 					// PER PNG TRASPARENTE DA QUI---------------------------
 					glMatrixMode(GL_MODELVIEW);				// Select The Modelview Matrix
@@ -403,7 +439,7 @@ bool MyModel::DrawGLScene(void)
 
 				if (bullet_it->alive) {
 					bullet_it->Update_position();
-					glBindTexture(GL_TEXTURE_2D, texture[2]);
+					glBindTexture(GL_TEXTURE_2D, texture[7]);
 					glBegin(GL_QUADS);
 					for (int i = 0; i < 4; i++) {
 						glTexCoord2f(bullet_it->bullet[i].u, bullet_it->bullet[i].v);
@@ -468,11 +504,11 @@ bool MyModel::DrawGLScene(void)
 
 			if (Player.has_won) {
 				// carico texture di won game
-				glBindTexture(GL_TEXTURE_2D, texture[7]);
+				glBindTexture(GL_TEXTURE_2D, texture[6]);
 			}
 			else {
 				// carico texture di lost game
-				glBindTexture(GL_TEXTURE_2D, texture[3]);
+				glBindTexture(GL_TEXTURE_2D, texture[5]);
 
 			}
 
@@ -488,6 +524,7 @@ bool MyModel::DrawGLScene(void)
 		}
 	}
 
+	// mostro il menu iniziale
 	else
 	{
 		std::vector<Vertex> Background_start_menu;
@@ -885,6 +922,16 @@ double MyModel::Get_last_bump_elapsed()
 void MyModel::Set_bump_elapsed()
 {
 	Bump_elapsed = Full_elapsed;
+}
+
+double MyModel::Get_last_motion_elapsed()
+{
+	return Full_elapsed - Motion_elapsed;
+}
+
+void MyModel::Set_motion_elapsed()
+{
+	Motion_elapsed = Full_elapsed;
 }
 
 void Enemy::random_move(float hero_player_x, int level_width)
