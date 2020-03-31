@@ -563,7 +563,7 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 				// salta
 				if (Data.keys[VK_SPACE] && Data.game_started)						// Is right arrow Being Pressed?
 				{
-					//Data.keys[VK_SPACE] = FALSE;
+					Data.Player.has_moved = true;
 					if (Data.Player.Jump_personaggio()) {
 
 						if (Data.Get_last_jump_elapsed() > .5) {

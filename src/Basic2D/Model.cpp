@@ -263,9 +263,12 @@ bool MyModel::DrawGLScene(void)
 			//  Background3 fino a qui---------------------
 			
 
-			//  gestione del movimento delle gambe quando si corre in orizzontale
-			if (Player.motion_status > 0 && Player.motion_status < 3)
+			//  gestione del movimento delle gambe quando si corre in orizzontale, copiamo il comportamento di
+			// super mario land 2 dove, nel momento in cui si precipita, la posizione è con le gambe aperte
+			if (Player.motion_status > 0 && Player.motion_status < 3 && Player.Is_on_tile())
 				Player.motion_status = 1 + ((int((Get_last_motion_elapsed() * 10))) % 2);
+			else if (Player.motion_status > 0 && Player.motion_status < 3 && !Player.Is_on_tile())
+				Player.motion_status = 2;
 
 			// sprite del personaggio sono variabili: 10 è la posizione base (fabrizio still) a cui viene sommato lo status 
 			// (fermo, movimento, jump) e un eventuale delay per cambiare personaggio da fabrizio a jacopo
@@ -318,10 +321,14 @@ bool MyModel::DrawGLScene(void)
 					case '.':
 						break;
 					default:
-						int type = id - '0';
-						enemy_list.push_back(Enemy(col, row, enemy_ids, type));
-						Set_tile(col, row, '.');
-						enemy_ids += 1;
+						// spawno i nemici solo se sono sufficientemente vicino
+						if (Distance(Player.player_x, Player.player_y, (col + 1)*.05, (row + 1)*.05))
+						{
+							int type = id - '0';
+							enemy_list.push_back(Enemy(col, row, enemy_ids, type));
+							Set_tile(col, row, '.');
+							enemy_ids += 1;
+						}
 						break;
 					}
 				}
@@ -692,8 +699,9 @@ void Character::Gravity()
 
 		int next_pos_row_bottom = round((npy / .05)) / 100000;
 
-		if (next_pos_row_bottom == 23) {
+		if (next_pos_row_bottom >= 23) {
 			vel_v = 0;
+			god_mode = false;
 			Die();
 		}
 
@@ -979,4 +987,14 @@ int Bullet::round(double value) {
 	int int_value = (int)value;
 
 	return int_value;
+}
+
+bool Distance(double player_x, double player_y, double enemy_x, double enemy_y)
+{
+	double spawn_distance = 30 * .05;
+
+	// return (sqrt(pow((player_x - enemy_x), 2) + pow(player_y - enemy_y, 2)) < spawn_distance);
+
+	// area quadrata, molto più veloce
+	return player_x > enemy_x - spawn_distance && player_x < enemy_x + spawn_distance && player_y > enemy_y - spawn_distance && player_y < enemy_y + spawn_distance;
 }

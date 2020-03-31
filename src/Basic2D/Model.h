@@ -361,3 +361,5 @@ private:
 };
 
 extern class MyModel Data;
+
+bool Distance(double player_x, double player_y, double enemy_x, double enemy_y);
