@@ -549,6 +549,7 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 						else win->play();
 
 						Data.Player.has_won = true;
+						Data.Player.god_mode = false;
 						Data.Player.Die();
 					}
 

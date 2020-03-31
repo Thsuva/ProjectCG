@@ -949,7 +949,7 @@ void Enemy::random_move(float hero_player_x, int level_width)
 	{
 		double vel = .001;
 		// vai verso destra se il personaggio è a destra
-		if (hero_player_x >= player_x && player_x < (level_width * .05)) {
+		if (hero_player_x >= player_x && player_x < (level_width * .05) + .6) {
 			double nvel_h = vel_h + vel;
 
 			MoveOrCollide(nvel_h);
@@ -991,10 +991,11 @@ int Bullet::round(double value) {
 
 bool Distance(double player_x, double player_y, double enemy_x, double enemy_y)
 {
-	double spawn_distance = 30 * .05;
+	double spawn_distance_h = 30 * .05;
+	double spawn_distance_v = 13 * .05;
 
 	// return (sqrt(pow((player_x - enemy_x), 2) + pow(player_y - enemy_y, 2)) < spawn_distance);
 
-	// area quadrata, molto più veloce
-	return player_x > enemy_x - spawn_distance && player_x < enemy_x + spawn_distance && player_y > enemy_y - spawn_distance && player_y < enemy_y + spawn_distance;
+	// area rettangolare molto più veloce
+	return (player_x > enemy_x - spawn_distance_h && player_x < enemy_x + spawn_distance_h) && (player_y < enemy_y + spawn_distance_v && player_y > enemy_y - spawn_distance_v);
 }
