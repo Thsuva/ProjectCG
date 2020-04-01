@@ -947,7 +947,9 @@ void Enemy::random_move(float hero_player_x, int level_width)
 	// va verso il personaggio
 	if (rand_var > 0 && rand_var < 9)
 	{
-		double vel = .001;
+		// velocità nemici
+		// double vel = .001;
+		double vel = MAX_VEL_H;
 		// vai verso destra se il personaggio è a destra
 		if (hero_player_x >= player_x && player_x < (level_width * .05) + .6) {
 			double nvel_h = vel_h + vel;

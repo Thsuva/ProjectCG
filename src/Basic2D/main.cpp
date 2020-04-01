@@ -594,6 +594,12 @@ int WINAPI WinMain(HINSTANCE	hInstance,			// Instance
 						
 				}
 
+				// se premi destra e sinistra in contemporanea, grafica still
+				if (Data.keys[VK_LEFT] && Data.keys[VK_RIGHT]) {
+					Data.Player.motion_status = 0;
+				}
+
+				// se il personaggio è immobile, grafica still
 				if (Data.Player.vel_h == 0 && Data.Player.vel_v == 0)
 					Data.Player.motion_status = 0;
 			}

@@ -101,7 +101,7 @@ public:
 	float p_width = 0.1;
 	float vel_h;
 	float vel_v;
-	float MAX_VEL_H = 0.00025 * 5;
+	float MAX_VEL_H = 0.00025 * 10;
 	float MAX_VEL_V = 0.00025 * 50;
 	
 	//collision tile of feet
